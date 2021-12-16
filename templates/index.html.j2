@@ -1,0 +1,46 @@
+{% extends "layoutBase.html.j2" %} 
+{% block title %}Display OD/UD{% endblock %}
+{% block head %} {{ super() }} {% endblock %} 
+
+{% block content %}
+
+<div class="mt-3 ml-5">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" name="startDate" id="startDate" />
+        </div>
+        <div class="col-md-3">
+            <label for="endDate">End Date</label>
+            <input type="date" name="endDate" id="endDate" />
+        </div>
+        <div class="col-md-3">
+            <label for="stateName">State Name</label>
+            <select id="stateName"
+                    name="stateName" multiple
+                    > 
+                <option value="MAHARASHTRA">Mah</option>
+                <option value="GUJARAT">Guj</option>
+                <option value="MADHYA PRADESH">MP</option>
+                <option value="CHHATTISGARH">Chatt</option>
+                <option value="GOA">Goa</option>
+                <option value="DAMAN AND DIU">DD</option>
+                <option value="DADRA AND NAGAR HAVELI">DNH</option>
+            </select>
+        </div>
+        <div class="col-md-3 align-self-center mt-4">
+            <button type="button" class="btn btn-primary" id="submitBtn">
+                Submit
+            </button>
+        </div>
+    </div>
+    <div id="errorDiv"></div>
+    <div id="odUdDataTableWrapper">
+    </div>
+    <div id="spinner"></div>
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<script src="{{ url_for('static', filename='dist/index.js') }}"></script>
+{% endblock %}

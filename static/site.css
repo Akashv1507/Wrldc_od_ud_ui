@@ -1,0 +1,123 @@
+#errorDiv {
+  color: #dc3545;
+}
+
+label {
+  color: #0062cc;
+  font-weight: 500;
+}
+#startDate, #endDate {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+
+/* for multiselect */
+.choices__inner {
+  display: inline-block;
+  margin: 10px 0;
+  vertical-align: top;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding: 7.5px 7.5px 3.75px;
+  border: 2px solid rgb(131, 129, 129);
+  border-radius: 10px;
+  font-size: 14px;
+  min-height: 44px;
+  overflow: hidden;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+}
+th {
+  color: white;
+  background: #dc3545;
+}
+
+tr {
+  color: hsl(0, 75%, 14%);
+  font-weight: 500;
+}
+
+.hrStyle {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+button.dt-button,
+div.dt-button,
+a.dt-button,
+input.dt-button {
+    width: 50px;
+    height: 30px;
+    border-radius: 15px;
+    background: linear-gradient(to left top, #c32c71 50%, #b33771 50%);
+    border-style: none;
+    color: rgb(12, 11, 11);
+    /* font-size: 23px; */
+    /* letter-spacing: 3px;
+  font-family: "Lato";*/
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0px;
+    overflow: hidden;
+    transition: all 0.5s;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+tfoot tr th {
+  color: #dc3545;
+  background: white;
+  font-size: 12px;
+  font-weight: bolder;
+  animation: blinker 1s linear infinite;
+}
+.important {
+  color: #dc3545;
+  font-size: 20px;
+  font-weight: bolder;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+/*for loading spinner*/
+
+.loader {
+  border: 16px solid #f3f3f3;
+  margin: 0 auto;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

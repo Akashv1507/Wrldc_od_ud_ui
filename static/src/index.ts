@@ -103,7 +103,7 @@ const fetchData = async () => {
       let odUdData = await getOdUdData(startDateValue, endDateValue, selectedStateList[stateInd].value)
 
       //generating column name
-      const columns = [{ title: 'Date' }, { title: `${selectedStateList[stateInd].name}_Sch_Drawl` }, { title: `${selectedStateList[stateInd].name}_Act_Drawl` }, { title: `${selectedStateList[stateInd].name}_UI` }, { title: `${selectedStateList[stateInd].name}_Availability` }, { title: `${selectedStateList[stateInd].name}_Requirement` }, { title: `${selectedStateList[stateInd].name}_Shortage` }, { title: `${selectedStateList[stateInd].name}_Consumption` }]
+      const columns = [{ title: 'Date_Key' }, { title: `${selectedStateList[stateInd].name}_Sch_Drawl` }, { title: `${selectedStateList[stateInd].name}_Act_Drawl` }, { title: `${selectedStateList[stateInd].name}_UI` }, { title: `${selectedStateList[stateInd].name}_Availability` }, { title: `${selectedStateList[stateInd].name}_Requirement` }, { title: `${selectedStateList[stateInd].name}_Shortage` }, { title: `${selectedStateList[stateInd].name}_Consumption` }]
 
       $(`#${selectedStateList[stateInd].name}_tbl`).DataTable({
 

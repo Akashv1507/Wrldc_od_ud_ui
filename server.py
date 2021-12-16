@@ -17,6 +17,7 @@ app.config['SECRET_KEY'] = appConfig['flaskSecret']
 conStr = appConfig['con_string_server_db']
 
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
+
 @app.route('/')
 def home():
     return render_template('index.html.j2')

@@ -29,7 +29,12 @@ label {
   min-height: 44px;
   overflow: hidden;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+
 }
+
+.chartActive { border-bottom:5px solid orange ; }
+.tblActive { border-bottom:5px solid green ; }
+
 th {
   color: white;
   background: #dc3545;

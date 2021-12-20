@@ -1,0 +1,61 @@
+{% extends "layoutBase.html.j2" %} 
+{% block title %}Display Schedule Vs Actual Drawl {% endblock %}
+{% block head %} {{ super() }} 
+{% endblock %} 
+
+{% block content %}
+
+<div class="mt-3 ml-5">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" name="startDate" id="startDate" />
+        </div>
+        <div class="col-md-3">
+            <label for="endDate">End Date</label>
+            <input type="date" name="endDate" id="endDate" />
+        </div>
+        <div class="col-md-3">
+            <label for="stateName">State Name</label>
+            <select id="stateName"
+                    name="stateName" multiple
+                    > 
+                <option value="Maharashtra">Mah</option>
+                <option value="Gujarat">Guj</option>
+                <option value="MP">MP</option>
+                <option value="Chattishgarh">Chatt</option>
+                <option value="Goa">Goa</option>
+                <option value="DD">DD</option>
+                <option value="DNH">DNH</option>
+            </select>
+        </div>
+        <div class="col-md-3 align-self-center mt-4">
+            <button type="button" class="btn btn-primary" id="submitBtn">
+                Submit
+            </button>
+        </div>
+    </div>
+    
+    <div class = "mt-4 mb-3" id = "iconDiv" >
+        <button id = "chartIcon"style='font-size:18px; margin-left:75%' class="btn btn-outline-warning"> Chart <i class='fas fa-chart-area' style='font-size:32px;color:orange'></i></button>
+        <button id = "tblIcon" style='font-size:18px; margin-left:20px' class="btn btn-outline-success" > Table <i class="fas fa-solid fa-table" style='font-size:32px;color:green'></i></button> 
+    </div>
+    <div id="schVsActDrawlPlotSection">
+        <div id="errorPlotDiv"></div>
+        <div id="plotSpinner"></div>
+        <div id="schVsActDrawlPlotsWrapper"></div>
+    </div>
+    <div id="schVsActDrawlTableSection">
+        <div id="errorTableDiv"></div>
+        <div id="tableSpinner"></div>
+        <div id="schVsActDrawlTableWrapper"></div>
+    </div>
+    
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<script src="https://cdn.plot.ly/plotly-2.6.3.min.js"></script>
+<script src="{{ url_for('static', filename='dist/schVsActDrawl.js') }}"></script>
+
+{% endblock %}

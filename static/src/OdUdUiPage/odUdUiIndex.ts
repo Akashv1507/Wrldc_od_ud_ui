@@ -1,19 +1,24 @@
-import { getOdUdData } from "./fetchDataApi";
+import { getOdUdData } from "../fetchDataApi";
 
 declare var Choices: any;
 // declare var $:any;
 
 //interface for api response object
+// export interface odUdRespObj {
+//   dateKey: number | string;
+//   drawalSche: number;
+//   actualDrawal: number;
+//   ui: number;
+//   availability: number;
+//   requirement: number;
+//   shortage: number;
+//   consumption: number;
+// }
 export interface odUdRespObj {
-  dateKey: number | string;
-  drawalSche: number;
-  actualDrawal: number;
-  ui: number;
-  availability: number;
-  requirement: number;
-  shortage: number;
-  consumption: number;
+
+  odUdData:[Date|string, number, number, number, number, number,number,number][]
 }
+
 export interface SelectedStateObj {
   name: string;
   value: string;
@@ -99,7 +104,7 @@ const fetchData = async () => {
       odUdDataTableWrapper.appendChild(hrDiv1);
 
 
-      //fetch data for each generator and push data to datatble created above dynamically
+      //fetch data for each states and push data to datatble div created above dynamically
       let odUdData = await getOdUdData(startDateValue, endDateValue, selectedStateList[stateInd].value)
 
       //generating column name
@@ -109,7 +114,7 @@ const fetchData = async () => {
 
         dom: "Bfrtip",
         lengthMenu: [50, 192, 188],
-        data: odUdData["odUdData"],
+        data: odUdData.odUdData,
         columns: columns
     });
     }

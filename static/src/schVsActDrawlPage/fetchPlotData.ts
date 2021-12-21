@@ -76,7 +76,7 @@ export const fetchPlotData = async () => {
        //fetch data for each states and plot data in div created above dynamically
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
-        const uiData = getDifference( schDrawlData.schVsActDrawlData, actDrawlData.schVsActDrawlData)
+        const uiData = getDifference( actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
 
         let schActDrawlPlotData: PlotData = {
           title: `Schedule Vs Actual Drawl Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,

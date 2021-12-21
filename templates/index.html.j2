@@ -1,0 +1,75 @@
+{% extends "indexLayout.html.j2" %} 
+
+
+{% block css %}  <link
+      href="{{ url_for('static', filename='index.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+ {% endblock %} 
+{% block content %}
+ <div class="row">
+        <div class="col-1-of-3">
+          <div class="card">
+            <div class="card__side card__side--front-1">
+              <div class="card__title card__title--1">
+                <i class="fas fa-solid fa-table"></i>
+                <h4 class="card__heading">Scada Data</h4>
+              </div>
+
+              <div class="card__details">
+                <ul>
+                  <li>Scada Real Time Data(MW)</li>
+                  <li>Schedule Drawal(MW)</li>
+                  <li>Actual Drawal(MW)</li>
+                  <li>UI(MW)</li>
+                  <li>Minimum Maximum Average of Metrics</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card__side card__side--back card__side--back-1">
+              <div class="card__cta">
+                {# <div class="card__price-box">
+                  <p class="card__price-only">Only</p>
+                  <p class="card__price-value">$2.95/mo*</p>
+                </div> #}
+                <a href="{{url_for('schVsActDrawlIndex')}}" class="btn btn--white">Go To Page</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-1-of-3">
+          <div class="card">
+            <div class="card__side card__side--front-2">
+              <div class="card__title card__title--2">
+                <i class="fas fa-database"></i>
+                <h4 class="card__heading">PSP Data</h4>
+              </div>
+
+              <div class="card__details">
+                <ul>
+                  <li>Schedule Drawal(MUs)</li>
+                  <li>Actual Drawal(MUs)</li>
+                  <li>UI(MUs)</li>
+                  <li>Shortage(MUs)</li>
+                  <li>Consumption(MUs)</li>
+                  <li>Availability(MUs)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card__side card__side--back card__side--back-2">
+              <div class="card__cta">
+                {# <div class="card__price-box">
+                  <p class="card__price-only">Only</p>
+                  <p class="card__price-value">$5.45/mo*</p>
+                </div> #}
+                <a href="{{url_for('odUdUiIndex')}}" class="btn btn--white">Go To Page</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       
+  </div>
+{% endblock %} 

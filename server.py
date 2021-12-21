@@ -24,6 +24,11 @@ clientSecret=appConfig['clientSecret']
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
 
+
+@app.route('/')
+def index():
+    return render_template('index.html.j2')
+
 @app.route('/odUdUi')
 def odUdUiIndex():
     return render_template('odUdUiIndex.html.j2')

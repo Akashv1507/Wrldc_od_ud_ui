@@ -1,21 +1,9 @@
-import { getOdUdData } from "../fetchDataApi";
-
+import {fetchTableData} from "./fetchTableData"
+import {fetchPlotData} from "./fetchPlotData"
 declare var Choices: any;
-// declare var $:any;
 
-//interface for api response object
-// export interface odUdRespObj {
-//   dateKey: number | string;
-//   drawalSche: number;
-//   actualDrawal: number;
-//   ui: number;
-//   availability: number;
-//   requirement: number;
-//   shortage: number;
-//   consumption: number;
-// }
+
 export interface odUdRespObj {
-
   odUdData:[Date|string, number, number, number, number, number,number,number][]
 }
 
@@ -33,94 +21,38 @@ window.onload = async () => {
     searchResultLimit: 50,
     renderChoiceLimit: 50,
   });
-  (document.getElementById("submitBtn") as HTMLButtonElement).onclick =
-    fetchData;
-};
+  const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement
+  submitBtn.onclick= wrapperFunc;
 
-const fetchData = async () => {
-  //to display error msg
-  const errorDiv = document.getElementById("errorDiv") as HTMLDivElement;
+  const tblIconBtn = document.getElementById("tblIcon") as HTMLButtonElement
+  const chartIconBtn = document.getElementById("chartIcon") as HTMLButtonElement
 
-  //to display spinner
-  const spinnerDiv = document.getElementById("spinner") as HTMLDivElement;
+  const plotSectionDiv = document.getElementById("odUdPlotSection") as HTMLDivElement
+  const tblSectionDiv = document.getElementById("odUdTableSection") as HTMLDivElement
 
-  //to display spinner
-  const odUdDataTableWrapper = document.getElementById("odUdDataTableWrapper") as HTMLDivElement;
+  tblIconBtn.classList.add("tblActive")
+  plotSectionDiv.hidden =true
 
-  //get user inputs
-  let startDateValue = (
-    document.getElementById("startDate") as HTMLInputElement
-  ).value;
-  let endDateValue = (document.getElementById("endDate") as HTMLInputElement)
-    .value;
+  tblIconBtn.onclick = ()=>{
+    tblIconBtn.classList.add("tblActive")
+    chartIconBtn.classList.remove("chartActive")
 
-  const stateOptions = (
-    document.getElementById("stateName") as HTMLSelectElement
-  ).options;
-
-  // clearing earlier div(except for first api call), here all the datatble in odUdDataTableWrapper, and we are emptying it, hence no need to clear datatable
-  odUdDataTableWrapper.innerHTML = "";
-
-  let selectedStateList: SelectedStateObj[] = [];
-  for (let option of stateOptions) {
-    if (option.selected) {
-      let selecetedStateObj: SelectedStateObj = {
-        name: option.text,
-        value: option.value,
-      };
-      selectedStateList.push(selecetedStateObj);
-    }
+    tblSectionDiv.hidden =false
+    plotSectionDiv.hidden = true
   }
-  //validation checks, and displaying msg in error div
-  if (startDateValue === "" || endDateValue === "") {
-    errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
-    errorDiv.innerHTML = "<b> Please Enter a Valid Start Date/End Date</b>";
-  } else if (selectedStateList.length == 0) {
-    errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
-    errorDiv.innerHTML = "<b> Please Select State From Dropdown</b>";
-  } else if (startDateValue > endDateValue) {
-    errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
-    errorDiv.innerHTML =
-      "<b> Ooops !! End Date should be greater or Equal to Start Date </b>";
-  } else {
 
-    //if reached this ,means no validation error ,emptying error div and making start date and end date in desired format
-    errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
-    errorDiv.innerHTML = "";
-    //adding spinner class to spinner div
-    spinnerDiv.classList.add("loader");
-    for (let stateInd = 0; stateInd < selectedStateList.length; stateInd++) {
+  chartIconBtn.onclick = ()=>{
+    chartIconBtn.classList.add("chartActive")
+    tblIconBtn.classList.remove("tblActive")
 
-      //defining table schema dynamically
-      let tbl = document.createElement('table');
-      tbl.style.width = '100px';
-      tbl.id = `${selectedStateList[stateInd].name}_tbl`;
-      tbl.className = "table table-bordered table-hover display w-auto "
-      odUdDataTableWrapper.appendChild(tbl);
-
-      // div for plotting horizontal rule
-      let hrDiv1 = document.createElement("div");
-      hrDiv1.className = "hrStyle mt-3 mb-3";
-      odUdDataTableWrapper.appendChild(hrDiv1);
-
-
-      //fetch data for each states and push data to datatble div created above dynamically
-      let odUdData = await getOdUdData(startDateValue, endDateValue, selectedStateList[stateInd].value)
-
-      //generating column name
-      const columns = [{ title: 'Date_Key' }, { title: `${selectedStateList[stateInd].name}_Sch_Drawl` }, { title: `${selectedStateList[stateInd].name}_Act_Drawl` }, { title: `${selectedStateList[stateInd].name}_UI` }, { title: `${selectedStateList[stateInd].name}_Availability` }, { title: `${selectedStateList[stateInd].name}_Requirement` }, { title: `${selectedStateList[stateInd].name}_Shortage` }, { title: `${selectedStateList[stateInd].name}_Consumption` }]
-
-      $(`#${selectedStateList[stateInd].name}_tbl`).DataTable({
-
-        dom: "Bfrtip",
-        lengthMenu: [50, 192, 188],
-        data: odUdData.odUdData,
-        columns: columns
-    });
-    }
-
-    //removing spinnner
-    spinnerDiv.classList.remove("loader")
-
+    tblSectionDiv.hidden =true
+    plotSectionDiv.hidden = false
   }
 };
+
+
+const wrapperFunc = async ()=>{
+  fetchPlotData()
+  fetchTableData()
+
+}

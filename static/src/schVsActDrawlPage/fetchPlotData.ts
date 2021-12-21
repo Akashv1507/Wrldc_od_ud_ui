@@ -58,9 +58,9 @@ export const fetchPlotData = async () => {
   
       //adding spinner class to spinner div
       spinnerDiv.classList.add("loader");
-  try{
+  
       for (let stateInd = 0; stateInd < selectedStateList.length; stateInd++) {
-        
+        try{
         currState = selectedStateList[stateInd].value
 
         //div for plot of a current loop state
@@ -69,9 +69,9 @@ export const fetchPlotData = async () => {
         schVsActDrawlPlotsWrapper.appendChild(plotDiv);
   
         // div for plotting horizontal rule
-        let hrDiv1 = document.createElement("div");
-        hrDiv1.className = "hrStyle mt-3 mb-3";
-        schVsActDrawlPlotsWrapper.appendChild(hrDiv1);
+        let hrDiv = document.createElement("div");
+        hrDiv.className = "hrStyle mt-3 mb-3";
+        schVsActDrawlPlotsWrapper.appendChild(hrDiv);
   
        //fetch data for each states and plot data in div created above dynamically
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
@@ -128,26 +128,20 @@ export const fetchPlotData = async () => {
     };
     schActDrawlPlotData.traces.push(uiTrace);
   
-      // removing spinner class to spinner div
-      spinnerDiv.classList.remove("loader")
-  
       setPlotTraces(
           `${selectedStateList[stateInd].name}_plot`,
           schActDrawlPlotData
-      );
-      
-     
+      ); 
+      }catch(err){
+        errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
+        errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`
+        console.log(err)
+        //removing spinnner
+        spinnerDiv.classList.remove("loader")
+                  }   
       }
-  
-          }   
-  catch(err){
-      errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
-      errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`
-      console.log(err)
-      //removing spinnner
-      spinnerDiv.classList.remove("loader")
-  }  
-  
+      // removing spinner class to spinner div
+      spinnerDiv.classList.remove("loader")   
     }
   };
   

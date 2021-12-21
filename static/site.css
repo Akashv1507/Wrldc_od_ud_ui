@@ -1,3 +1,12 @@
+.top_navbar{
+  background: rgb(7, 105, 185);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+ 
+}
+
 #errorDiv {
   color: #dc3545;
 }

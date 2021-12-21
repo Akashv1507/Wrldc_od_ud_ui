@@ -70,19 +70,15 @@ export const fetchTableData = async()=>{
       errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML = "";
       
-      //to keep track of current state in loop 
-       let currState = ""
       //adding spinner class to spinner div
       spinnerDiv.classList.add("loader");
   
-  try{
       for (let stateInd = 0; stateInd < selectedStateList.length; stateInd++) {
-        
-        currState = selectedStateList[stateInd].value
+        try{
         // to store all maxminrows of table
         let allMaxMinAvgTblRows:MaxMinAvgTblRow[] = []
 
-        // div for plotting horizontal rule
+        // div for meta info like showing table of which state and date
         let metaInfoDiv = document.createElement("div");
         metaInfoDiv.className = " text-info text-center mt-3 mb-5 font-weight-bold h5";
         schVsActDrawlTableWrapper.appendChild(metaInfoDiv);
@@ -109,19 +105,20 @@ export const fetchTableData = async()=>{
 
           currDateStr =currDate.toISOString().slice(0,10)
 
-          //making api call
-          const schDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Schedule`)
-          const actDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Actual`)
-          const uiData = getDifference( schDrawlData.schVsActDrawlData, actDrawlData.schVsActDrawlData)
-
-          const schDrawlMaxMinAvg = calMaxMinAvg(schDrawlData.schVsActDrawlData)
-          const actDrawlMaxMinAvg = calMaxMinAvg(actDrawlData.schVsActDrawlData)
-          const uiMaxMinAvg = calMaxMinAvg(uiData)
-          allMaxMinAvgTblRows.push({date:currDateStr, schMax:schDrawlMaxMinAvg.max, schMin:schDrawlMaxMinAvg.min, schAvg:schDrawlMaxMinAvg.avg, actMax:actDrawlMaxMinAvg.max, actMin:actDrawlMaxMinAvg.min, actAvg:actDrawlMaxMinAvg.avg, uiMax:uiMaxMinAvg.max, uiAvg:uiMaxMinAvg.avg, uiMin:uiMaxMinAvg.min})
-          let newDate = currDate.setDate(currDate.getDate()+1)
-          currDate = new Date(newDate)
-        }
-      
+          
+            //making api call
+            const schDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Schedule`)
+            const actDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Actual`)
+            const uiData = getDifference( schDrawlData.schVsActDrawlData, actDrawlData.schVsActDrawlData)
+  
+            const schDrawlMaxMinAvg = calMaxMinAvg(schDrawlData.schVsActDrawlData)
+            const actDrawlMaxMinAvg = calMaxMinAvg(actDrawlData.schVsActDrawlData)
+            const uiMaxMinAvg = calMaxMinAvg(uiData)
+            allMaxMinAvgTblRows.push({date:currDateStr, schMax:schDrawlMaxMinAvg.max, schMin:schDrawlMaxMinAvg.min, schAvg:schDrawlMaxMinAvg.avg, actMax:actDrawlMaxMinAvg.max, actMin:actDrawlMaxMinAvg.min, actAvg:actDrawlMaxMinAvg.avg, uiMax:uiMaxMinAvg.max, uiAvg:uiMaxMinAvg.avg, uiMin:uiMaxMinAvg.min})
+            
+            let newDate = currDate.setDate(currDate.getDate()+1)
+            currDate = new Date(newDate)
+          }
          //generating column name
         const columns = [{ title: 'Date_Key', data:"date" },{ title: 'Max_Sch', data:"schMax" }, { title: 'Min_Sch' , data:"schMin" }, { title: 'Avg_Sch', data:"schAvg"  },{ title: 'Max_Act',data:"actMax"  },{ title: 'Min_Act', data:"actMin"  },{ title: 'Avg_Act', data:"actAvg"  },{ title: 'Max_UI', data:"uiMax"  },{ title: 'Min_Ui', data:"uiMin"  }, { title: 'Av_Ui', data:"uiAvg"  } ]
         
@@ -131,18 +128,15 @@ export const fetchTableData = async()=>{
           lengthMenu: [50, 192, 188],
           data: allMaxMinAvgTblRows,
           columns: columns
-      });
+          });
       // showing meta information
       metaInfoDiv.innerHTML =  `Showing Max Min Avg of Schedule & Actual Drawal For State ${selectedStateList[stateInd].value}.`
       }
-      spinnerDiv.classList.remove("loader")
+      catch(err){
+        errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
+        errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${selectedStateList[stateInd].value} B/w Selected Date. Please Try Again</b>`
+      }
+    }      
+    spinnerDiv.classList.remove("loader")  
     }
-    catch(err){
-      errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
-      errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`
-    console.log(err)
-    // removing spinner class to spinner div
-    spinnerDiv.classList.remove("loader")
-      }  
-    }       
 }

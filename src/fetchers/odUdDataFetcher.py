@@ -44,7 +44,7 @@ class OdUdDataFetcher():
             try:
                 cur = connection.cursor()
 
-                fetch_sql = "SELECT date_key, drawal_schdule, actual_drawal, ui, availability, requirement, shortage, consumption FROM REPORTING_UAT.state_load_details where state_name = :stateName and date_key between  :start_date and :end_date order by date_key"
+                fetch_sql = "SELECT date_key, drawal_schdule, actual_drawal, ui, shortage, consumption, availability, requirement  FROM REPORTING_UAT.state_load_details where state_name = :stateName and date_key between  :start_date and :end_date order by date_key"
                 # pspMetricDataDf = pd.read_sql(fetch_sql, params={'start_date': numbStartDate, 'end_date': numbEndDate}, con=connection)
                 cur.execute(fetch_sql, {
                             'stateName': stateName, 'start_date': numbStartDate, 'end_date': numbEndDate})

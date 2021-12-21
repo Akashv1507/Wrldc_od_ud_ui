@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} - Dashboard</title>
     
-    {# <script src="https://cdn.plot.ly/plotly-2.6.3.min.js"></script> #}
+    <script src="https://cdn.plot.ly/plotly-2.6.3.min.js"></script>
 
     {# for cdn use of of fontawsome #}
     {# <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> #}
@@ -42,6 +42,11 @@
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
+                <div class="top_navbar">
+                    <a href="{{url_for('index')}}" class ="text-white ml-5">
+                        <i class="fas fa-home" style='font-size:32px;color:white'></i> Home
+                    </a>
+                </div>
                 <div class="container-fluid">
                     {% block content %}{% endblock %}
                 </div>

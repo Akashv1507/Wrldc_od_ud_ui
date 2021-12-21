@@ -1,5 +1,5 @@
-import Plotly from "plotly.js-dist";
-// declare var Plotly: any;
+// import Plotly from "plotly.js-dist";
+declare var Plotly: any;
 import { toDateObj } from "./timeUtils";
 
 
@@ -15,7 +15,6 @@ export interface PlotTrace {
     fill?: string;
     mode?: string;
     fillcolor?: string;
-
 }
 
 export interface PlotData {

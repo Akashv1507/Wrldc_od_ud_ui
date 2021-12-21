@@ -1,0 +1,76 @@
+<!--Design by foolishdeveloper.com-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {# <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    /> #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/@fortawesome/fontawesome-free/css/all.css') }}" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home-Dashboard</title>
+
+    {#custom user css file#}
+    {% block css %} {% endblock %}
+    <link
+      href="{{ url_for('static', filename='indexLayout.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="section">
+        <div class="top_navbar">
+          {# <div class="hamburger">
+            <a href="#">
+              <i class="fas fa-bars"></i>
+            </a>
+          </div> #}
+        </div>
+        <div class="container">{% block content %}{% endblock %}</div>
+      </div>
+      <div class="sidebar">
+        <div class="profile">
+          <img
+            src="{{ url_for('static', filename='images/Wrldc_Logo.jpg') }}"
+            alt="WRLDC-LOGO"
+          />
+          <h3>WRLDC</h3>
+          <p>Mumbai</p>
+        </div>
+        <ul>
+          <li>
+            <a href="{{url_for('index')}}" class="active">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span class="item">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{url_for('schVsActDrawlIndex')}}">
+              <span class="icon"><i class="fas fa-desktop"></i></span>
+              <span class="item">Scada Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{url_for('odUdUiIndex')}}">
+              <span class="icon"><i class="fas fa-chart-area"></i></span>
+              <span class="item">PSP Dashboard</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{{url_for('index')}}">
+              <span class="icon"><i class="fas fa-user-friends"></i></span>
+              <span class="item">Contact</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

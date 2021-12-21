@@ -109,7 +109,7 @@ export const fetchTableData = async()=>{
             //making api call
             const schDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Schedule`)
             const actDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Actual`)
-            const uiData = getDifference( schDrawlData.schVsActDrawlData, actDrawlData.schVsActDrawlData)
+            const uiData = getDifference(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
   
             const schDrawlMaxMinAvg = calMaxMinAvg(schDrawlData.schVsActDrawlData)
             const actDrawlMaxMinAvg = calMaxMinAvg(actDrawlData.schVsActDrawlData)

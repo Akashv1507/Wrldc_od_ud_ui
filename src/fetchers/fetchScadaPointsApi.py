@@ -44,7 +44,7 @@ class DataFetchFromApi():
         try:
             # fetching secondwise data from api for each entity(timestamp,value) and converting to dataframe
             resData = obj_scadaApiFetcher.fetchData(entityTag, startTime, endTime)
-            print(resData[:2])
+            # print(resData[:2])
         except Exception as err:
             print("error while fetching current demand", err)
         else:

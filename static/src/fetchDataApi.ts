@@ -27,8 +27,11 @@ export const getSchVsActDrawlData = async (
     const resp = await fetch(`/api/schVsActDrawl/${startDate}/${endDate}/${scadaPointName}`, {
       method: "get",
     });
+  
     const respJSON = await resp.json();
+    
     return respJSON;
+    
   } catch (e) {
     console.error(e);
     return null;

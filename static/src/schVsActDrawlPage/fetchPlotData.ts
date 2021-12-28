@@ -74,10 +74,11 @@ export const fetchPlotData = async () => {
         schVsActDrawlPlotsWrapper.appendChild(hrDiv);
   
        //fetch data for each states and plot data in div created above dynamically
+       
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
         const uiData = getDifference( actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
-
+        
         let schActDrawlPlotData: PlotData = {
           title: `Schedule Vs Actual Drawl Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,
           traces: [],
@@ -135,10 +136,10 @@ export const fetchPlotData = async () => {
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`
-        console.log(err)
+        // console.log(err)
         //removing spinnner
         spinnerDiv.classList.remove("loader")
-                  }   
+        }   
       }
       // removing spinner class to spinner div
       spinnerDiv.classList.remove("loader")   

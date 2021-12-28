@@ -67,8 +67,8 @@ window.onload = async () => {
 };
 
 const wrapperFunc = async ()=>{
-     fetchPlotData()
-     fetchTableData()   
+    fetchPlotData()
+    fetchTableData()   
 }
 
 const setPrevDate = ()=>{
@@ -92,6 +92,7 @@ const setPrevDate = ()=>{
   fetchPlotData()
   fetchTableData()
 }
+
 const setNextDate = ()=>{
   //return in string
   let startDate=(document.getElementById("startDate") as HTMLInputElement)

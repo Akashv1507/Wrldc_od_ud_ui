@@ -54,7 +54,6 @@ def getSchVsActDrawl(startDate:str, endDate:str, scadaPointName:str ):
     schVsActDrawl = obj_dataFetchFromApi.fetchEntityDataFromApi(startDate, endDate, scadaPointId)
     return jsonify({'schVsActDrawlData':schVsActDrawl})
     
- 
 
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']

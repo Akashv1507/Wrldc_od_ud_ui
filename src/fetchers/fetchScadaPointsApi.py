@@ -44,14 +44,18 @@ class DataFetchFromApi():
         try:
             # fetching secondwise data from api for each entity(timestamp,value) and converting to dataframe
             resData = obj_scadaApiFetcher.fetchData(entityTag, startTime, endTime)
-            # print(resData[:2])
+          
         except Exception as err:
             print("error while fetching current demand", err)
         else:
             entityDataDf = pd.DataFrame(resData, columns =['timestamp','value']) 
+            
             #converting to minutewise data
             entityDataDf = self.toMinuteWiseData(entityDataDf)
-        
+            
+            # handling missing values NANs
+            entityDataDf['value'].fillna(method='ffill', inplace= True)
+            entityDataDf['value'].fillna(method='bfill', inplace= True)
         finally:
             data : List[Union[dt.datetime, float]] = self.toListOfTuple(entityDataDf)
        

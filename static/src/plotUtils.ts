@@ -94,8 +94,8 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
     yaxis2: {
                   title: plotData.y2AxisTitle,
                   // range: [-20, +20],
-                  titlefont: {color: 'rgb(148, 103, 189)'},
-                  tickfont: {color: 'rgb(148, 103, 189)'},
+                  titlefont: {color: '#007500'},
+                  tickfont: {color: '#007500', size: 18 },
                   overlaying: 'y',
                   side: 'right',
                   showgrid: false,

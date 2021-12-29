@@ -9,3 +9,14 @@ export const toDateObj = (timestampStr: string): Date => {
     let newTimestamp = new Date(year, month - 1, day, hour, minute, second);
     return newTimestamp;
 };
+
+export const convertDateTimeToStr = (inp: Date): string => {
+    return `${ensureTwoDigits(inp.getDate())}-${ensureTwoDigits(inp.getMonth() + 1)}-${inp.getFullYear()}`;
+}
+
+export const ensureTwoDigits = (num: number): string => {
+    if (num < 10) {
+        return "0" + num;
+    }
+    return "" + num;
+}

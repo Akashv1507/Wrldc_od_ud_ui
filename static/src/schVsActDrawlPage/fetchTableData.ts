@@ -1,9 +1,9 @@
 import{SelectedStateObj} from "./schVsActDrawl"
 import { toDateObj } from "../timeUtils";
 import { getSchVsActDrawlData } from "../fetchDataApi";
-import {getDifference, calMaxMin, getValueCorresTime, getAvgOdUDData} from "../helperFunctions"
+import {getDifference, calMaxMin, getValueCorresTime, getAvgOdUDData, getNetUiActSch} from "../helperFunctions"
 import {createDynamicHtmlContent} from "./dynamicHtmlContentCreator"
-
+import {convertDateTimeToStr} from  "../timeUtils"
 
 export interface InstUiMax{
   date:string
@@ -30,6 +30,12 @@ export interface AvgUd{
   avgUd:number
   correspondingAvgSch:number
   correspondingAvgAct:number
+}
+export interface NetUi{
+  date:string
+  netUi:number
+  netSch:number
+  netAct:number
 }
 
 
@@ -95,6 +101,7 @@ export const fetchTableData = async()=>{
         let instUiMinRows:InstUiMin[] = []
         let avgOdRows :AvgOd[] = []
         let avgUdRows: AvgUd[] = []
+        let netUiActSchRows: NetUi[] = []
 
         // div for meta info like showing table of which state
         let stateInfoDIv = document.createElement("div");
@@ -110,11 +117,12 @@ export const fetchTableData = async()=>{
         const endDateObj = new Date (endDateValue)
         let currDate = new Date (startDateObj)
         let currDateStr = ""
-
+        let currDateStrDDMMYYY = ""
        //fetch data for each states and for each date, cal min max avg for each day and append to list
         while (currDate<=endDateObj){
           try{
             currDateStr =currDate.toISOString().slice(0,10)
+            let currDateStrDDMMYYY = convertDateTimeToStr(currDate)
  
             //making api call
             const schDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Schedule`)
@@ -129,13 +137,17 @@ export const fetchTableData = async()=>{
             const schCorrMinUi = getValueCorresTime(schDrawlData.schVsActDrawlData ,uiMaxMin.min.timestamp)
             const actCorrMinUi = getValueCorresTime(actDrawlData.schVsActDrawlData ,uiMaxMin.min.timestamp)
 
-            instUiMaxRows.push({date:currDateStr, maxUi:uiMaxMin.max.value, timestamp:uiMaxMin.max.timestamp.slice(11), correspondingSch:schCorrMaxUi, correspondingAct:actCorrMaxUi})
-            instUiMinRows.push({date:currDateStr, minUi:uiMaxMin.min.value, timestamp:uiMaxMin.min.timestamp.slice(11), correspondingSch:schCorrMinUi, correspondingAct:actCorrMinUi})
+            instUiMaxRows.push({date:currDateStrDDMMYYY, maxUi:uiMaxMin.max.value, timestamp:uiMaxMin.max.timestamp.slice(11), correspondingSch:schCorrMaxUi, correspondingAct:actCorrMaxUi})
+            instUiMinRows.push({date:currDateStrDDMMYYY, minUi:uiMaxMin.min.value, timestamp:uiMaxMin.min.timestamp.slice(11), correspondingSch:schCorrMinUi, correspondingAct:actCorrMinUi})
 
             //get avg sch , avg act coressponidng to avg od ud
             const avgOdUdData = getAvgOdUDData(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
-            avgOdRows.push({date:currDateStr, avgOd:avgOdUdData.avgOd, correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd})
-            avgUdRows.push({date:currDateStr, avgUd:avgOdUdData.avgUd, correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd})
+            avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd})
+            avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd})
+            
+            //get net ui and net sch, actual drawal
+            const netUiActSch = getNetUiActSch(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
+            netUiActSchRows.push({date:currDateStrDDMMYYY, netUi:netUiActSch.netUi, netAct:netUiActSch.netAct, netSch:netUiActSch.netSch})
 
           }catch(err){
             errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
@@ -151,8 +163,9 @@ export const fetchTableData = async()=>{
         const maxUiCols = [{ title: 'Date', data:"date" },{ title: 'Timesatmp', data:"timestamp" }, { title: 'Max_UI' , data:"maxUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"  }]
         const avgOdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_OD', data:"avgOd" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }]
         const avgUdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_UD', data:"avgUd" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }]
+        const netUiCols = [{ title: 'Date', data:"date" }, { title: 'Net_UI', data:"netUi" },{ title: 'Net_Act', data:"netAct" },{ title: 'Net_Sch', data:"netSch" }]
 
-        //draw table in div created above dynamically
+        //draw table instantaneous max ui and corresponding shcedule and actual
         $(`#${selectedStateList[stateInd].name}_maxUiTbl`).DataTable({
           dom: "Brtp",
           autoWidth: false,
@@ -161,7 +174,7 @@ export const fetchTableData = async()=>{
           columns: maxUiCols
           });
 
-        //draw table in div created above dynamically
+        //draw table instantaneous min ui and corresponding shcedule and actual
         $(`#${selectedStateList[stateInd].name}_minUiTbl`).DataTable({
           dom: "Brtp",
           autoWidth: false,
@@ -170,7 +183,7 @@ export const fetchTableData = async()=>{
           columns: minUiCols
           })
 
-          //draw table in div created above dynamically
+        //draw table avg od and corresponding avg shcedule and actual
         $(`#${selectedStateList[stateInd].name}_avgOdTbl`).DataTable({
           dom: "Brtp",
           autoWidth: false,
@@ -179,13 +192,22 @@ export const fetchTableData = async()=>{
           columns: avgOdCols
           })
 
-          //draw table in div created above dynamically
+          //draw table avg ud and corresponding avg shcedule and actual
         $(`#${selectedStateList[stateInd].name}_avgUdTbl`).DataTable({
           dom: "Brtp",
           autoWidth: false,
           lengthMenu: [50, 192, 188],
           data: avgUdRows,
           columns: avgUdCols
+          })
+
+          //draw table net ui and net shcedule and actual
+        $(`#${selectedStateList[stateInd].name}_netUiTbl`).DataTable({
+          dom: "Brtp",
+          autoWidth: false,
+          lengthMenu: [50, 192, 188],
+          data: netUiActSchRows,
+          columns: netUiCols
           })
 
       }

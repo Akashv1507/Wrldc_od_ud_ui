@@ -84,9 +84,34 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
      avgUdTbl.className = "table table-bordered table-hover display"
      avgUdTbl.id = `${stateName}_avgUdTbl`;
      avgUdTblDiv.appendChild(avgUdTbl);
-     
-     // div for plotting horizontal rule
-     let hrDiv = document.createElement("div");
-     hrDiv.className = "hrStyle mt-3 mb-3";
-     schVsActDrawlTableWrapper.appendChild(hrDiv);
+
+     //------------------------now net ui tbl start-------------------------
+
+     // div that holds net ui div
+     let netUiTblsDiv = document.createElement("div");
+     netUiTblsDiv.className = "row justify-content-md-center";
+     schVsActDrawlTableWrapper.appendChild(netUiTblsDiv);
+    
+    // -------- net UI tble and children------------- 
+     // net ui tbl div 
+     let netUiTblDiv = document.createElement("div");
+     netUiTblDiv.className = "col-md-5";
+     netUiTblsDiv.appendChild(netUiTblDiv);
+    
+     // div for meta info 
+     let netUiTblInfoDiv = document.createElement("div");
+     netUiTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
+     netUiTblInfoDiv.innerHTML = " <u>Net UI and Corresponding Net Schedule and Actual(MW)</u>"
+     netUiTblDiv.appendChild(netUiTblInfoDiv);
+
+     // net ui tbl
+     let netUiTbl = document.createElement('table');
+     netUiTbl.className = "table table-bordered table-hover display "
+     netUiTbl.id = `${stateName}_netUiTbl`;
+     netUiTblDiv.appendChild(netUiTbl);
+
+      // div for plotting horizontal rule
+      let hrDiv = document.createElement("div");
+      hrDiv.className = "hrStyle mt-3 mb-3";
+      schVsActDrawlTableWrapper.appendChild(hrDiv);
 }

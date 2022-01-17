@@ -1,7 +1,7 @@
 import { getSchVsActDrawlData } from "../fetchDataApi";
 import { PlotData, PlotTrace, setPlotTraces } from "../plotUtils";
 import{SelectedStateObj} from "./schVsActDrawl"
-import {getDifference} from "../helperFunctions"
+import {getDifference, getUiPosNeg} from "../helperFunctions"
 
 export const fetchPlotData = async () => {
     //to display error msg
@@ -78,12 +78,13 @@ export const fetchPlotData = async () => {
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
         const uiData = getDifference( actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
+        const uiPosNegData = getUiPosNeg(schDrawlData.schVsActDrawlData, uiData)
         
         let schActDrawlPlotData: PlotData = {
           title: `Schedule Vs Actual Drawl Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,
           traces: [],
           yAxisTitle: "MW",
-          y2AxisTitle:"Mw"
+          y2AxisTitle:"MW"
 
       };
   
@@ -109,13 +110,13 @@ export const fetchPlotData = async () => {
               width: 4,
               // color: '#34A853'
           },
-          fill: "tonextx",
-          fillcolor: '#e763fa'
+          // fill: "tonextx",
+          // fillcolor: '#e763fa'
       };
-      schActDrawlPlotData.traces.push(actDrawlTrace);
+      // schActDrawlPlotData.traces.push(actDrawlTrace);
 
       let uiTrace: PlotTrace = {
-        name: "UI",
+        name: "Deviation",
         data: uiData,
         type: "scatter",
         hoverYaxisDisplay: "MW",
@@ -126,8 +127,38 @@ export const fetchPlotData = async () => {
         },
         // fill: "tonextx",
         // fillcolor: '#e763fa'
-    };
+      };
     schActDrawlPlotData.traces.push(uiTrace);
+
+    let actualCorrToUiNegTrace: PlotTrace = {
+      name: "ActForUd",
+      data: uiPosNegData.actualCorrToUiNeg,
+      type: "scatter",
+      hoverYaxisDisplay: "MW",
+      mode: 'markers',
+      line: {
+          width: 1,
+          // color: '#34A853'
+      },
+      // fill: "tonextx",
+      // fillcolor: '#e763fa'
+    };
+    schActDrawlPlotData.traces.push(actualCorrToUiNegTrace);
+
+    let actualCorrToUiPosTrace: PlotTrace = {
+    name: "ActForOd",
+    data: uiPosNegData.actualCorrToUiPos,
+    type: "scatter",
+    hoverYaxisDisplay: "MW", 
+    mode: 'markers',
+    line: {
+        width: 1,
+        // color: '#34A853'
+    },
+    // fill: "tonextx",
+    // fillcolor: '#e763fa'
+    };
+  schActDrawlPlotData.traces.push(actualCorrToUiPosTrace);
   
       setPlotTraces(
           `${selectedStateList[stateInd].name}_plot`,
@@ -136,7 +167,7 @@ export const fetchPlotData = async () => {
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`
-        // console.log(err)
+        console.log(err)
         //removing spinnner
         spinnerDiv.classList.remove("loader")
         }   

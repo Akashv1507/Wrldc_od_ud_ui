@@ -83,7 +83,7 @@ export const fetchTableData = async () => {
         let odUdData = await getOdUdData(startDateValue, endDateValue, selectedStateList[stateInd].value)
   
         //generating column name
-        const columns = [{ title: 'Date_Key' }, { title: `${selectedStateList[stateInd].name}_Sch_Drawl` }, { title: `${selectedStateList[stateInd].name}_Act_Drawl` }, { title: `${selectedStateList[stateInd].name}_UI` },{ title: `${selectedStateList[stateInd].name}_Shortage` }, { title: `${selectedStateList[stateInd].name}_Consumption` }, { title: `${selectedStateList[stateInd].name}_Availability` }, { title: `${selectedStateList[stateInd].name}_Requirement` }]
+        const columns = [{ title: 'Date_Key' }, { title: `${selectedStateList[stateInd].name}_Sch_Drawl` }, { title: `${selectedStateList[stateInd].name}_Act_Drawl` }, { title: `${selectedStateList[stateInd].name}_Deviation` },{ title: `${selectedStateList[stateInd].name}_Shortage` }, { title: `${selectedStateList[stateInd].name}_Consumption` }, { title: `${selectedStateList[stateInd].name}_Availability` }, { title: `${selectedStateList[stateInd].name}_Requirement` }]
   
         $(`#${selectedStateList[stateInd].name}_tbl`).DataTable({
           dom: "Bfrtip",
@@ -92,7 +92,7 @@ export const fetchTableData = async () => {
           columns: columns
       });
       // showing meta information
-      metaInfoDiv.innerHTML =  `Showing Schedule Drawal, Actual Drawal and UI(in MUs) For State ${selectedStateList[stateInd].value}.`
+      metaInfoDiv.innerHTML =  `Showing Schedule Drawal, Actual Drawal and Deviation(in MUs) For State ${selectedStateList[stateInd].value}.`
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`

@@ -44,7 +44,7 @@ export const calMaxMin = (list :[string, number][]): MaxMin=>{
         return maxminObj
 }
 
-export const getValueCorresTime=(list :[string, number][], timestamp:string):number=>{
+export const getValueCorresTime=(list :[string, number][], timestamp:string, roundNeeded:boolean= true):number=>{
     let value:number
     list.every((ele, ind)=>{
         if(ele[0]===timestamp){
@@ -53,7 +53,13 @@ export const getValueCorresTime=(list :[string, number][], timestamp:string):num
         }
        return true
     })
-    return Math.round(value)
+    if(roundNeeded){
+        return Math.round(value)
+    }
+    else{
+        return +value.toFixed(2)
+    }
+    
 }
 
 export function roundToOne(num: number) {
@@ -121,4 +127,60 @@ netUiActSchObj.netSch = Math.round(sumSch/lenSch)
 netUiActSchObj.netUi =Math.round( (sumAct-sumSch)/lenSch)
 
 return netUiActSchObj
+}
+
+export const getUiPosNeg = (schDrawal:[string, number][], uiData:[string, number][])=>{
+    let actualCorrToUiPos:[string, number][] = []
+    let actualCorrToUiNeg:[string, number][] = []
+    let copySchDrawalData =JSON.parse(JSON.stringify(schDrawal));
+    let uiPosNegData= {'actualCorrToUiPos':actualCorrToUiPos, 'actualCorrToUiNeg':actualCorrToUiNeg}
+
+    uiData.forEach((ele, ind)=>{
+        if(ele[1]>0){
+            copySchDrawalData[ind][1] = copySchDrawalData[ind][1]+ele[1]
+            
+            actualCorrToUiPos.push(copySchDrawalData[ind])
+        }
+        else{
+            copySchDrawalData[ind][1] = copySchDrawalData[ind][1]+ele[1]
+            actualCorrToUiNeg.push(copySchDrawalData[ind])
+        }
+    })
+    console.log(uiPosNegData)
+    return uiPosNegData
+}
+
+export const getFreqStats= (actDrawal:[string,number][], schDrawal:[string,number][], freqData:[string,number][] )=>{
+    
+    let countOd =0
+    let countUd = 0
+    let countLessThanBandForOd = 0
+    let countGreaterThanBandForUd = 0
+    let countBetweenBand = 0
+    
+
+    actDrawal.forEach((actDrawalEle, ind)=>{
+        let ui = actDrawalEle[1]-schDrawal[ind][1]
+        if (ui<0 ){
+            countUd = countUd+1
+            if (freqData[ind][1]>50.05){
+                countGreaterThanBandForUd = countGreaterThanBandForUd +1
+            }
+        }
+        else if(ui>0){
+            countOd = countOd+1
+            if (freqData[ind][1]<49.90){
+                countLessThanBandForOd = countLessThanBandForOd +1
+            }  
+        }
+    })
+
+    actDrawal.forEach((actDrawalEle, ind)=>{
+        if (freqData[ind][1]>=49.90 && freqData[ind][1]<=50.05){
+            countBetweenBand = countBetweenBand +1
+        }  
+    })
+
+    let freqStatsData = {'countLessThanBandForOd':((countLessThanBandForOd/countOd)*100).toFixed(1), 'countGreaterThanBandForUd':((countGreaterThanBandForUd/countUd)*100).toFixed(1), 'countBetweenBand':((countBetweenBand/actDrawal.length)*100).toFixed(1),}
+    return freqStatsData
 }

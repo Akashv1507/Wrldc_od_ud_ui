@@ -117,7 +117,7 @@ export const fetchPlotData = async () => {
 
         //UI trace
         let uiTrace: PlotTrace = {
-            name: "UI",
+            name: "Deviation",
             data: odUdPlotData.ui,
             type: "scatter",
             hoverYaxisDisplay: "MUs",

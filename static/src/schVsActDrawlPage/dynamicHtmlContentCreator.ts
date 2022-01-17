@@ -15,7 +15,7 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
      // div for meta info 
      let maxTblInfoDiv = document.createElement("div");
      maxTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
-     maxTblInfoDiv.innerHTML = "<u>Instantaneous Max UI(OD) and Corresponding Schedule and Actual(MW)</u>"
+     maxTblInfoDiv.innerHTML = "<u>Instantaneous Max OD & Corresponding Schedule, Actual(MW) & Frequency</u>"
      maxTblDiv.appendChild(maxTblInfoDiv);
     
      // instantaneous max ui table
@@ -33,7 +33,7 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
      // div for meta info 
      let minTblInfoDiv = document.createElement("div");
      minTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
-     minTblInfoDiv.innerHTML = "<u>Instantaneous Min UI(UD) and Corresponding Schedule and Actual(MW)</u>"
+     minTblInfoDiv.innerHTML = "<u>Instantaneous Max UD & Corresponding Schedule, Actual(MW) & Frequency</u>"
      minTblDiv.appendChild(minTblInfoDiv);
 
      // instantaneous min ui table
@@ -58,7 +58,7 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
      // div for meta info 
      let avgOdTblInfoDiv = document.createElement("div");
      avgOdTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
-     avgOdTblInfoDiv.innerHTML = " <u>Avg OD and Corresponding Avg Schedule and Actual(MW)</u>"
+     avgOdTblInfoDiv.innerHTML = " <u>Avg OD and Corresponding Avg Schedule, Actual(MW) and Frequency<49.90</u>"
      avgOdTblDiv.appendChild(avgOdTblInfoDiv);
 
      // avg od tbl
@@ -76,7 +76,7 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
     // div for meta info
     let avgudTblInfoDiv = document.createElement("div");
     avgudTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
-    avgudTblInfoDiv.innerHTML = " <u>Avg UD and Corresponding Avg Schedule and Actual(MW)</u>"
+    avgudTblInfoDiv.innerHTML = " <u>Avg UD and Corresponding Avg Schedule, Actual(MW) and Frequency>50.05</u>"
     avgUdTblDiv.appendChild(avgudTblInfoDiv);
     
      // avg ud tbl
@@ -95,13 +95,13 @@ export const createDynamicHtmlContent = (stateName:string, stateValue:string, sc
     // -------- net UI tble and children------------- 
      // net ui tbl div 
      let netUiTblDiv = document.createElement("div");
-     netUiTblDiv.className = "col-md-5";
+     netUiTblDiv.className = "col-md-6";
      netUiTblsDiv.appendChild(netUiTblDiv);
     
      // div for meta info 
      let netUiTblInfoDiv = document.createElement("div");
      netUiTblInfoDiv.className = " text-info text-center mt-3 mb-2 font-weight-bold";
-     netUiTblInfoDiv.innerHTML = " <u>Net UI and Corresponding Net Schedule and Actual(MW)</u>"
+     netUiTblInfoDiv.innerHTML = " <u>Net Deviation and Corresponding Net Schedule and Actual(MW) and Frequency b/w Band</u>"
      netUiTblDiv.appendChild(netUiTblInfoDiv);
 
      // net ui tbl

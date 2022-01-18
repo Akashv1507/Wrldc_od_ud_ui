@@ -84,14 +84,14 @@ export const fetchPlotData = async () => {
             title: `Showing Drawl Details Of ${selectedStateList[stateInd].value} (In MUs) B/w Dates ${startDateValue} And ${endDateValue}`,
             traces: [],
             yAxisTitle: "MUs",
-            y2AxisTitle:"MUs"
-  
+            y2AxisTitle:"MUs",
+            barmode:"group"
         };
         //sch drawal trace
         let schDrawlTrace: PlotTrace = {
             name: "Schedule Drawl",
             data: odUdPlotData.schDrawal,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
             line: {
                 width: 4,
@@ -105,7 +105,7 @@ export const fetchPlotData = async () => {
         let actDrawlTrace: PlotTrace = {
             name: "Actual Drawl",
             data: odUdPlotData.actDrawal,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
             line: {
                 width: 4,
@@ -119,9 +119,9 @@ export const fetchPlotData = async () => {
         let uiTrace: PlotTrace = {
             name: "Deviation",
             data: odUdPlotData.ui,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
-            isSecondaryAxisTrace:true,
+            //isSecondaryAxisTrace:true,
             line: {
                 width: 4,
                 // color: '#34A853'
@@ -134,7 +134,7 @@ export const fetchPlotData = async () => {
         let shortageTrace: PlotTrace = {
             name: "Availability",
             data: odUdPlotData.availability,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
             visible:"legendonly",
             line: {
@@ -149,7 +149,7 @@ export const fetchPlotData = async () => {
         let consumptionTrace: PlotTrace = {
             name: "Consumption",
             data: odUdPlotData.consumption,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
             visible:"legendonly",
             line: {
@@ -164,7 +164,7 @@ export const fetchPlotData = async () => {
         let requirementTrace: PlotTrace = {
             name: "Requirement",
             data: odUdPlotData.requirement,
-            type: "scatter",
+            type: "bar",
             hoverYaxisDisplay: "MUs",
             visible:"legendonly",
             line: {

@@ -24,6 +24,7 @@ export interface InstUiMin{
 export interface AvgOd{
   date:string
   avgOd:number
+  mus:number
   correspondingAvgSch:number
   correspondingAvgAct:number
   correspondingFreqLessThanBand:number
@@ -31,6 +32,7 @@ export interface AvgOd{
 export interface AvgUd{
   date:string
   avgUd:number
+  mus:number
   correspondingAvgSch:number
   correspondingAvgAct:number
   correspondingFreqGreaterThanBand:number
@@ -151,8 +153,8 @@ export const fetchTableData = async()=>{
             //get avg sch , avg act coressponidng to avg od ud and percentage of time less than band for OD and percentage of time greter than band for UD
             const avgOdUdData = getAvgOdUDData(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
             const freqStatsData = getFreqStats(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData, freqData.schVsActDrawlData)
-            avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd, correspondingFreqLessThanBand:+freqStatsData.countLessThanBandForOd})
-            avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd, correspondingFreqGreaterThanBand: +freqStatsData.countGreaterThanBandForUd})
+            avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, mus:avgOdUdData.avgOd*0.024, correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd, correspondingFreqLessThanBand:+freqStatsData.countLessThanBandForOd})
+            avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, mus:avgOdUdData.avgUd*(-0.024),correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd, correspondingFreqGreaterThanBand: +freqStatsData.countGreaterThanBandForUd})
             
             //get net ui and net sch, actual drawal
             const netUiActSch = getNetUiActSch(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
@@ -170,8 +172,8 @@ export const fetchTableData = async()=>{
          //generating column name
         const minUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_UD' , data:"minUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}]
         const maxUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_OD' , data:"maxUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}]
-        const avgOdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_OD', data:"avgOd" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq<49.9', data:"correspondingFreqLessThanBand" }]
-        const avgUdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_UD', data:"avgUd" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq>51.05', data:"correspondingFreqGreaterThanBand" }]
+        const avgOdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_OD', data:"avgOd" }, { title: 'OD(MUs)', data:"mus" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq<49.9', data:"correspondingFreqLessThanBand" }]
+        const avgUdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_UD', data:"avgUd" }, { title: 'UD(MUs)', data:"mus" }, { title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq>50.05', data:"correspondingFreqGreaterThanBand" }]
         const netUiCols = [{ title: 'Date', data:"date" }, { title: 'Net_Deviation', data:"netUi" },{ title: 'Net_Act', data:"netAct" },{ title: 'Net_Sch', data:"netSch" }, { title: 'Freq Between Band', data:"freqBetweenBand" }]
 
         //draw table instantaneous max ui and corresponding shcedule and actual

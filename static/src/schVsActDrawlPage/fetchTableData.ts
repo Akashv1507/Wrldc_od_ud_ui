@@ -12,6 +12,8 @@ export interface InstUiMax{
   correspondingSch:number
   correspondingAct:number
   correspondingFreq:number
+  odGreaterThan250InMin: number
+  percentOdGreaterThan250InMin:number
 }
 export interface InstUiMin{
   date:string
@@ -20,6 +22,8 @@ export interface InstUiMin{
   correspondingSch:number
   correspondingAct:number
   correspondingFreq:number
+  udGreaterThan250InMin: number
+  percentUdGreaterThan250InMin:number
 }
 export interface AvgOd{
   date:string
@@ -43,6 +47,20 @@ export interface NetUi{
   netSch:number
   netAct:number
   freqBetweenBand:number
+}
+export interface InstMinFreq{
+  date:string
+  timestamp: string
+  minFreq:number
+  correspondingUi:number
+  
+}
+export interface InstMaxFreq{
+  date:string
+  timestamp: string
+  maxFreq:number
+  correspondingUi:number
+  
 }
 
 
@@ -109,11 +127,13 @@ export const fetchTableData = async()=>{
         let avgOdRows :AvgOd[] = []
         let avgUdRows: AvgUd[] = []
         let netUiActSchRows: NetUi[] = []
+        let instMaxFreqRows: InstMaxFreq[]=[]
+        let instMinFreqRows: InstMinFreq[]=[]
 
         // div for meta info like showing table of which state
         let stateInfoDIv = document.createElement("div");
         stateInfoDIv.className = " text-danger text-center mt-3 mb-2 font-weight-bold h4";
-        stateInfoDIv.innerHTML = `Showing Tables Of ${selectedStateList[stateInd].value}. All Figures In MW.`
+        stateInfoDIv.innerHTML = `Showing Tables Of ${selectedStateList[stateInd].value}.`
         schVsActDrawlTableWrapper.appendChild(stateInfoDIv);
 
         //creating dynamic html div and tables
@@ -147,18 +167,27 @@ export const fetchTableData = async()=>{
             const actCorrMinUi = getValueCorresTime(actDrawlData.schVsActDrawlData ,uiMaxMin.min.timestamp)
             const freqCorrMinUi = getValueCorresTime(freqData.schVsActDrawlData, uiMaxMin.min.timestamp, false)
 
-            instUiMaxRows.push({date:currDateStrDDMMYYY, maxUi:uiMaxMin.max.value, timestamp:uiMaxMin.max.timestamp.slice(11), correspondingSch:schCorrMaxUi, correspondingAct:actCorrMaxUi, correspondingFreq:freqCorrMaxUi })
-            instUiMinRows.push({date:currDateStrDDMMYYY, minUi:uiMaxMin.min.value, timestamp:uiMaxMin.min.timestamp.slice(11), correspondingSch:schCorrMinUi, correspondingAct:actCorrMinUi, correspondingFreq:freqCorrMinUi})
-
             //get avg sch , avg act coressponidng to avg od ud and percentage of time less than band for OD and percentage of time greter than band for UD
             const avgOdUdData = getAvgOdUDData(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
             const freqStatsData = getFreqStats(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData, freqData.schVsActDrawlData)
+
+            //pushing rows for current date
+            instUiMaxRows.push({date:currDateStrDDMMYYY, maxUi:uiMaxMin.max.value, timestamp:uiMaxMin.max.timestamp.slice(11), correspondingSch:schCorrMaxUi, correspondingAct:actCorrMaxUi, correspondingFreq:freqCorrMaxUi, odGreaterThan250InMin:avgOdUdData.countOdInMin, percentOdGreaterThan250InMin:+avgOdUdData["%countOdInMin"] })
+            instUiMinRows.push({date:currDateStrDDMMYYY, minUi:uiMaxMin.min.value, timestamp:uiMaxMin.min.timestamp.slice(11), correspondingSch:schCorrMinUi, correspondingAct:actCorrMinUi, correspondingFreq:freqCorrMinUi, udGreaterThan250InMin:avgOdUdData.countUdInMin, percentUdGreaterThan250InMin: +avgOdUdData["%countUdInMin"]})
             avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, mus:+(avgOdUdData.avgOd*0.024).toFixed(1), correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd, correspondingFreqLessThanBand:+freqStatsData.countLessThanBandForOd})
             avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, mus:+(avgOdUdData.avgUd*(-0.024)).toFixed(1),correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd, correspondingFreqGreaterThanBand: +freqStatsData.countGreaterThanBandForUd})
             
             //get net ui and net sch, actual drawal
             const netUiActSch = getNetUiActSch(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
             netUiActSchRows.push({date:currDateStrDDMMYYY, netUi:netUiActSch.netUi, netAct:netUiActSch.netAct, netSch:netUiActSch.netSch, freqBetweenBand: +freqStatsData.countBetweenBand})
+
+            // new added tbl of min max frequency time and corresponding od,ud
+            // get max min frequency and corresponding timestamp
+            const freqMaxMin = calMaxMin(freqData.schVsActDrawlData, false)
+            const uiCorrMaxFreq = getValueCorresTime(uiData, freqMaxMin.max.timestamp)
+            const uiCorrMinFreq = getValueCorresTime(uiData, freqMaxMin.min.timestamp)
+            instMaxFreqRows.push({date:currDateStrDDMMYYY, timestamp:freqMaxMin.max.timestamp, maxFreq:freqMaxMin.max.value, correspondingUi:uiCorrMaxFreq})
+            instMinFreqRows.push({date:currDateStrDDMMYYY, timestamp:freqMaxMin.min.timestamp,minFreq:freqMaxMin.min.value, correspondingUi:uiCorrMinFreq})
 
           }catch(err){
             errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
@@ -170,11 +199,13 @@ export const fetchTableData = async()=>{
             
           }
          //generating column name
-        const minUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_UD' , data:"minUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}]
-        const maxUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_OD' , data:"maxUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}]
-        const avgOdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_OD', data:"avgOd" }, { title: 'OD(MUs)', data:"mus" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq<49.9', data:"correspondingFreqLessThanBand" }]
-        const avgUdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_UD', data:"avgUd" }, { title: 'UD(MUs)', data:"mus" }, { title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: 'Freq>50.05', data:"correspondingFreqGreaterThanBand" }]
-        const netUiCols = [{ title: 'Date', data:"date" }, { title: 'Net_Deviation', data:"netUi" },{ title: 'Net_Act', data:"netAct" },{ title: 'Net_Sch', data:"netSch" }, { title: 'Freq Between Band', data:"freqBetweenBand" }]
+        const minUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_UD' , data:"minUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}, {title:'UD>250(In Mins)', data:"udGreaterThan250InMin"}, {title:'UD>250(In %)', data:"percentUdGreaterThan250InMin"}]
+        const maxUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_OD' , data:"maxUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}, {title:'OD>250(In Mins)', data:"odGreaterThan250InMin"}, {title:'OD>250(In %)', data:"percentOdGreaterThan250InMin"}]
+        const avgOdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_OD', data:"avgOd" }, { title: 'OD(MUs)', data:"mus" },{ title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: '%Freq<49.9', data:"correspondingFreqLessThanBand" }]
+        const avgUdCols = [{ title: 'Date', data:"date" }, { title: 'Avg_UD', data:"avgUd" }, { title: 'UD(MUs)', data:"mus" }, { title: 'Avg_Act', data:"correspondingAvgAct" },{ title: 'Avg_Sch', data:"correspondingAvgSch" }, { title: '%Freq>50.05', data:"correspondingFreqGreaterThanBand" }]
+        const netUiCols = [{ title: 'Date', data:"date" }, { title: 'Net_Deviation', data:"netUi" },{ title: 'Net_Act', data:"netAct" },{ title: 'Net_Sch', data:"netSch" }, { title: '% Freq Between Band', data:"freqBetweenBand" }]
+        const minFreqCols= [{title:'Date', data:'date'}, {title:'Timestamp', data:'timestamp'}, {title:'Min_Freq', data:'minFreq'},{title:'Corr-Deviation', data:'correspondingUi'}]
+        const maxFreqCols= [{title:'Date', data:'date'}, {title:'Timestamp', data:'timestamp'}, {title:'Max_Freq', data:'maxFreq'},{title:'Corr-Deviation', data:'correspondingUi'}]
 
         //draw table instantaneous max ui and corresponding shcedule and actual
         $(`#${selectedStateList[stateInd].name}_maxUiTbl`).DataTable({
@@ -220,6 +251,24 @@ export const fetchTableData = async()=>{
           data: netUiActSchRows,
           columns: netUiCols
           })
+
+        //draw table instantaneous max Frequency and corresponding deviation
+        $(`#${selectedStateList[stateInd].name}_maxFreqTbl`).DataTable({
+          dom: "Brtp",
+          autoWidth: false,
+          lengthMenu: [50, 192, 188],
+          data: instMaxFreqRows,
+          columns: maxFreqCols
+          });
+        
+        //draw table instantaneous min Frequency and corresponding deviation
+        $(`#${selectedStateList[stateInd].name}_minFreqTbl`).DataTable({
+          dom: "Brtp",
+          autoWidth: false,
+          lengthMenu: [50, 192, 188],
+          data: instMinFreqRows,
+          columns: minFreqCols
+          });
 
       }
       catch(err){

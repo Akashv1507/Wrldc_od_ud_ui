@@ -42,16 +42,19 @@ def getOdUdData(startDate:str, endDate:str, stateName:str ):
 
     startDate = dt.strptime(startDate, '%Y-%m-%d')
     endDate = dt.strptime(endDate, '%Y-%m-%d')  
+  
     odUdData = obj_odUdDataFetcher.fetchOdUdData(startDate, endDate, stateName) 
     return jsonify({'odUdData':odUdData})
 
 @app.route('/api/schVsActDrawl/<startDate>/<endDate>/<scadaPointName>')
 def getSchVsActDrawl(startDate:str, endDate:str, scadaPointName:str ):
-
-    startDate = dt.strptime(startDate, '%Y-%m-%d')
-    endDate = dt.strptime(endDate, '%Y-%m-%d')  
+    print(startDate, endDate)
+    startTime = dt.strptime(startDate, '%Y-%m-%d %H:%M:%S')
+    endTime = dt.strptime(endDate, '%Y-%m-%d %H:%M:%S')  
+   
     scadaPointId = appConfig[scadaPointName]
-    schVsActDrawl = obj_dataFetchFromApi.fetchEntityDataFromApi(startDate, endDate, scadaPointId)
+    schVsActDrawl = obj_dataFetchFromApi.fetchEntityDataFromApi(startTime, endTime, scadaPointId)
+  
     return jsonify({'schVsActDrawlData':schVsActDrawl})
     
 

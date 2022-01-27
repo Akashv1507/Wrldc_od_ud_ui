@@ -1,9 +1,8 @@
 import{SelectedStateObj} from "./schVsActDrawl"
-import { toDateObj } from "../timeUtils";
 import { getSchVsActDrawlData } from "../fetchDataApi";
 import {getDifference, calMaxMin, getValueCorresTime, getAvgOdUDData, getNetUiActSch, getFreqStats} from "../helperFunctions"
 import {createDynamicHtmlContent} from "./dynamicHtmlContentCreator"
-import {convertDateTimeToStr} from  "../timeUtils"
+import {yyyyddmmToddmmyyy, convertIsoString, getListOfDates} from  "../timeUtils"
 
 export interface InstUiMax{
   date:string
@@ -65,7 +64,7 @@ export interface InstMaxFreq{
 
 
 export const fetchTableData = async()=>{
-
+   
     //to display error msg
     const errorDiv = document.getElementById("errorTableDiv") as HTMLDivElement;
   
@@ -111,7 +110,11 @@ export const fetchTableData = async()=>{
       errorDiv.innerHTML =
         "<b> Ooops !! End Date should be greater or Equal to Start Date </b>";
     } else {
-  
+      // convert '2022-01-24T00:00' to '2022-01-24 00:00:00'
+      startDateValue = convertIsoString(startDateValue)
+      endDateValue = convertIsoString(endDateValue)
+      let datesChunksList = getListOfDates(startDateValue, endDateValue)
+
       //if reached this ,means no validation error ,emptying error div and making start date and end date in desired format
       errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML = "";
@@ -139,22 +142,16 @@ export const fetchTableData = async()=>{
         //creating dynamic html div and tables
         createDynamicHtmlContent(selectedStateList[stateInd].name, selectedStateList[stateInd].value, schVsActDrawlTableWrapper )
 
-        // converting start date and end date js date obj so that we can looop over it
-        const startDateObj = new Date (startDateValue)
-        const endDateObj = new Date (endDateValue)
-        let currDate = new Date (startDateObj)
-        let currDateStr = ""
-        let currDateStrDDMMYYY = ""
        //fetch data for each states and for each date, cal min max avg for each day and append to list
-        while (currDate<=endDateObj){
+       for(let ind=0;ind<datesChunksList.length;ind++){
           try{
-            currDateStr =currDate.toISOString().slice(0,10)
-            let currDateStrDDMMYYY = convertDateTimeToStr(currDate)
+            
+            let currDateStrDDMMYYY = yyyyddmmToddmmyyy(datesChunksList[ind].startTime)
  
             //making api call
-            const schDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Schedule`)
-            const actDrawlData = await getSchVsActDrawlData(currDateStr, currDateStr, `${selectedStateList[stateInd].value}_Actual`)
-            const freqData = await getSchVsActDrawlData(currDateStr, currDateStr, 'Frequency')
+            const schDrawlData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, `${selectedStateList[stateInd].value}_Schedule`)
+            const actDrawlData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, `${selectedStateList[stateInd].value}_Actual`)
+            const freqData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, 'Frequency')
             const uiData = getDifference(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
 
             //get max and min ui with their timestamp
@@ -191,13 +188,11 @@ export const fetchTableData = async()=>{
 
           }catch(err){
             errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
-            errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${selectedStateList[stateInd].value} For ${currDateStr}. Please Try Again</b>`
-          }finally{
-            let newDate = currDate.setDate(currDate.getDate()+1)
-            currDate = new Date(newDate)
+            errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${selectedStateList[stateInd].value} For ${datesChunksList[ind].startTime.substring(0,10)}. Please Try Again</b>`
           }
             
-          }
+        }//For loop end
+
          //generating column name
         const minUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_UD' , data:"minUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}, {title:'UD>250(In Mins)', data:"udGreaterThan250InMin"}, {title:'UD>250(In %)', data:"percentUdGreaterThan250InMin"}]
         const maxUiCols = [{ title: 'Date', data:"date" },{ title: 'Timestamp', data:"timestamp" }, { title: 'Max_OD' , data:"maxUi" }, { title: 'Schedule', data:"correspondingSch"  },{ title: 'Actual', data:"correspondingAct"}, { title: 'Frequency', data:"correspondingFreq"}, {title:'OD>250(In Mins)', data:"odGreaterThan250InMin"}, {title:'OD>250(In %)', data:"percentOdGreaterThan250InMin"}]

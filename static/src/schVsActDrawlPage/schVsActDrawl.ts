@@ -24,14 +24,15 @@ window.onload = async () => {
     searchResultLimit: 50,
     renderChoiceLimit: 50,
   });
-
-  const yesterday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date).toISOString().slice(0,10);
+  let currDate = new Date();
+  let yesterdayDate = new Date(currDate.setDate(currDate.getDate()-1));
+  let yesterdayDateStr = yesterdayDate.toISOString().substring(0,10);
 
   //setting startdate and enddate to yesterday
-  (document.getElementById("startDate") as HTMLInputElement).value= yesterday;
-  (document.getElementById("endDate") as HTMLInputElement).value = yesterday;
+  (document.getElementById("startDate") as HTMLInputElement).value= yesterdayDateStr + 'T00:00';
+  (document.getElementById("endDate") as HTMLInputElement).value = yesterdayDateStr +'T23:59';
 
-  // getting right arrow btn and left arrow btn
+  // getting right arrow btn and left arrow b
   (document.getElementById("leftArrow") as HTMLButtonElement).onclick = setPrevDate;
   (document.getElementById("rightArrow") as HTMLButtonElement).onclick = setNextDate;
   
@@ -67,13 +68,13 @@ window.onload = async () => {
 };
 
 const wrapperFunc = async ()=>{
-    fetchPlotData()
-    fetchTableData()   
+    await fetchPlotData()
+    await fetchTableData()   
 }
 
 const setPrevDate = ()=>{
   
-  // console.log(this.id)
+  
   //return in string
   let startDate=(document.getElementById("startDate") as HTMLInputElement)
   let endDate = (document.getElementById("endDate") as HTMLInputElement)
@@ -82,11 +83,15 @@ const setPrevDate = ()=>{
   const startDateObj = new Date (startDate.value)
   const endDateObj = new Date (endDate.value)
 
+  // toISOString() will subtract 5 hours and 30 minutes, hence adding 5 hours and 30 minutes before converting to string
+  startDateObj.setHours(startDateObj.getHours()+5, startDateObj.getMinutes()+30)
+  endDateObj.setHours(endDateObj.getHours()+5, endDateObj.getMinutes()+30)
+
   let newStartDate= startDateObj.setDate(startDateObj.getDate()-1)
-  startDate.value = (new Date(newStartDate)).toISOString().slice(0,10)
+  startDate.value = (new Date(newStartDate)).toISOString().slice(0,16)
 
   let newEndDate= endDateObj.setDate(endDateObj.getDate()-1)
-  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,10)
+  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
   
   //calling both the function with the new start date and end date
   fetchPlotData()
@@ -102,11 +107,15 @@ const setNextDate = ()=>{
   const startDateObj = new Date (startDate.value)
   const endDateObj = new Date (endDate.value)
 
+  // toISOString() will subtract 5 hours and 30 minutes, hence adding 5 hours and 30 minutes before converting to string
+  startDateObj.setHours(startDateObj.getHours()+5, startDateObj.getMinutes()+30)
+  endDateObj.setHours(endDateObj.getHours()+5, endDateObj.getMinutes()+30)
+  
   let newStartDate= startDateObj.setDate(startDateObj.getDate()+1)
-  startDate.value = (new Date(newStartDate)).toISOString().slice(0,10)
+  startDate.value = (new Date(newStartDate)).toISOString().slice(0,16)
 
   let newEndDate= endDateObj.setDate(endDateObj.getDate()+1)
-  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,10)
+  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
   
   //calling both the function with the new start date and end date
   fetchPlotData()

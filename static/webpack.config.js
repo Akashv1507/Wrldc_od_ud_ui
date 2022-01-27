@@ -14,11 +14,13 @@ module.exports = {
   // https://webpack.js.org/configuration/externals/
   externals: {
     "plotly.js-dist": "Plotly",
+    // 'moment': 'window.moment',
     // jquery: "jQuery",
   },
 
   // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
+  // devtool: "source-map",
+  devtool: false,
 
   module: {
     rules: [

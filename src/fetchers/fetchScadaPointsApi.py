@@ -52,6 +52,8 @@ class DataFetchFromApi():
             
             #converting to minutewise data
             entityDataDf = self.toMinuteWiseData(entityDataDf)
+            #filtering demand between startTIme and endtime only
+            entityDataDf = entityDataDf[(entityDataDf['timestamp'] >= startTime) & (entityDataDf['timestamp'] <= endTime)]
             
             # handling missing values NANs
             entityDataDf['value'].fillna(method='ffill', inplace= True)

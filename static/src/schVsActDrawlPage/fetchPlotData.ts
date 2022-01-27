@@ -2,6 +2,7 @@ import { getSchVsActDrawlData } from "../fetchDataApi";
 import { PlotData, PlotTrace, setPlotTraces } from "../plotUtils";
 import{SelectedStateObj} from "./schVsActDrawl"
 import {getDifference, getUiPosNeg} from "../helperFunctions"
+import {convertIsoString} from '../timeUtils'
 
 export const fetchPlotData = async () => {
     //to display error msg
@@ -49,6 +50,11 @@ export const fetchPlotData = async () => {
       errorDiv.innerHTML =
         "<b> Ooops !! End Date should be greater or Equal to Start Date </b>";
     } else {  
+
+      // convert '2022-01-24T00:00' to '2022-01-24 00:00:00'
+      startDateValue = convertIsoString(startDateValue)
+      endDateValue = convertIsoString(endDateValue)
+      
       //to keep track of current state in loop 
       let currState = ""
 
@@ -73,7 +79,7 @@ export const fetchPlotData = async () => {
         hrDiv.className = "hrStyle mt-3 mb-3";
         schVsActDrawlPlotsWrapper.appendChild(hrDiv);
   
-       //fetch data for each states and plot data in div created above dynamically
+      //  fetch data for each states and plot data in div created above dynamically
        
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
@@ -101,19 +107,19 @@ export const fetchPlotData = async () => {
       };
       schActDrawlPlotData.traces.push(schDrawlTrace);
   
-      let actDrawlTrace: PlotTrace = {
-          name: "Actual Drawl",
-          data: actDrawlData.schVsActDrawlData,
-          type: "scatter",
-          hoverYaxisDisplay: "MW",
-          line: {
-              width: 4,
-              // color: '#34A853'
-          },
-          // fill: "tonextx",
-          // fillcolor: '#e763fa'
-      };
-      // schActDrawlPlotData.traces.push(actDrawlTrace);
+  //     let actDrawlTrace: PlotTrace = {
+  //         name: "Actual Drawl",
+  //         data: actDrawlData.schVsActDrawlData,
+  //         type: "scatter",
+  //         hoverYaxisDisplay: "MW",
+  //         line: {
+  //             width: 4,
+  //             // color: '#34A853'
+  //         },
+  //         // fill: "tonextx",
+  //         // fillcolor: '#e763fa'
+  //     };
+  //     schActDrawlPlotData.traces.push(actDrawlTrace);
 
       let uiTrace: PlotTrace = {
         name: "Deviation",

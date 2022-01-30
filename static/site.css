@@ -59,6 +59,10 @@ tr {
   border: 0;
   box-shadow: 0 10px 10px -10px #8c8b8b inset;
 }
+.button.disabled {
+  opacity: 0.65; 
+  cursor: not-allowed;
+}
 
 /* .dt-button.button-copy{
   visibility: hidden;

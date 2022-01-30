@@ -68,8 +68,15 @@ window.onload = async () => {
 };
 
 const wrapperFunc = async ()=>{
-    await fetchPlotData()
-    await fetchTableData()   
+     const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement 
+
+     // making submit button disabled till api call fetches data
+     submitBtn.disabled = true
+     submitBtn.classList.add("button", "disabled")
+     await fetchPlotData()
+     await fetchTableData()   
+     submitBtn.disabled = false
+     submitBtn.classList.remove("button", "disabled");
 }
 
 const setPrevDate = ()=>{
@@ -94,8 +101,9 @@ const setPrevDate = ()=>{
   endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
   
   //calling both the function with the new start date and end date
-  fetchPlotData()
-  fetchTableData()
+  // fetchPlotData()
+  // fetchTableData()
+  wrapperFunc()
 }
 
 const setNextDate = ()=>{
@@ -118,7 +126,8 @@ const setNextDate = ()=>{
   endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
   
   //calling both the function with the new start date and end date
-  fetchPlotData()
-  fetchTableData()
+  // fetchPlotData()
+  // fetchTableData()
+  wrapperFunc()
 }
 

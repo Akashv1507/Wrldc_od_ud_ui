@@ -2,7 +2,7 @@ import{SelectedStateObj} from "./schVsActDrawl"
 import { getSchVsActDrawlData } from "../fetchDataApi";
 import {getDifference, calMaxMin, getValueCorresTime, getAvgOdUDData, getNetUiActSch, getFreqStats} from "../helperFunctions"
 import {createDynamicHtmlContent} from "./dynamicHtmlContentCreator"
-import {yyyyddmmToddmmyyy, convertIsoString, getListOfDates} from  "../timeUtils"
+import {yyyyddmmToddmmyyy, convertIsoString, getListOfDates, getMultiplyingFactorMus} from  "../timeUtils"
 
 export interface InstUiMax{
   date:string
@@ -115,6 +115,10 @@ export const fetchTableData = async()=>{
       endDateValue = convertIsoString(endDateValue)
       let datesChunksList = getListOfDates(startDateValue, endDateValue)
 
+      // get multiplying factor, in case of conversion from Avg MW to MUs
+      const multiplyingFactorMus = getMultiplyingFactorMus(startDateValue, endDateValue)
+      console.log(multiplyingFactorMus)
+
       //if reached this ,means no validation error ,emptying error div and making start date and end date in desired format
       errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML = "";
@@ -171,8 +175,8 @@ export const fetchTableData = async()=>{
             //pushing rows for current date
             instUiMaxRows.push({date:currDateStrDDMMYYY, maxUi:uiMaxMin.max.value, timestamp:uiMaxMin.max.timestamp.slice(11), correspondingSch:schCorrMaxUi, correspondingAct:actCorrMaxUi, correspondingFreq:freqCorrMaxUi, odGreaterThan250InMin:avgOdUdData.countOdInMin, percentOdGreaterThan250InMin:+avgOdUdData["%countOdInMin"] })
             instUiMinRows.push({date:currDateStrDDMMYYY, minUi:uiMaxMin.min.value, timestamp:uiMaxMin.min.timestamp.slice(11), correspondingSch:schCorrMinUi, correspondingAct:actCorrMinUi, correspondingFreq:freqCorrMinUi, udGreaterThan250InMin:avgOdUdData.countUdInMin, percentUdGreaterThan250InMin: +avgOdUdData["%countUdInMin"]})
-            avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, mus:+(avgOdUdData.avgOd*0.024).toFixed(1), correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd, correspondingFreqLessThanBand:+freqStatsData.countLessThanBandForOd})
-            avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, mus:+(avgOdUdData.avgUd*(-0.024)).toFixed(1),correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd, correspondingFreqGreaterThanBand: +freqStatsData.countGreaterThanBandForUd})
+            avgOdRows.push({date:currDateStrDDMMYYY, avgOd:avgOdUdData.avgOd, mus:+(avgOdUdData.avgOd*multiplyingFactorMus).toFixed(1), correspondingAvgAct:avgOdUdData.avgActCorrOd, correspondingAvgSch:avgOdUdData.avgSchCorrOd, correspondingFreqLessThanBand:+freqStatsData.countLessThanBandForOd})
+            avgUdRows.push({date:currDateStrDDMMYYY, avgUd:avgOdUdData.avgUd, mus:+(avgOdUdData.avgUd*-1*multiplyingFactorMus).toFixed(1),correspondingAvgAct:avgOdUdData.avgActCorrUd, correspondingAvgSch:avgOdUdData.avgSchCorrUd, correspondingFreqGreaterThanBand: +freqStatsData.countGreaterThanBandForUd})
             
             //get net ui and net sch, actual drawal
             const netUiActSch = getNetUiActSch(actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)

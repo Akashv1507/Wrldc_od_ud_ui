@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack');
 
 module.exports = {
   // multiple entry points - https://github.com/webpack/docs/wiki/multiple-entry-points
@@ -43,7 +44,10 @@ module.exports = {
     ],
   },
 
-  plugins: [],
+  plugins: [
+    // Ignore all locale files of moment.js
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+  ],
 
   resolve: {
     extensions: [".js", ".ts"],

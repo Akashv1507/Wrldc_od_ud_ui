@@ -114,9 +114,6 @@ export const fetchTableData = async()=>{
       startDateValue = convertIsoString(startDateValue)
       endDateValue = convertIsoString(endDateValue)
       let datesChunksList = getListOfDates(startDateValue, endDateValue)
-
-      // get multiplying factor, in case of conversion from Avg MW to MUs
-      const multiplyingFactorMus = getMultiplyingFactorMus(startDateValue, endDateValue)
       
       //if reached this ,means no validation error ,emptying error div and making start date and end date in desired format
       errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
@@ -150,7 +147,9 @@ export const fetchTableData = async()=>{
           try{
             
             let currDateStrDDMMYYY = yyyyddmmToddmmyyy(datesChunksList[ind].startTime)
- 
+            // get multiplying factor, in case of conversion from Avg MW to MUs
+            const multiplyingFactorMus = getMultiplyingFactorMus(datesChunksList[ind].startTime, datesChunksList[ind].endTime)
+
             //making api call
             const schDrawlData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, `${selectedStateList[stateInd].value}_Schedule`)
             const actDrawlData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, `${selectedStateList[stateInd].value}_Actual`)

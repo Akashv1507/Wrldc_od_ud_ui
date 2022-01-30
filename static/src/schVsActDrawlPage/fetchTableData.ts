@@ -117,8 +117,7 @@ export const fetchTableData = async()=>{
 
       // get multiplying factor, in case of conversion from Avg MW to MUs
       const multiplyingFactorMus = getMultiplyingFactorMus(startDateValue, endDateValue)
-      console.log(multiplyingFactorMus)
-
+      
       //if reached this ,means no validation error ,emptying error div and making start date and end date in desired format
       errorDiv.classList.remove("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML = "";

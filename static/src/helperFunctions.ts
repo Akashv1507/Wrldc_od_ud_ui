@@ -166,7 +166,6 @@ export const getUiPosNeg = (schDrawal:[string, number][], uiData:[string, number
             actualCorrToUiNeg.push(copySchDrawalData[ind])
         }
     })
-    console.log(uiPosNegData)
     return uiPosNegData
 }
 

@@ -69,7 +69,6 @@ export const getMultiplyingFactorMus = (startTime:string, endTime:string):number
     let endTimeObj = moment(endTime)
     
     const totalMinutes = endTimeObj.diff(startTimeObj ,'minutes')
-    console.log(totalMinutes)
     const multiplyingFactorMus = (totalMinutes+1)/(60*1000)
     return multiplyingFactorMus
 }

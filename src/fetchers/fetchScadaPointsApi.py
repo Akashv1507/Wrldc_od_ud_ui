@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import datetime as dt
 from typing import List, Tuple, TypedDict, Union
 from src.fetchers.scadaAPiFetchers import ScadaApiFetcher
@@ -54,7 +55,10 @@ class DataFetchFromApi():
             entityDataDf = self.toMinuteWiseData(entityDataDf)
             #filtering demand between startTIme and endtime only
             entityDataDf = entityDataDf[(entityDataDf['timestamp'] >= startTime) & (entityDataDf['timestamp'] <= endTime)]
-            
+
+            # filling nan where value is zero
+            entityDataDf.loc[entityDataDf['value'] == 0,'value'] = np.nan
+    
             # handling missing values NANs
             entityDataDf['value'].fillna(method='ffill', inplace= True)
             entityDataDf['value'].fillna(method='bfill', inplace= True)

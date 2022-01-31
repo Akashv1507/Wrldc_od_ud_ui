@@ -97,6 +97,7 @@ export const fetchPlotData = async () => {
                 width: 4,
                 // color: '#34A853'
             },
+            offsetgroup:1
             // fill: "tonextx",
         };
         plotData.traces.push(schDrawlTrace);
@@ -111,6 +112,7 @@ export const fetchPlotData = async () => {
                 width: 4,
                 // color: '#34A853'
             },
+            offsetgroup:2
             // fill: "tonextx",
         };
         plotData.traces.push(actDrawlTrace);
@@ -121,11 +123,13 @@ export const fetchPlotData = async () => {
             data: odUdPlotData.ui,
             type: "bar",
             hoverYaxisDisplay: "MUs",
-            //isSecondaryAxisTrace:true,
-            line: {
-                width: 4,
-                // color: '#34A853'
-            },
+            isSecondaryAxisTrace:true,
+            offsetgroup:3,
+            range:[-10,+10]
+            // line: {
+            //     width: 4,
+            //     // color: '#34A853'
+            // },
             // fill: "tonextx",
         };
         plotData.traces.push(uiTrace);

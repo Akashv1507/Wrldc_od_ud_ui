@@ -68,14 +68,28 @@ window.onload = async () => {
 };
 
 const wrapperFunc = async ()=>{
-     const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement 
+    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement 
+    const leftArrowBtn = document.getElementById("leftArrow") as HTMLButtonElement 
+    const rightArrowBtn = document.getElementById("rightArrow") as HTMLButtonElement 
 
      // making submit button disabled till api call fetches data
      submitBtn.disabled = true
+     leftArrowBtn.disabled = true
+     rightArrowBtn.disabled = true
+
      submitBtn.classList.add("button", "disabled")
+     leftArrowBtn.classList.add("button", "disabled")
+     rightArrowBtn.classList.add("button", "disabled")
+
      await fetchPlotData()
-     await fetchTableData()   
+     await fetchTableData()  
+
      submitBtn.disabled = false
+     leftArrowBtn.disabled = false
+     rightArrowBtn.disabled = false
+
+     leftArrowBtn.classList.remove("button", "disabled")
+     rightArrowBtn.classList.remove  ("button", "disabled")
      submitBtn.classList.remove("button", "disabled");
 }
 
@@ -97,8 +111,9 @@ const setPrevDate = ()=>{
   let newStartDate= startDateObj.setDate(startDateObj.getDate()-1)
   startDate.value = (new Date(newStartDate)).toISOString().slice(0,16)
 
-  let newEndDate= endDateObj.setDate(endDateObj.getDate()-1)
-  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
+  // not changing endDate on prev btn click
+  // let newEndDate= endDateObj.setDate(endDateObj.getDate()-1)
+  // endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)
   
   //calling both the function with the new start date and end date
   // fetchPlotData()
@@ -119,8 +134,9 @@ const setNextDate = ()=>{
   startDateObj.setHours(startDateObj.getHours()+5, startDateObj.getMinutes()+30)
   endDateObj.setHours(endDateObj.getHours()+5, endDateObj.getMinutes()+30)
   
-  let newStartDate= startDateObj.setDate(startDateObj.getDate()+1)
-  startDate.value = (new Date(newStartDate)).toISOString().slice(0,16)
+  // not changing startDate on next btn click
+  // let newStartDate= startDateObj.setDate(startDateObj.getDate()+1)
+  // startDate.value = (new Date(newStartDate)).toISOString().slice(0,16)
 
   let newEndDate= endDateObj.setDate(endDateObj.getDate()+1)
   endDate.value  = (new Date(newEndDate)).toISOString().slice(0,16)

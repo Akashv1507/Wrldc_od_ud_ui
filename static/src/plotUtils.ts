@@ -15,6 +15,8 @@ export interface PlotTrace {
     fill?: string;
     mode?: string;
     fillcolor?: string;
+    range?:number[],
+    offsetgroup?: number
 }
 
 export interface PlotData {
@@ -23,6 +25,7 @@ export interface PlotData {
     yAxisTitle: string
     y2AxisTitle?:string
     barmode?: string
+   
 }
 
 export const getPlotXYArrays = (
@@ -104,9 +107,7 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
       spikethickness: 1,
       showline: true,
       automargin: true,
-        },
-
-        
+        },   
     };
     //only for secondary y axis
     if(plotData.y2AxisTitle!=null){
@@ -128,8 +129,18 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
       name: trace.name,
       hovertemplate: `(%{x}, %{y:.0f} ${trace.hoverYaxisDisplay})`,
     };
+    
+    // defining range of bar plots
+    if(trace.range!=null){
+      layout["yaxis2"]["range"] = trace.range
+    }
+    //only for secondary y axis
     if (trace.isSecondaryAxisTrace) {
       traceObj["yaxis"] = "y2";
+    }
+    //only for secondary y axis
+    if (trace.offsetgroup) {
+      traceObj["offsetgroup"] = trace.offsetgroup;
     }
     if (trace.line != null) {
       traceObj["line"] = trace.line;
@@ -140,9 +151,11 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
     if (trace.fill != null) {
       traceObj["fill"] = trace.fill;
       }
-      if (trace.mode != null) {
-          traceObj["mode"] = trace.mode;
-      }
+    if (trace.mode != null) {
+        traceObj["mode"] = trace.mode;
+    }
+     
+
     traceData.push(traceObj);
   }
   Plotly.newPlot(divId, traceData, layout);

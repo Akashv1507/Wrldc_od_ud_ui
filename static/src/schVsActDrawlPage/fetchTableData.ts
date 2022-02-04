@@ -71,7 +71,7 @@ export const fetchTableData = async()=>{
     //to display spinner
     const spinnerDiv = document.getElementById("tableSpinner") as HTMLDivElement;
   
-    //to display spinner
+    //to display tables
     const schVsActDrawlTableWrapper = document.getElementById("schVsActDrawlTableWrapper") as HTMLDivElement;
   
     //get user inputs
@@ -140,7 +140,7 @@ export const fetchTableData = async()=>{
         schVsActDrawlTableWrapper.appendChild(stateInfoDIv);
 
         //creating dynamic html div and tables
-        createDynamicHtmlContent(selectedStateList[stateInd].name, selectedStateList[stateInd].value, schVsActDrawlTableWrapper )
+        createDynamicHtmlContent(selectedStateList[stateInd].name, schVsActDrawlTableWrapper)
 
        //fetch data for each states and for each date, cal min max avg for each day and append to list
        for(let ind=0;ind<datesChunksList.length;ind++){

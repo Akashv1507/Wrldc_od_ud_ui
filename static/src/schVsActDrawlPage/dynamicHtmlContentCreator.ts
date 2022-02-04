@@ -116,7 +116,7 @@
 //       schVsActDrawlTableWrapper.appendChild(hrDiv);
 // }
 
-export const createDynamicHtmlContent = (stateName:string, stateValue:string, schVsActDrawlTableWrapper:HTMLDivElement)=>{
+export const createDynamicHtmlContent = (stateName:string, schVsActDrawlTableWrapper:HTMLDivElement)=>{
     
 
       //div for meta info 

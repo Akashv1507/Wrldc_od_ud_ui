@@ -1,6 +1,6 @@
 import {fetchPlotData} from "./fetchPlotData"
 import {fetchTableData} from "./fetchTableData"
-
+import {fetchDevTableData} from "./fetchConDeviationData"
 declare var Choices: any;
 // declare var $:any;
 
@@ -41,28 +41,46 @@ window.onload = async () => {
 
   const tblIconBtn = document.getElementById("tblIcon") as HTMLButtonElement
   const chartIconBtn = document.getElementById("chartIcon") as HTMLButtonElement
+  const devTblIconBtn = document.getElementById("devTblIcon") as HTMLButtonElement
 
   const plotSectionDiv = document.getElementById("schVsActDrawlPlotSection") as HTMLDivElement
   const tblSectionDiv = document.getElementById("schVsActDrawlTableSection") as HTMLDivElement
+  const deviationTblSectionDiv = document.getElementById("contDeviationTableSection") as HTMLDivElement
 
  
   chartIconBtn.classList.add("chartActive")
   tblSectionDiv.hidden =true
+  deviationTblSectionDiv.hidden= true
 
   tblIconBtn.onclick = ()=>{
     tblIconBtn.classList.add("tblActive")
     chartIconBtn.classList.remove("chartActive")
-
+    devTblIconBtn.classList.remove("devTblActive")
+    
     tblSectionDiv.hidden =false
     plotSectionDiv.hidden = true
+    deviationTblSectionDiv.hidden= true
   }
 
   chartIconBtn.onclick = ()=>{
     chartIconBtn.classList.add("chartActive")
     tblIconBtn.classList.remove("tblActive")
+    devTblIconBtn.classList.remove("devTblActive")
 
-    tblSectionDiv.hidden =true
     plotSectionDiv.hidden = false
+    tblSectionDiv.hidden =true
+    deviationTblSectionDiv.hidden= true
+  }
+
+  devTblIconBtn.onclick = ()=>{
+    devTblIconBtn.classList.add("devTblActive")
+    tblIconBtn.classList.remove("tblActive")
+    chartIconBtn.classList.remove("chartActive")
+
+    deviationTblSectionDiv.hidden= false
+    tblSectionDiv.hidden =true
+    plotSectionDiv.hidden = true
+    
   }
 
 };
@@ -83,6 +101,7 @@ const wrapperFunc = async ()=>{
 
      await fetchPlotData()
      await fetchTableData()  
+     await fetchDevTableData()
 
      submitBtn.disabled = false
      leftArrowBtn.disabled = false

@@ -2,6 +2,8 @@ from src.appConfig import loadAppConfig
 from flask import Flask, jsonify, render_template
 from src.fetchers.odUdDataFetcher import OdUdDataFetcher
 from src.fetchers.fetchScadaPointsApi import DataFetchFromApi
+from src.fetchers.getContOdUdDate import ContOdUdDataFetch
+from src.helperFunctions import getNearestBlockTimeStamp, getTimeBlockNos
 from waitress import serve
 from datetime import datetime as dt, timedelta
 import warnings
@@ -23,6 +25,7 @@ clientSecret=appConfig['clientSecret']
 
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
+obj_contOdUdDataFetch= ContOdUdDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 
 
 @app.route('/')
@@ -48,7 +51,7 @@ def getOdUdData(startDate:str, endDate:str, stateName:str ):
 
 @app.route('/api/schVsActDrawl/<startDate>/<endDate>/<scadaPointName>')
 def getSchVsActDrawl(startDate:str, endDate:str, scadaPointName:str ):
-    print(startDate, endDate)
+    
     startTime = dt.strptime(startDate, '%Y-%m-%d %H:%M:%S')
     endTime = dt.strptime(endDate, '%Y-%m-%d %H:%M:%S')  
    
@@ -56,6 +59,23 @@ def getSchVsActDrawl(startDate:str, endDate:str, scadaPointName:str ):
     schVsActDrawl = obj_dataFetchFromApi.fetchEntityDataFromApi(startTime, endTime, scadaPointId)
   
     return jsonify({'schVsActDrawlData':schVsActDrawl})
+
+@app.route('/api/contOdUd/<startDate>/<endDate>/<stateName>')
+def getContOdUd(startDate:str, endDate:str, stateName:str ):
+    
+    startTime = dt.strptime(startDate, '%Y-%m-%d %H:%M:%S')
+    endTime = dt.strptime(endDate, '%Y-%m-%d %H:%M:%S') 
+    # converting startime and endtime to nearest block starttime and endtime
+    newTimes= getNearestBlockTimeStamp(startTime, endTime) 
+    startTime = newTimes['newStartTime']
+    endTime = newTimes['newEndTime']
+
+    stateSchName = stateName+ '_Schedule'
+    stateActName = stateName+ '_Actual'
+    schScadaPointId = appConfig[stateSchName]
+    actScadaPointId = appConfig[stateActName]
+    deviationRespObj = obj_contOdUdDataFetch.fetchContOdUdData(startTime, endTime, schScadaPointId, actScadaPointId )
+    return jsonify(deviationRespObj)
     
 
 if __name__ == '__main__':

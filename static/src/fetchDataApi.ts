@@ -1,6 +1,20 @@
 import { odUdRespObj } from "./OdUdUiPage/odUdUiIndex";
 import {schActDrawlResObj} from "./schVsActDrawlPage/schVsActDrawl"
 
+export interface Deviation{
+  date:string
+  fromTb:string
+  toTb:string
+  avgDeviation :number
+  minDeviation:number
+  maxDeviation:number
+}
+
+export interface ContDeviationResp{
+  odListObj :Deviation[]
+  udListObj: Deviation[]
+}
+
 export const getOdUdData = async (
   startDate: string,
   endDate: string,
@@ -28,8 +42,26 @@ export const getSchVsActDrawlData = async (
       method: "get",
     });
   
-    const respJSON = await resp.json();
+    const respJSON = await resp.json();   
+    return respJSON;
     
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getContDeviationData = async (
+  startDate: string,
+  endDate: string,
+  stateName: string
+): Promise<ContDeviationResp | null> => {
+  try {
+    const resp = await fetch(`/api/contOdUd/${startDate}/${endDate}/${stateName}`, {
+      method: "get",
+    });
+
+    const respJSON = await resp.json();
     return respJSON;
     
   } catch (e) {

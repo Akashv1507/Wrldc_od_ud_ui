@@ -42,7 +42,8 @@ label {
 }
 
 .chartActive { border-bottom:5px solid orange ; }
-.tblActive { border-bottom:5px solid green ; }
+.tblActive { border-bottom:5px solid #008000 ; }
+.devTblActive { border-bottom:5px solid #17a2b8; }
 
 th {
   color: white;

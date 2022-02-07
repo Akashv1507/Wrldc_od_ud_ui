@@ -45,12 +45,14 @@ class ContOdUdDataFetch():
         schDataDf.rename(columns = {'value':'schValue'}, inplace = True)
         
         concatDf = pd.concat([actDataDf, schDataDf], axis=1)
-        concatDf.insert(1, "block_no", blkNoList) 
+        # here if endtime is 23:59 of current day and currTime id 10:30, blockNoList length will be 96, concatdf length will be 43(till now) hence error is thrown
+        concatDf.insert(1, "block_no", blkNoList[:len(concatDf)]) 
         concatDf['deviation'] =  concatDf['actValue']- concatDf['schValue']
         concatDf['dummyVal'] = 0
         dummyVal =0
         concatDf['dummyVal'][0] = dummyVal
         prevDeviation = concatDf['deviation'][0]
+        # print(concatDf)
 
         for ind in concatDf.index.tolist()[1:]:
             currDeviation = concatDf['deviation'][ind]
@@ -97,6 +99,7 @@ class ContOdUdDataFetch():
         obj_scadaApiFetcher = ScadaApiFetcher(self.tokenUrl, self.apiBaseUrl, self.clientId, self.clientSecret)
         deviationRespObj:IdevitionRespDtypes = {'odListObj':[], 'udListObj':[]}
         try:
+            
             # fetching secondwise data from api for each entity(timestamp,value) and converting to dataframe
             schData = obj_scadaApiFetcher.fetchData(schScadaPointId, startTime, endTime)
             actData = obj_scadaApiFetcher.fetchData(actScadaPointId, startTime, endTime)
@@ -111,7 +114,7 @@ class ContOdUdDataFetch():
             #filtering demand between startTIme and endtime only
             schDataDf = schDataDf[(schDataDf['timestamp'] >= startTime) & (schDataDf['timestamp'] <= endTime)]
             actDataDf = actDataDf[(actDataDf['timestamp'] >= startTime) & (actDataDf['timestamp'] <= endTime)]
-
+            
             # filling nan where value is zero
             schDataDf.loc[schDataDf['value'] == 0,'value'] = np.nan
             actDataDf.loc[actDataDf['value'] == 0,'value'] = np.nan
@@ -127,7 +130,7 @@ class ContOdUdDataFetch():
             schDataDf = self.toBlockWiseData(schDataDf)
             actDataDf = self.toBlockWiseData(actDataDf)
             schDataDf.drop(['timestamp'], axis=1, inplace=True)
-
+            # print(actDataDf)
             # getting list of block no. between startTime and endTime
             blkNoList = getTimeBlockNos(startTime, endTime)   
 

@@ -101,6 +101,10 @@ export const getAvgOdUDData= (actDrawal:[string,number][], schDrawal:[string,num
     // countUdInMin and countOdInMIn will count time in minutes od and ud greater than 250
     let countUdInMin = 0
     let countOdInMin = 0
+    let multiplyingFactorMusOd = 0
+    let multiplyingFactorMusUd = 0
+    let odMus = 0
+    let udMus = 0
 
     actDrawal.forEach((actDrawalEle, ind)=>{
         let ui = actDrawalEle[1]-schDrawal[ind][1]
@@ -113,7 +117,7 @@ export const getAvgOdUDData= (actDrawal:[string,number][], schDrawal:[string,num
                 countUdInMin= countUdInMin +1
             }
         }
-        else if(ui>0){
+        else if(ui>=0){
             countOd = countOd+1
             sumOd = sumOd+ui
             sumActCorrOd = sumActCorrOd+ actDrawalEle[1]
@@ -123,9 +127,13 @@ export const getAvgOdUDData= (actDrawal:[string,number][], schDrawal:[string,num
             }
         }
     })
+    multiplyingFactorMusOd = countOd/(60*1000)
+    multiplyingFactorMusUd = countUd/(60*1000)
+    odMus = (sumOd/countOd)*multiplyingFactorMusOd
+    udMus = (sumUd/countUd)*multiplyingFactorMusUd*-1
 
-    let avgOdUdData = {'avgOd':Math.round(sumOd/countOd), 'avgActCorrOd':Math.round(sumActCorrOd/countOd), 
-    'avgSchCorrOd': Math.round(sumSchCorrOd/countOd), 'avgUd': Math.round(sumUd/countUd), 
+    let avgOdUdData = {'avgOd':Math.round(sumOd/countOd),'odMus': odMus.toFixed(1), 'avgActCorrOd':Math.round(sumActCorrOd/countOd), 
+    'avgSchCorrOd': Math.round(sumSchCorrOd/countOd), 'avgUd': Math.round(sumUd/countUd), 'udMus': udMus.toFixed(1),
     'avgActCorrUd':Math.round(sumActCorrUd/countUd), 'avgSchCorrUd': Math.round(sumSchCorrUd/countUd) ,
     'countOdInMin': countOdInMin, '%countOdInMin':((countOdInMin/actDrawal.length)*100).toFixed(1), 'countUdInMin': countUdInMin, '%countUdInMin':((countUdInMin/actDrawal.length)*100).toFixed(1), '%totalUiInMin': (((countUdInMin+countUdInMin)/actDrawal.length)*100).toFixed(1)}
     return avgOdUdData
@@ -142,9 +150,10 @@ actDrawal.forEach((actEle, ind)=>{
     sumSch = sumSch + schDrawal[ind][1]
 
 })
+
 netUiActSchObj.netAct = Math.round(sumAct/lenAct)
 netUiActSchObj.netSch = Math.round(sumSch/lenSch)
-netUiActSchObj.netUi =Math.round( (sumAct-sumSch)/lenSch)
+netUiActSchObj.netUi =Math.round( ((sumAct-sumSch)/lenSch))
 
 return netUiActSchObj
 }

@@ -130,7 +130,7 @@ class ContOdUdDataFetch():
             schDataDf = self.toBlockWiseData(schDataDf)
             actDataDf = self.toBlockWiseData(actDataDf)
             schDataDf.drop(['timestamp'], axis=1, inplace=True)
-            # print(actDataDf)
+            
             # getting list of block no. between startTime and endTime
             blkNoList = getTimeBlockNos(startTime, endTime)   
 

@@ -30,7 +30,7 @@ export const fetchPlotData = async () => {
   
     let selectedStateList: SelectedStateObj[] = [];
     for (let option of stateOptions) {
-      if (option.selected) {
+      if (option.selected && option.value != "WR") {
         let selecetedStateObj: SelectedStateObj = {
           name: option.text,
           value: option.value,
@@ -44,7 +44,7 @@ export const fetchPlotData = async () => {
       errorDiv.innerHTML = "<b> Please Enter a Valid Start Date/End Date</b>";
     } else if (selectedStateList.length == 0) {
       errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
-      errorDiv.innerHTML = "<b> Please Select State From Dropdown</b>";
+      errorDiv.innerHTML = "<b> Please Select State From Dropdown Other Than WR</b>";
     } else if (startDateValue > endDateValue) {
       errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML =
@@ -83,6 +83,7 @@ export const fetchPlotData = async () => {
        
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
+        const freqData = await getSchVsActDrawlData(startDateValue, endDateValue, 'Frequency')
         const uiData = getDifference( actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
         const uiPosNegData = getUiPosNeg(schDrawlData.schVsActDrawlData, uiData)
         
@@ -90,12 +91,12 @@ export const fetchPlotData = async () => {
           title: `Schedule Vs Actual Drawl Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,
           traces: [],
           yAxisTitle: "MW",
-          y2AxisTitle:"MW"
+          y2AxisTitle:"MW/Hz"
 
       };
   
       let schDrawlTrace: PlotTrace = {
-          name: "Schedule Drawl",
+          name: "Schedule",
           data: schDrawlData.schVsActDrawlData,
           type: "scatter",
           hoverYaxisDisplay: "MW",
@@ -107,19 +108,19 @@ export const fetchPlotData = async () => {
       };
       schActDrawlPlotData.traces.push(schDrawlTrace);
   
-  //     let actDrawlTrace: PlotTrace = {
-  //         name: "Actual Drawl",
-  //         data: actDrawlData.schVsActDrawlData,
-  //         type: "scatter",
-  //         hoverYaxisDisplay: "MW",
-  //         line: {
-  //             width: 4,
-  //             // color: '#34A853'
-  //         },
-  //         // fill: "tonextx",
-  //         // fillcolor: '#e763fa'
-  //     };
-  //     schActDrawlPlotData.traces.push(actDrawlTrace);
+      let actDrawlTrace: PlotTrace = {
+          name: "Actual Drawl",
+          data: actDrawlData.schVsActDrawlData,
+          type: "scatter",
+          hoverYaxisDisplay: "MW",
+          line: {
+              width: 4,
+              // color: '#34A853'
+          },
+          // fill: "tonextx",
+          // fillcolor: '#e763fa'
+      };
+      schActDrawlPlotData.traces.push(actDrawlTrace);
 
       let uiTrace: PlotTrace = {
         name: "Deviation",
@@ -134,14 +135,15 @@ export const fetchPlotData = async () => {
         // fill: "tonextx",
         // fillcolor: '#e763fa'
       };
-    schActDrawlPlotData.traces.push(uiTrace);
+      schActDrawlPlotData.traces.push(uiTrace);
 
-    let actualCorrToUiNegTrace: PlotTrace = {
-      name: "ActForUd",
-      data: uiPosNegData.actualCorrToUiNeg,
+    let freqTrace: PlotTrace = {
+      name: "Frequency",
+      data: freqData.schVsActDrawlData,
       type: "scatter",
-      hoverYaxisDisplay: "MW",
-      mode: 'markers',
+      hoverYaxisDisplay: "Freq",
+      isSecondaryAxisTrace: true,
+      visible:"legendonly",
       line: {
           width: 1,
           // color: '#34A853'
@@ -149,22 +151,37 @@ export const fetchPlotData = async () => {
       // fill: "tonextx",
       // fillcolor: '#e763fa'
     };
-    schActDrawlPlotData.traces.push(actualCorrToUiNegTrace);
+    schActDrawlPlotData.traces.push(freqTrace);
 
-    let actualCorrToUiPosTrace: PlotTrace = {
-    name: "ActForOd",
-    data: uiPosNegData.actualCorrToUiPos,
-    type: "scatter",
-    hoverYaxisDisplay: "MW", 
-    mode: 'markers',
-    line: {
-        width: 1,
-        // color: '#34A853'
-    },
-    // fill: "tonextx",
-    // fillcolor: '#e763fa'
-    };
-  schActDrawlPlotData.traces.push(actualCorrToUiPosTrace);
+    // let actualCorrToUiNegTrace: PlotTrace = {
+    //   name: "ActForUd",
+    //   data: uiPosNegData.actualCorrToUiNeg,
+    //   type: "scatter",
+    //   hoverYaxisDisplay: "MW",
+    //   mode: 'markers',
+    //   line: {
+    //       width: 1,
+    //       // color: '#34A853'
+    //   },
+    //   // fill: "tonextx",
+    //   // fillcolor: '#e763fa'
+    // };
+    // schActDrawlPlotData.traces.push(actualCorrToUiNegTrace);
+
+  //   let actualCorrToUiPosTrace: PlotTrace = {
+  //   name: "ActForOd",
+  //   data: uiPosNegData.actualCorrToUiPos,
+  //   type: "scatter",
+  //   hoverYaxisDisplay: "MW", 
+  //   mode: 'markers',
+  //   line: {
+  //       width: 1,
+  //       // color: '#34A853'
+  //   },
+  //   // fill: "tonextx",
+  //   // fillcolor: '#e763fa'
+  //   };
+  // schActDrawlPlotData.traces.push(actualCorrToUiPosTrace);
   
       setPlotTraces(
           `${selectedStateList[stateInd].name}_plot`,

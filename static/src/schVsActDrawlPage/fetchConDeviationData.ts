@@ -47,7 +47,7 @@ export const fetchDevTableData = async()=>{
   
     let selectedStateList: SelectedStateObj[] = [];
     for (let option of stateOptions) {
-      if (option.selected) {
+      if (option.selected && option.value != "WR") {
         let selecetedStateObj: SelectedStateObj = {
           name: option.text,
           value: option.value,
@@ -61,7 +61,7 @@ export const fetchDevTableData = async()=>{
       errorDiv.innerHTML = "<b> Please Enter a Valid Start Date/End Date</b>";
     } else if (selectedStateList.length == 0) {
       errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
-      errorDiv.innerHTML = "<b> Please Select State From Dropdown</b>";
+      errorDiv.innerHTML = "<b> Please Select State From Dropdown Other Than WR</b>";
     } else if (startDateValue > endDateValue) {
       errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger");
       errorDiv.innerHTML =

@@ -1,4 +1,5 @@
 import datetime as dt
+from src.appConfig import getAppConfigDict
 
 
 def getNearestBlockTimeStamp(startTime: dt.datetime, endTime: dt.datetime):
@@ -34,3 +35,12 @@ def getTimeBlockNos(startTime: dt.datetime, endTime: dt.datetime):
             if blockCount==96:
                 break
         return blksBwStartEndTime
+
+def getListofPointDict():
+
+    appConfig = getAppConfigDict()
+    stateName = ["Gujarat", "Maharashtra", "MP", "Chattishgarh", "Goa", "DD", "DNH"]
+    stateObjList = [] 
+    for state in stateName:
+        stateObjList.append({"schedule":appConfig[f"{state}_Schedule"], "actual":appConfig[f"{state}_Actual"], "stateName": state})
+    return stateObjList

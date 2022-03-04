@@ -3,7 +3,8 @@ from flask import Flask, jsonify, render_template
 from src.fetchers.odUdDataFetcher import OdUdDataFetcher
 from src.fetchers.fetchScadaPointsApi import DataFetchFromApi
 from src.fetchers.getContOdUdDate import ContOdUdDataFetch
-from src.helperFunctions import getNearestBlockTimeStamp, getTimeBlockNos
+from src.fetchers.FreqAndCorrDevDataFetcher import FreqAndCorrDevDataFetch
+from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
 import warnings
@@ -26,6 +27,7 @@ clientSecret=appConfig['clientSecret']
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_contOdUdDataFetch= ContOdUdDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
+obj_freqAndCorrDevDataFetch= FreqAndCorrDevDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 
 
 @app.route('/')
@@ -77,7 +79,19 @@ def getContOdUd(startDate:str, endDate:str, stateName:str ):
     deviationRespObj = obj_contOdUdDataFetch.fetchContOdUdData(startTime, endTime, schScadaPointId, actScadaPointId )
     return jsonify(deviationRespObj)
     
+@app.route('/api/wrFreq_Dev/<startDate>/<endDate>/')
+def getWrFreqDevData(startDate:str, endDate:str ):
+    
+    startTime = dt.strptime(startDate, '%Y-%m-%d %H:%M:%S')
+    endTime = dt.strptime(endDate, '%Y-%m-%d %H:%M:%S') 
+    # converting startime and endtime to nearest block starttime and endtime
+    newTimes= getNearestBlockTimeStamp(startTime, endTime) 
+    startTime = newTimes['newStartTime']
+    endTime = newTimes['newEndTime']
 
+    freqCorrDevRespObj = obj_freqAndCorrDevDataFetch.fetchApiData(startTime, endTime)
+    return jsonify(freqCorrDevRespObj)
+    
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']
     if serverMode.lower() == 'd':

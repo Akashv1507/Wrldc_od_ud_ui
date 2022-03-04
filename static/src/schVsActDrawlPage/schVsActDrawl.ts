@@ -1,6 +1,8 @@
 import {fetchPlotData} from "./fetchPlotData"
 import {fetchTableData} from "./fetchTableData"
 import {fetchDevTableData} from "./fetchConDeviationData"
+import {fetchDFreqAndCorrTableData} from "./fetchWrTotalData"
+
 declare var Choices: any;
 // declare var $:any;
 
@@ -42,44 +44,65 @@ window.onload = async () => {
   const tblIconBtn = document.getElementById("tblIcon") as HTMLButtonElement
   const chartIconBtn = document.getElementById("chartIcon") as HTMLButtonElement
   const devTblIconBtn = document.getElementById("devTblIcon") as HTMLButtonElement
+  const wrTblIconBtn = document.getElementById("wrTblIcon") as HTMLButtonElement
 
   const plotSectionDiv = document.getElementById("schVsActDrawlPlotSection") as HTMLDivElement
   const tblSectionDiv = document.getElementById("schVsActDrawlTableSection") as HTMLDivElement
   const deviationTblSectionDiv = document.getElementById("contDeviationTableSection") as HTMLDivElement
+  const wrTblSectionDiv = document.getElementById("wrTableSection") as HTMLDivElement
 
  
   chartIconBtn.classList.add("chartActive")
   tblSectionDiv.hidden =true
   deviationTblSectionDiv.hidden= true
-
+  wrTblSectionDiv.hidden = true
+  
   tblIconBtn.onclick = ()=>{
     tblIconBtn.classList.add("tblActive")
     chartIconBtn.classList.remove("chartActive")
     devTblIconBtn.classList.remove("devTblActive")
+    wrTblIconBtn.classList.remove("wrTblActive")
     
     tblSectionDiv.hidden =false
     plotSectionDiv.hidden = true
     deviationTblSectionDiv.hidden= true
+    wrTblSectionDiv.hidden= true
   }
 
   chartIconBtn.onclick = ()=>{
     chartIconBtn.classList.add("chartActive")
     tblIconBtn.classList.remove("tblActive")
     devTblIconBtn.classList.remove("devTblActive")
+    wrTblIconBtn.classList.remove("wrTblActive")
 
     plotSectionDiv.hidden = false
     tblSectionDiv.hidden =true
     deviationTblSectionDiv.hidden= true
+    wrTblSectionDiv.hidden= true
   }
 
   devTblIconBtn.onclick = ()=>{
     devTblIconBtn.classList.add("devTblActive")
     tblIconBtn.classList.remove("tblActive")
     chartIconBtn.classList.remove("chartActive")
+    wrTblIconBtn.classList.remove("wrTblActive")
 
     deviationTblSectionDiv.hidden= false
-    tblSectionDiv.hidden =true
     plotSectionDiv.hidden = true
+    tblSectionDiv.hidden =true 
+    wrTblSectionDiv.hidden= true
+  }
+
+  wrTblIconBtn.onclick = ()=>{
+    wrTblIconBtn.classList.add("wrTblActive")
+    tblIconBtn.classList.remove("tblActive")
+    chartIconBtn.classList.remove("chartActive")
+    devTblIconBtn.classList.remove("devTblActive")
+
+    wrTblSectionDiv.hidden= false
+    plotSectionDiv.hidden = true
+    tblSectionDiv.hidden =true 
+    deviationTblSectionDiv.hidden= true
     
   }
 
@@ -102,6 +125,7 @@ const wrapperFunc = async ()=>{
      await fetchPlotData()
      await fetchTableData()  
      await fetchDevTableData()
+     await fetchDFreqAndCorrTableData()
 
      submitBtn.disabled = false
      leftArrowBtn.disabled = false

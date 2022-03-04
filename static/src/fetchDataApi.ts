@@ -1,5 +1,6 @@
 import { odUdRespObj } from "./OdUdUiPage/odUdUiIndex";
 import {schActDrawlResObj} from "./schVsActDrawlPage/schVsActDrawl"
+import {IRespFreqAndCorrDev} from "./schVsActDrawlPage/fetchWrTotalData"
 
 export interface Deviation{
   date:string
@@ -58,6 +59,24 @@ export const getContDeviationData = async (
 ): Promise<ContDeviationResp | null> => {
   try {
     const resp = await fetch(`/api/contOdUd/${startDate}/${endDate}/${stateName}`, {
+      method: "get",
+    });
+
+    const respJSON = await resp.json();
+    return respJSON;
+    
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getFreqAndCorrDevData = async (
+  startDate: string,
+  endDate: string,
+): Promise<IRespFreqAndCorrDev | null> => {
+  try {
+    const resp = await fetch(`/api/wrFreq_Dev/${startDate}/${endDate}`, {
       method: "get",
     });
 

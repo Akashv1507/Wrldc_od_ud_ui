@@ -127,7 +127,7 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
       y: xyData.vals,
       type: trace.type,
       name: trace.name,
-      hovertemplate: `(%{x}, %{y:.0f} ${trace.hoverYaxisDisplay})`,
+      hovertemplate: `(%{x}, %{y:.2f} ${trace.hoverYaxisDisplay})`,
     };
     
     // defining range of bar plots

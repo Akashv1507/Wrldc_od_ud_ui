@@ -127,8 +127,8 @@ class FreqAndCorrDevDataFetch():
         maxDataDf.reset_index(inplace = True, drop = True)
         minDataDf.reset_index(inplace = True, drop = True)
 
-        maxFreqAndCorrDev = {'date':str(maxDataDf['date'][0]), 'time':str(maxDataDf['time'][0]), 'freq':round(maxDataDf['Frequency_value'][0],3), 'gujDev':round(maxDataDf['Gujarat_dev'][0]), 'mahDev':round(maxDataDf['Maharashtra_dev'][0]), 'mpDev':round(maxDataDf['MP_dev'][0]), 'chattDev':0, 'goaDev':round(maxDataDf['Goa_dev'][0]), 'ddDev':round(maxDataDf['DD_dev'][0]), 'dnhDev':round(maxDataDf['DNH_dev'][0]) }
-        minFreqAndCorrDev = {'date':str(minDataDf['date'][0]), 'time':str(minDataDf['time'][0]), 'freq':round(minDataDf['Frequency_value'][0],3), 'gujDev':round(minDataDf['Gujarat_dev'][0]), 'mahDev':round(minDataDf['Maharashtra_dev'][0]), 'mpDev':round(minDataDf['MP_dev'][0]), 'chattDev':0, 'goaDev':round(minDataDf['Goa_dev'][0]), 'ddDev':round(minDataDf['DD_dev'][0]), 'dnhDev':round(minDataDf['DNH_dev'][0]) }
+        maxFreqAndCorrDev = {'date':str(maxDataDf['date'][0]), 'time':str(maxDataDf['time'][0]), 'freq':round(maxDataDf['Frequency_value'][0],3), 'gujDev':round(maxDataDf['Gujarat_dev'][0]), 'mahDev':round(maxDataDf['Maharashtra_dev'][0]), 'mpDev':round(maxDataDf['MP_dev'][0]), 'chattDev':round(maxDataDf['Chattishgarh_dev'][0]), 'goaDev':round(maxDataDf['Goa_dev'][0]), 'ddDev':round(maxDataDf['DD_dev'][0]), 'dnhDev':round(maxDataDf['DNH_dev'][0]) }
+        minFreqAndCorrDev = {'date':str(minDataDf['date'][0]), 'time':str(minDataDf['time'][0]), 'freq':round(minDataDf['Frequency_value'][0],3), 'gujDev':round(minDataDf['Gujarat_dev'][0]), 'mahDev':round(minDataDf['Maharashtra_dev'][0]), 'mpDev':round(minDataDf['MP_dev'][0]), 'chattDev':round(minDataDf['Chattishgarh_dev'][0]), 'goaDev':round(minDataDf['Goa_dev'][0]), 'ddDev':round(minDataDf['DD_dev'][0]), 'dnhDev':round(minDataDf['DNH_dev'][0]) }
         
         freqAndCorrDevObj = {'maxFreqAndCorrDev':maxFreqAndCorrDev, 'minFreqAndCorrDev':minFreqAndCorrDev}
 

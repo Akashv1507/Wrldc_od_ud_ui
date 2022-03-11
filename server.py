@@ -4,6 +4,10 @@ from src.fetchers.odUdDataFetcher import OdUdDataFetcher
 from src.fetchers.fetchScadaPointsApi import DataFetchFromApi
 from src.fetchers.getContOdUdDate import ContOdUdDataFetch
 from src.fetchers.FreqAndCorrDevDataFetcher import FreqAndCorrDevDataFetch
+from src.fetchers.MorningAppraisalReport.section_1_fetcher import Section1Fetcher
+from src.fetchers.MorningAppraisalReport.section_2_fetcher import Section2Fetcher
+from src.fetchers.MorningAppraisalReport.section_3_fetcher import Section3Fetcher
+from src.fetchers.MorningAppraisalReport.section_5_fetcher import Section5Fetcher
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -28,6 +32,10 @@ obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_contOdUdDataFetch= ContOdUdDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_freqAndCorrDevDataFetch= FreqAndCorrDevDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
+obj_section1Fetcher = Section1Fetcher(connStr=conStr)
+obj_section2Fetcher = Section2Fetcher(connStr=conStr)
+obj_section3Fetcher = Section3Fetcher(connStr=conStr)
+obj_section5Fetcher = Section5Fetcher(connStr=conStr)
 
 
 @app.route('/')
@@ -41,6 +49,10 @@ def odUdUiIndex():
 @app.route('/schVsActDrawl')
 def schVsActDrawlIndex():
     return render_template('schVsActDrawlIndex.html.j2')
+
+@app.route('/mornAppraisalRep')
+def morningAppraisalReport():
+    return render_template('morningReportIndex.html.j2')
 
 @app.route('/api/odUd/<startDate>/<endDate>/<stateName>')
 def getOdUdData(startDate:str, endDate:str, stateName:str ):
@@ -91,6 +103,20 @@ def getWrFreqDevData(startDate:str, endDate:str ):
 
     freqCorrDevRespObj = obj_freqAndCorrDevDataFetch.fetchApiData(startTime, endTime)
     return jsonify(freqCorrDevRespObj)
+
+@app.route('/generteMorningReport/<targetDate>/')
+def generateMorningReport(targetDate:str ):
+
+    # endDate will be targetDate and startDate will be previous date
+    endDate = dt.strptime(targetDate, '%Y-%m-%d')
+    startDate = endDate - timedelta(days=1)
+
+    section1Data = obj_section1Fetcher.fetchSection1Data(startDate, endDate)
+    section2Data = obj_section2Fetcher.fetchSection2Data(startDate, endDate)
+    section3Data = obj_section3Fetcher.fetchSection3Data(startDate, endDate)
+    sectio5Data = obj_section5Fetcher.fetchSection5Data(startDate, endDate)
+    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data)
+   
     
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']

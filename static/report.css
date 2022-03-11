@@ -1,0 +1,18 @@
+h3{
+    color: #2880c4;
+    text-align: center;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #b1aeae;
+}
+th {
+    color: white;
+    background: #89c0eb;
+  }
+
+  .table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #b1aeae;
+}
+

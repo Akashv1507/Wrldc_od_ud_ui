@@ -6,6 +6,8 @@ module.exports = {
   entry: {
     odUdUiIndex: ["babel-polyfill", path.resolve(__dirname, "src/odUdUiPage/odUdUiIndex.ts")],
     schVsActDrawl: ["babel-polyfill", path.resolve(__dirname, "src/schVsActDrawlPage/schVsActDrawl.ts")],
+    morningRepIndex: ["babel-polyfill", path.resolve(__dirname, "src/MorningReportPage/morningReportIndex.ts")],
+
   },
 
   output: {

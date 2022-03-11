@@ -1,0 +1,109 @@
+generationFetchSql = '''SELECT
+	A.ORD,
+	A.STATION_TYPE,
+	THERMAL_MU,
+	SOLAR_MU,
+	WIND_MU,
+	HYDEL_MU,
+	OTHER_MU,
+	TOTAL_ACTUAL_MU,
+	TOTAL_SCHEDULE_MU
+FROM
+	(
+	SELECT
+		'ISGS' AS STATION_TYPE ,
+		1 AS ORD
+	FROM
+		dual
+UNION ALL
+	SELECT
+		'IPP' AS STATION_TYPE ,
+		2 AS ORD
+	FROM
+		dual
+UNION ALL
+	SELECT
+		'Constituents' AS STATION_TYPE ,
+		3 AS ORD
+	FROM
+		dual
+UNION ALL
+	SELECT
+		'Renewables' AS STATION_TYPE ,
+		4 AS ORD
+	FROM
+		dual )A
+LEFT OUTER JOIN (
+	SELECT
+		date_key ,
+		1 ORD ,
+		sum(CASE WHEN station_type_name IN ('THERMAL', 'GAS/NAPTHA/DIESEL') THEN DAY_ENERGY_ACTUAL ELSE 0 END) THERMAL_MU ,
+		NULL SOLAR_MU ,
+		NULL WIND_MU ,
+		sum(CASE WHEN station_type_name = 'HYDEL' THEN DAY_ENERGY_ACTUAL ELSE 0 END) HYDEL_MU ,
+		sum(CASE WHEN station_type_name IN ('NUCLEAR') THEN DAY_ENERGY_ACTUAL ELSE 0 END) OTHER_MU ,
+		round(sum(DAY_ENERGY_ACTUAL), 2) TOTAL_ACTUAL_MU ,
+		round(sum(DAY_ENERGY_SCHDULE), 2) TOTAL_SCHEDULE_MU
+	FROM
+		REPORTING_UAT.REGIONAL_ENTITIES_GENERATION
+	WHERE
+		date_key = :date_key
+		AND classification_name = 'ISGS'
+	GROUP BY
+		date_key
+UNION
+	SELECT
+		date_key ,
+		2 ORD ,
+		sum(CASE WHEN station_type_name IN ('THERMAL', 'GAS/NAPTHA/DIESEL') THEN DAY_ENERGY_ACTUAL ELSE 0 END) THERMAL_MU ,
+		NULL SOLAR_MU ,
+		NULL WIND_MU ,
+		NULL HYDEL_MU ,
+		NULL OTHER_MU ,
+		round(sum(DAY_ENERGY_ACTUAL), 2) TOTAL_ACTUAL_MU ,
+		round(sum(DAY_ENERGY_SCHDULE), 2) TOTAL_SCHEDULE_MU
+	FROM
+		REPORTING_UAT.REGIONAL_ENTITIES_GENERATION
+	WHERE
+		date_key = :date_key
+		AND classification_name = 'REGIONAL_IPP'
+	GROUP BY
+		date_key
+UNION
+	SELECT
+		date_key ,
+		3 ,
+		round(sum(THERMAL), 2) THERMAL_MU ,
+		round(sum(SOLAR), 2) SOLAR_MU ,
+		round(sum(WIND), 2) WIND_MU ,
+		round(sum(HYDRO), 2) HYDEL_MU ,
+		round(sum(OTHERS), 2) OTHER_MU ,
+		round(sum(TOTAL), 2) TOTAL_ACTUAL_MU ,
+		round(sum(CONSUMPTION - DRAWAL_SCHDULE), 2) TOTAL_SCHEDULE_MU
+	FROM
+		REPORTING_UAT.state_load_details
+	WHERE
+		date_key = :date_key
+	GROUP BY
+		date_key
+UNION
+	SELECT
+		date_key ,
+		4 ORD ,
+		NULL THERMAL_MU ,
+		sum(CASE WHEN station_type_name = 'SOLAR' THEN DAY_ENERGY_ACTUAL ELSE 0 END) SOLAR_MU ,
+		sum(CASE WHEN station_type_name = 'WIND' THEN DAY_ENERGY_ACTUAL ELSE 0 END) WIND_MU ,
+		NULL HYDEL_MU ,
+		NULL OTHER_MU ,
+		round(sum(DAY_ENERGY_ACTUAL), 2) TOTAL_ACTUAL_MU ,
+		round(sum(DAY_ENERGY_SCHDULE), 2) TOTAL_SCHEDULE_MU
+	FROM
+		REPORTING_UAT.REGIONAL_ENTITIES_GENERATION
+	WHERE
+		date_key = :date_key
+		AND classification_name = 'RENEWABLE'
+	GROUP BY
+		date_key )B ON
+	A.ORD = B.ORD
+ORDER BY
+	A.ORD'''

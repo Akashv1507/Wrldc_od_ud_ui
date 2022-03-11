@@ -70,6 +70,37 @@
           </div>
         </div>
 
+        <div class="col-1-of-3">
+          <div class="card">
+            <div class="card__side card__side--front-2">
+              <div class="card__title card__title--2">
+                <i class="fas fa-file"></i>
+                <h4 class="card__heading">Morning Appraisal Report</h4>
+              </div>
+
+              <div class="card__details">
+                <ul>
+                  <li>Energy Consumption(MUs)</li>
+                  <li>Maximum Demand(MW)</li>
+                  <li>Generation(MUs)</li>
+                  <li>Frequency Profile</li>
+                  <li>DAM/RTM</li>
+                  <li>Planned Outage</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card__side card__side--back card__side--back-2">
+              <div class="card__cta">
+                {# <div class="card__price-box">
+                  <p class="card__price-only">Only</p>
+                  <p class="card__price-value">$5.45/mo*</p>
+                </div> #}
+                <a href="{{url_for('morningAppraisalReport')}}" class="btn btn--white">Go To Page</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
        
   </div>
 {% endblock %} 

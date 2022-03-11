@@ -88,3 +88,21 @@ export const getFreqAndCorrDevData = async (
     return null;
   }
 };
+
+export const getReportHtmlContent = async (
+  targetDate: string,
+)=>{
+  try {
+    const resp = await fetch(`/generteMorningReport/${targetDate}`, {
+      method: "get",
+    });
+
+    const respHtml = await resp.text();
+    return respHtml;
+    
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+  
+}

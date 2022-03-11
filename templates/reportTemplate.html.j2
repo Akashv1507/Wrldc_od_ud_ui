@@ -1,0 +1,179 @@
+
+    
+<h3>POWER SYSTEM OPERATION CORPORATION LIMITED <br>
+    WESTERN REGIONAL LOAD DESPATCH CENTRE, MUMBAI
+</h3>
+<br>
+<h6>To, ED/WRLDC/POSOCO <br>
+    Dear Sir, <br>
+    Subject : Daily Report for {{reportDate}}</h6>
+<br>
+{# section 1 table consumption(MUs) #}
+  <h3>1. Energy Consumption</h3>
+  <table id="section1Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Date</th>
+              {% for rowHeading in section1ConsumpData[0]['values'] %}
+              <th>{{rowHeading['STATE_NAME'][:]}}</th>
+              {% endfor %}
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section1ConsumpData %}
+          <tr>
+              <td>{{row.date}}</td>
+              {% for rowval in row['values'] %}
+                <td>{{rowval['CONSUMPTION']}}</td>
+              {% endfor %}
+          </tr>
+          {% endfor %}  
+          <tr>
+              <td> Change</td>
+              <td> {{(section1ConsumpData[1]['values'][0]['CONSUMPTION']- section1ConsumpData[0]['values'][0]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][1]['CONSUMPTION']- section1ConsumpData[0]['values'][1]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][2]['CONSUMPTION']- section1ConsumpData[0]['values'][2]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][3]['CONSUMPTION']- section1ConsumpData[0]['values'][3]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][4]['CONSUMPTION']- section1ConsumpData[0]['values'][4]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][5]['CONSUMPTION']- section1ConsumpData[0]['values'][5]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][6]['CONSUMPTION']- section1ConsumpData[0]['values'][6]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][7]['CONSUMPTION']- section1ConsumpData[0]['values'][7]['CONSUMPTION'])|round(2)}}</td>
+              <td> {{(section1ConsumpData[1]['values'][8]['CONSUMPTION']- section1ConsumpData[0]['values'][8]['CONSUMPTION'])|round(2)}}</td>
+              {# {% for row in section1DiffData %}
+                <td>{{row['diff']}}</td>
+              {% endfor %} #}
+          </tr>     
+      </tbody>     
+  </table>
+
+{# section 2 table Max Demand #}
+  <h3>2. Maximum Demand</h3>
+  <table id="section2Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Date</th>
+              {% for rowHeading in section2MaxData[0]['values'] %}
+              <th>{{rowHeading['STATE_NAME'][:]}}</th>
+              {% endfor %}
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section2MaxData %}
+          <tr>
+              <td>{{row.date}}</td>
+              {% for rowval in row['values'] %}
+                <td>{{rowval['MAX_WITH_TIME']}}</td>
+              {% endfor %}
+          </tr>
+          {% endfor %}
+
+          <tr>
+              <td> Change</td>
+              {% for row in section2DiffData %}
+                <td>{{row['diff']}}</td>
+              {% endfor %}
+          </tr>         
+      </tbody>     
+  </table>
+
+
+{# section 3 table Generation #}
+  <h3>3. Generation in MU</h3>
+  <table id="section3Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Date</th>
+              <th>Thermal</th>
+              <th>Solar</th>
+              <th>Wind</th>
+              <th>Hydro</th>
+              <th>Other</th>
+              <th>Total</th>
+              <th>RE Total</th>
+              <th>RE + Hydro Penetration %</th>
+              <th>RE Penetration %</th>                        
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section3Data %}
+          <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]|round(2)}}</td>
+              <td>{{row[2]|round(2)}}</td>
+              <td>{{row[3]|round(2)}}</td>
+              <td>{{row[4]|round(2)}}</td>
+              <td>{{row[5]|round(2)}}</td>
+              <td>{{row[6]|round(2)}}</td>
+              <td>{{row[7]|round(2)}}</td>
+              <td>{{row[8]|round(2)}}</td>
+              <td>{{row[9]|round(2)}}</td>
+            
+          </tr>
+          {% endfor %}
+
+          <tr>
+              <td>Change</td>
+              <td>{{(section3Data[1][1]-section3Data[0][1])|round(2)}}</td>
+              <td>{{(section3Data[1][2]-section3Data[0][2])|round(2)}}</td>
+              <td>{{(section3Data[1][3]-section3Data[0][3])|round(2)}}</td>
+              <td>{{(section3Data[1][4]-section3Data[0][4])|round(2)}}</td>
+              <td>{{(section3Data[1][5]-section3Data[0][5])|round(2)}}</td>
+              <td>{{(section3Data[1][6]-section3Data[0][6])|round(2)}}</td>
+              <td>{{(section3Data[1][7]-section3Data[0][7])|round(2)}}</td>
+              <td>{{(section3Data[1][8]-section3Data[0][8])|round(2)}}</td>
+              <td>{{(section3Data[1][9]-section3Data[0][9])|round(2)}}</td>
+          </tr>         
+      </tbody>     
+  </table>
+
+{# section 5 freq table #}
+  <h3>5. Frequency Profile</h3>
+  <table id="section5Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Date</th>
+              <th>Below 49.90 Hz</th>
+              <th>(49.90–50.05 Hz)</th>
+              <th>Above 50.05 Hz</th>
+              <th>Max Frequency</th>
+              <th>Time of Max Freq</th>
+              <th>Min. Frequency</th>
+              <th>Time of Min Freq</th>
+              <th>Avg. Frquency</th>
+              <th>FVI</th>
+              <th>Std. Deviation</th>
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section5freqProf %}
+          <tr>
+              <td>{{row.date}}</td>
+              <td>{{row["values"][0]["LESS_THAN_BAND"]}}</td>
+              <td>{{row["values"][0]["BETWEEN_BAND"]}}</td>
+              <td>{{row["values"][0]["GREATER_THAN_BAND"]}}</td>
+              <td>{{row["values"][0]["MAX_FREQ"]}}</td>
+              <td>{{row["values"][0]["MAX_TIME"]}}</td>
+              <td>{{row["values"][0]["MIN_FREQ"]}}</td>
+              <td>{{row["values"][0]["MIN_TIME"]}}</td>
+              <td>{{row["values"][0]["AVERAGE_FREQUENCY"]}}</td>
+              <td>{{row["values"][0]["FREQ_VARIATION_INDEX"]}}</td>
+              <td>{{row["values"][0]["STANDARD_DEVIATION"]}}</td>
+          </tr>
+          {% endfor %}
+
+          <tr>
+              <td> Change</td>
+              <td>{{(section5freqProf[1]['values'][0]['LESS_THAN_BAND'] - section5freqProf[0]['values'][0]['LESS_THAN_BAND'])|round(2) }}</td>
+              <td>{{(section5freqProf[1]['values'][0]['BETWEEN_BAND'] - section5freqProf[0]['values'][0]['BETWEEN_BAND'])|round(2)}}</td>
+              <td>{{(section5freqProf[1]['values'][0]['GREATER_THAN_BAND'] - section5freqProf[0]['values'][0]['GREATER_THAN_BAND'])|round(2)}}</td>
+              <td>{{(section5freqProf[1]['values'][0]['MAX_FREQ'] - section5freqProf[0]['values'][0]['MAX_FREQ'])|round(2)}}</td>
+              <td></td>
+              <td>{{(section5freqProf[1]['values'][0]['MIN_FREQ'] - section5freqProf[0]['values'][0]['MIN_FREQ'])|round(2)}}</td>
+              <td></td>
+              <td>{{(section5freqProf[1]['values'][0]['AVERAGE_FREQUENCY'] - section5freqProf[0]['values'][0]['AVERAGE_FREQUENCY'])|round(2)}}</td>
+              <td>{{(section5freqProf[1]['values'][0]['FREQ_VARIATION_INDEX'] - section5freqProf[0]['values'][0]['FREQ_VARIATION_INDEX'])|round(2)}}</td>
+              <td>{{(section5freqProf[1]['values'][0]['STANDARD_DEVIATION'] - section5freqProf[0]['values'][0]['STANDARD_DEVIATION'])|round(2)}}</td>
+          </tr>         
+      </tbody>     
+  </table>
+

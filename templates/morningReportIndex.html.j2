@@ -1,0 +1,43 @@
+{% extends "layoutBase.html.j2" %} 
+{% block title %}Display Morning Appraisal Report {% endblock %}
+{% block head %} {{ super() }} 
+{% endblock %} 
+
+{% block content %}
+
+<div class="mt-3 ml-5">
+    <div class="row">
+        <div class="col-md-3 offset-md-2 mt-2">
+            <label for="targetDate">Report Date</label>
+            <input type="date" name="targetDate" id="targetDate" />
+        </div>
+        <div class="col-md-2 mt-5">
+            <button type="button" class="btn btn-primary btn-lg"  style='font-size:18px; width:100%;'id="submitBtn">
+                Submit
+                <i class="fas fa-shuffle" style='font-size:32px;color:blue'></i>
+            </button>
+        </div>
+        {# <div class="col-md-2 mt-5">
+            <button id = "leftArrow"style='font-size:18px; width:100%;' class="btn btn-outline-danger"> Previous Date <i class='fas fa-arrow-left' style='font-size:32px;color:orange'></i></button>     
+        </div>   
+        <div class="col-md-2 mt-5">
+            <button id = "rightArrow" style='font-size:18px; width:100%;' class="btn btn-outline-success" > Next Date <i class="fas fa-arrow-right" style='font-size:32px;color:green'></i></button>    
+        </div> #}
+    </div>  
+
+    <div id="reportSection" class = "mt-4">
+       
+    </div>
+   
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<link
+      href="{{ url_for('static', filename='report.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+<script src="{{ url_for('static', filename='dist/morningRepIndex.js') }}"></script>
+
+{% endblock %}

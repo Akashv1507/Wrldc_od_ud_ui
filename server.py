@@ -8,6 +8,8 @@ from src.fetchers.MorningAppraisalReport.section_1_fetcher import Section1Fetche
 from src.fetchers.MorningAppraisalReport.section_2_fetcher import Section2Fetcher
 from src.fetchers.MorningAppraisalReport.section_3_fetcher import Section3Fetcher
 from src.fetchers.MorningAppraisalReport.section_5_fetcher import Section5Fetcher
+from src.fetchers.MorningAppraisalReport.section_state_fetcher import SectionStateFetcher
+from src.fetchers.MorningAppraisalReport.section_istsRe_fetcher import SectionIstsReFetcher
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -36,6 +38,8 @@ obj_section1Fetcher = Section1Fetcher(connStr=conStr)
 obj_section2Fetcher = Section2Fetcher(connStr=conStr)
 obj_section3Fetcher = Section3Fetcher(connStr=conStr)
 obj_section5Fetcher = Section5Fetcher(connStr=conStr)
+obj_sectionStateFetcher = SectionStateFetcher(connStr=conStr)
+obj_sectionIstsReFetcher = SectionIstsReFetcher(connStr=conStr)
 
 
 @app.route('/')
@@ -115,8 +119,28 @@ def generateMorningReport(targetDate:str ):
     section2Data = obj_section2Fetcher.fetchSection2Data(startDate, endDate)
     section3Data = obj_section3Fetcher.fetchSection3Data(startDate, endDate)
     sectio5Data = obj_section5Fetcher.fetchSection5Data(startDate, endDate)
+    
     return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data)
-   
+
+@app.route('/getStateReData/<targetDate>/')
+def getStateReData(targetDate:str ):
+
+    # endDate will be targetDate and startDate will be previous date
+    endDate = dt.strptime(targetDate, '%Y-%m-%d')
+    startDate = endDate - timedelta(days=1)
+
+    sectionStateData = obj_sectionStateFetcher.fetchSectionStateData(startDate, endDate)
+    return jsonify({'stateReData':sectionStateData})
+
+@app.route('/getIstsReData/<targetDate>/')
+def getIstsReData(targetDate:str ):
+
+    # endDate will be targetDate and startDate will be previous date
+    endDate = dt.strptime(targetDate, '%Y-%m-%d')
+    startDate = endDate - timedelta(days=1)
+
+    istsReData = obj_sectionIstsReFetcher.fetchSectionIstsReData(startDate, endDate)
+    return jsonify(istsReData)
     
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']

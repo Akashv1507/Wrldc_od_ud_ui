@@ -17,6 +17,20 @@ export const toDateObj = (timestampStr: string): Date => {
     return newTimestamp;
 };
 
+export const yyyymmddtoDateObj = (timestampStr: string): string => {
+    // convert 20210915 to javascript dateobject
+    // let year = Number(timestampStr.substring(0, 4));
+    // let month = Number(timestampStr.substring(4, 6));
+    // let day = Number(timestampStr.substring(6, 8));
+    // let newTimestamp = new Date(year, month - 1, day);
+    // return newTimestamp;
+    let year = timestampStr.substring(0, 4);
+    let month = timestampStr.substring(4, 6);
+    let day = timestampStr.substring(6, 8);
+    let dateKeyStr = year + '-'+ month + '-'+ day
+    return dateKeyStr;
+};
+
 export const convertDateTimeToStr = (inp: Date): string => {
     return `${ensureTwoDigits(inp.getDate())}-${ensureTwoDigits(inp.getMonth() + 1)}-${inp.getFullYear()}`;
 }

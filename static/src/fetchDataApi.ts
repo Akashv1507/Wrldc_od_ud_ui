@@ -1,6 +1,7 @@
 import { odUdRespObj } from "./OdUdUiPage/odUdUiIndex";
 import {schActDrawlResObj} from "./schVsActDrawlPage/schVsActDrawl"
 import {IRespFreqAndCorrDev} from "./schVsActDrawlPage/fetchWrTotalData"
+import {IStateReData, IIstsReData} from "./MorningReportPage/fetchReportHtml"
 
 export interface Deviation{
   date:string
@@ -15,6 +16,12 @@ export interface ContDeviationResp{
   odListObj :Deviation[]
   udListObj: Deviation[]
 }
+
+export interface IStateReRespData{
+  stateReData:IStateReData[]
+}
+
+
 
 export const getOdUdData = async (
   startDate: string,
@@ -44,8 +51,7 @@ export const getSchVsActDrawlData = async (
     });
   
     const respJSON = await resp.json();   
-    return respJSON;
-    
+    return respJSON;   
   } catch (e) {
     console.error(e);
     return null;
@@ -63,8 +69,7 @@ export const getContDeviationData = async (
     });
 
     const respJSON = await resp.json();
-    return respJSON;
-    
+    return respJSON;    
   } catch (e) {
     console.error(e);
     return null;
@@ -81,8 +86,7 @@ export const getFreqAndCorrDevData = async (
     });
 
     const respJSON = await resp.json();
-    return respJSON;
-    
+    return respJSON;   
   } catch (e) {
     console.error(e);
     return null;
@@ -98,11 +102,41 @@ export const getReportHtmlContent = async (
     });
 
     const respHtml = await resp.text();
-    return respHtml;
-    
+    return respHtml;  
   } catch (e) {
     console.error(e);
     return null;
-  }
-  
+  }  
+}
+
+export const getStateReData = async (
+  targetDate: string,
+):Promise<IStateReRespData | null>=>{
+  try {
+    const resp = await fetch(`/getStateReData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getIstsReData = async (
+  targetDate: string,
+):Promise<IIstsReData | null>=>{
+  try {
+    const resp = await fetch(`/getIstsReData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
 }

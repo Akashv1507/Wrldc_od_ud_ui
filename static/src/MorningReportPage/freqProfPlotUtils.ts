@@ -1,65 +1,64 @@
 // import Plotly from "plotly.js-dist";
 declare var Plotly: any;
 import { toDateObj, yyyymmddtoDateObj } from "../timeUtils";
-import {ISingleStateReData} from "./fetchReportHtml"
+import {IFreqProfileObj} from "./fetchReportHtml"
 
 
-export interface StateRePlotTrace {
+export interface FreqProfPlotTrace {
     name: string;
     // here date in string formate
-    data: ISingleStateReData[];
+    data: IFreqProfileObj[];
     type: string;
     hoverYaxisDisplay: string;
     mode?: string;
-    marker_color: string;
+    // marker_color?: string;
     
 }
 
-export interface StateRePlotData {
+export interface FreqProfPlotData {
   title: string;
-  traces: StateRePlotTrace[];
+  traces: FreqProfPlotTrace[];
   yAxisTitle: string
   barmode?: string
    
 }
 export interface XYData{
-  timestamps: string[]; 
-  vals: number[] 
-  showTimestamps:string[]
+  parNamesList: string[]; 
+  valueList: number[] 
+  
 }
 
 
 export const getPlotXYArrays = (
-  measData: StateRePlotTrace["data"]
+  measData: FreqProfPlotTrace["data"]
 ): XYData => {
-  let timestamps: string[] = [];
-  let vals: number[] = [];
-  let showTimestamps: string[]=[]
+  let parNames: string[] = [];
+  let values: number[] = [];
+ 
   for (var i = 0; i < measData.length; i = i + 1) {
-    timestamps.push(yyyymmddtoDateObj(measData[i].dateKey));
-    showTimestamps.push(yyyymmddtoDateObj(measData[i].showDateKey));
-    vals.push(measData[i].val as number);
+    parNames.push(measData[i].parName as string);
+    values.push(measData[i].value as number);
   }
-  return { timestamps: timestamps, vals: vals, showTimestamps:showTimestamps };
+  return { parNamesList:parNames, valueList:values };
 };
 
-export const setPlotTraces = (divId: string, plotData: StateRePlotData) => {
+export const setPlotTraces = (divId: string, plotData: FreqProfPlotData) => {
 
   let traceData = [];
-  let xyData:XYData={timestamps:[], vals:[], showTimestamps:[]}
+  let xyData:XYData={parNamesList:[], valueList:[], }
 
   for (var traceIter = 0; traceIter < plotData.traces.length; traceIter++) {
     const trace = plotData.traces[traceIter];
     xyData = getPlotXYArrays(trace.data);
     // creating different graph for bias error  , which is 2nd index of plotdata.traces
     let traceObj = {
-      x: xyData.showTimestamps,
-      y: xyData.vals,
+      x: xyData.parNamesList,
+      y: xyData.valueList,
       type: trace.type,
       name: trace.name,
       hovertemplate: `(%{x}, %{y:.2f} ${trace.hoverYaxisDisplay})`,
-      marker:{color:trace.marker_color},
-      text:xyData.vals.map(String)
+      // marker:{color:trace.marker_color},
+      text:xyData.valueList.map(String)
     };
     if (trace.mode != null) {
         traceObj["mode"] = trace.mode;
@@ -98,11 +97,8 @@ export const setPlotTraces = (divId: string, plotData: StateRePlotData) => {
     showspikes: true,
     spikethickness: 1,
     showline: true,
-    titlefont: { color: "#000", size: 12 },
-    tickfont: { color: "#000", size: 14 },
-    tickmode: "array",
-    tickvals:xyData.showTimestamps,
-    ticktext: xyData.timestamps,
+    titlefont: { color: "#000", size: 16 },
+    tickfont: { color: "#000", size: 16 },
     automargin: false,
     // tickangle: 283,
   },
@@ -114,8 +110,8 @@ export const setPlotTraces = (divId: string, plotData: StateRePlotData) => {
     spikethickness: 1,
     showline: true,
     automargin: true,
-    titlefont: { color: "#000"  , size: 14 },
-    tickfont: { color: "#000", size: 14 },
+    titlefont: { color: "#000"  , size: 16 },
+    tickfont: { color: "#000", size: 16 },
     tickformat: "digits",
   },  
   };

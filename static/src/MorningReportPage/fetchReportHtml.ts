@@ -1,11 +1,23 @@
-import {getReportHtmlContent, getStateReData, getIstsReData} from "../fetchDataApi"
+import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData} from "../fetchDataApi"
 import { StateRePlotData, StateRePlotTrace, setPlotTraces } from "./stateRePlotUtils";
+import {FreqProfPlotData, FreqProfPlotTrace, setPlotTraces as freqSetPlotTrace } from "./freqProfPlotUtils"
+import { yyyymmddtoDateObj } from "../timeUtils";
 
 export interface ISingleStateReData{
   dateKey: string;
   val: number;
   showDateKey:string
 } 
+export interface IFreqProfileObj{
+  dateKey: string;
+  value: number;
+  parName:string
+} 
+//interface for object with dynamic keys Ref- https://stackoverflow.com/questions/39256682/how-to-define-an-interface-for-objects-with-dynamic-keys
+export interface IFreqProfileResp{
+  [dateId: number]: IFreqProfileObj[];
+} 
+
 export interface IStateReData{
   consumption: ISingleStateReData[];
   maxDem: ISingleStateReData[];
@@ -121,14 +133,12 @@ export const fetchReportHtml = async()=>{
       title: 'Wind Generation',
       traces: [],
       yAxisTitle: "Wind Gen(MU)",
-      // barmode: "relative"
     };
 
     let IstsSolarGenPlotData: StateRePlotData = {
       title: 'Solar Generation',
       traces: [],
       yAxisTitle: "Solar Gen(MU)",
-      // barmode: "relative"
     };
 
     let istsWindGenTrace: StateRePlotTrace = {
@@ -151,5 +161,27 @@ export const fetchReportHtml = async()=>{
 
     setPlotTraces(`ists_windGen`, IstsWindGenPlotData); 
     setPlotTraces(`ists_solarGen`, IstsSolarGenPlotData);
-    
+
+    // plotting frequency profile data
+    const freqProfData = await getFreqProfileData(targetDateValue)
+    let FreqProfPlotData: FreqProfPlotData = {
+      title: 'Frequency Profile',
+      traces: [],
+      yAxisTitle: "%age Time",
+      barmode:"group"
+    };
+    // get all values for corresponding keys
+    const freqProfDataVal:IFreqProfileObj[][] = Object.values(freqProfData)
+
+    for(let dateKeyInd = 0; dateKeyInd < freqProfDataVal.length; dateKeyInd++){
+ 
+      let freqProfPlotRace: FreqProfPlotTrace = {
+        name: yyyymmddtoDateObj(freqProfDataVal[dateKeyInd][0].dateKey),
+        data:freqProfDataVal[dateKeyInd],
+        type: "bar",
+        hoverYaxisDisplay: "%age",
+      };
+      FreqProfPlotData.traces.push(freqProfPlotRace);
+    }
+    freqSetPlotTrace(`freqProf`, FreqProfPlotData); 
 }

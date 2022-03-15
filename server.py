@@ -10,6 +10,7 @@ from src.fetchers.MorningAppraisalReport.section_3_fetcher import Section3Fetche
 from src.fetchers.MorningAppraisalReport.section_5_fetcher import Section5Fetcher
 from src.fetchers.MorningAppraisalReport.section_state_fetcher import SectionStateFetcher
 from src.fetchers.MorningAppraisalReport.section_istsRe_fetcher import SectionIstsReFetcher
+from src.fetchers.MorningAppraisalReport.section_freqProfile_fetcher import SectionFreqProfileFetcher
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -40,6 +41,7 @@ obj_section3Fetcher = Section3Fetcher(connStr=conStr)
 obj_section5Fetcher = Section5Fetcher(connStr=conStr)
 obj_sectionStateFetcher = SectionStateFetcher(connStr=conStr)
 obj_sectionIstsReFetcher = SectionIstsReFetcher(connStr=conStr)
+obj_sectionFreqProfileFetcher = SectionFreqProfileFetcher(connStr=conStr)
 
 
 @app.route('/')
@@ -140,6 +142,16 @@ def getIstsReData(targetDate:str ):
     startDate = endDate - timedelta(days=1)
 
     istsReData = obj_sectionIstsReFetcher.fetchSectionIstsReData(startDate, endDate)
+    return jsonify(istsReData)
+
+@app.route('/getFreqProfPlotData/<targetDate>/')
+def getFreqProfPlotData(targetDate:str ):
+
+    # endDate will be targetDate and startDate will be previous date
+    endDate = dt.strptime(targetDate, '%Y-%m-%d')
+    startDate = endDate - timedelta(days=2)
+
+    istsReData = obj_sectionFreqProfileFetcher.fetchSectionFreqProfilePlotData(startDate, endDate)
     return jsonify(istsReData)
     
 if __name__ == '__main__':

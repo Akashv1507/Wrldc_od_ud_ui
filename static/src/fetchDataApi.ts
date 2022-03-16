@@ -1,7 +1,7 @@
 import { odUdRespObj } from "./OdUdUiPage/odUdUiIndex";
 import {schActDrawlResObj} from "./schVsActDrawlPage/schVsActDrawl"
 import {IRespFreqAndCorrDev} from "./schVsActDrawlPage/fetchWrTotalData"
-import {IStateReData, IIstsReData, IFreqProfileResp} from "./MorningReportPage/fetchReportHtml"
+import {IStateReData, IIstsReData, IProfileResp} from "./MorningReportPage/fetchReportHtml"
 
 export interface Deviation{
   date:string
@@ -143,9 +143,25 @@ export const getIstsReData = async (
 
 export const getFreqProfileData = async (
   targetDate: string,
-):Promise<IFreqProfileResp | null>=>{
+):Promise<IProfileResp | null>=>{
   try {
     const resp = await fetch(`/getFreqProfPlotData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getGenPlotData = async (
+  targetDate: string,
+):Promise<IProfileResp | null>=>{
+  try {
+    const resp = await fetch(`/getGenPlotData/${targetDate}`, {
       method: "get",
     });
 

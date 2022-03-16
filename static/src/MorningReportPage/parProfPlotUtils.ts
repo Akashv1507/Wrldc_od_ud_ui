@@ -1,13 +1,13 @@
 // import Plotly from "plotly.js-dist";
 declare var Plotly: any;
 import { toDateObj, yyyymmddtoDateObj } from "../timeUtils";
-import {IFreqProfileObj} from "./fetchReportHtml"
+import {IProfileObj} from "./fetchReportHtml"
 
 
-export interface FreqProfPlotTrace {
+export interface ParProfPlotTrace {
     name: string;
     // here date in string formate
-    data: IFreqProfileObj[];
+    data: IProfileObj[];
     type: string;
     hoverYaxisDisplay: string;
     mode?: string;
@@ -15,9 +15,9 @@ export interface FreqProfPlotTrace {
     
 }
 
-export interface FreqProfPlotData {
+export interface ParProfPlotData {
   title: string;
-  traces: FreqProfPlotTrace[];
+  traces: ParProfPlotTrace[];
   yAxisTitle: string
   barmode?: string
    
@@ -28,9 +28,8 @@ export interface XYData{
   
 }
 
-
 export const getPlotXYArrays = (
-  measData: FreqProfPlotTrace["data"]
+  measData: ParProfPlotTrace["data"]
 ): XYData => {
   let parNames: string[] = [];
   let values: number[] = [];
@@ -42,7 +41,7 @@ export const getPlotXYArrays = (
   return { parNamesList:parNames, valueList:values };
 };
 
-export const setPlotTraces = (divId: string, plotData: FreqProfPlotData) => {
+export const setPlotTraces = (divId: string, plotData: ParProfPlotData) => {
 
   let traceData = [];
   let xyData:XYData={parNamesList:[], valueList:[], }

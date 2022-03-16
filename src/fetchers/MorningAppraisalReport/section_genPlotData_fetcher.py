@@ -5,28 +5,29 @@ import pandas as pd
 from src.fetchers.MorningAppraisalReport.section_3Gen_sql import generationFetchSql
 
 
-class Section3Fetcher():
+class SectionGenPlotDataFetcher():
 
     def __init__(self, connStr: str) -> None:
         """constructor
+
         Args:
             connStr (str): psp db connection string
         """
         self.connString = connStr
 
-    def fetchSection3Data(self, start_date: dt.datetime, end_date: dt.datetime):  
+    def fetchGenPlotDataData(self, start_date: dt.datetime, end_date: dt.datetime):  
 
         # converting datetime obj to string and then integer, 2021-08-16-> 20210816
         numbStartDate = int(start_date.strftime('%Y%m%d'))
         numbEndDate = int(end_date.strftime('%Y%m%d'))
-        section3List = []
+        genPlotData = {}
         try:
             connection = cx_Oracle.connect(self.connString)
             cur = connection.cursor()
         except Exception as err:
             print('error while creating a connection/cursor', err)
         else:
-            for dateKey in [numbStartDate, numbEndDate]:
+            for dateKey in range(numbStartDate, numbEndDate+1):
                 dateKeyStr = str(dateKey)
                 dateKeyStr = dateKeyStr[:4]+ '-' + dateKeyStr[4:6] + '-' + dateKeyStr[6:]
                 thermalGen = 0
@@ -45,12 +46,16 @@ class Section3Fetcher():
                     hydroGen = hydroGen + (0 if not row[5] else row[5])
                     other = other + (0 if not row[6] else row[6])
                     totalGen = totalGen + (0 if not row[7] else row[7])
-                
-                section3List.append((dateKeyStr, thermalGen, solarGen, windGen, hydroGen, other, totalGen, solarGen+windGen, (solarGen+windGen+hydroGen)*100/totalGen, (solarGen+windGen)*100/totalGen ))
-                    
+
+                genPlotData[dateKey] =[{'parName': 'Thermal', 'value':round(thermalGen,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'Solar', 'value':round(solarGen,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'Wind', 'value':round(windGen,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'Hydro', 'value':round(hydroGen,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'Other', 'value':round(other,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'Total', 'value':round(totalGen,1), 'dateKey':dateKeyStr },
+                                        {'parName': 'RE-Total', 'value':round((solarGen+windGen),1), 'dateKey':dateKeyStr }]                   
         finally:
             cur.close()
             connection.close()
 
-        return section3List
-        
+        return genPlotData

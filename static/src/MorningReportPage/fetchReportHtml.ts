@@ -1,6 +1,6 @@
-import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData} from "../fetchDataApi"
+import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData} from "../fetchDataApi"
 import { StateRePlotData, StateRePlotTrace, setPlotTraces } from "./stateRePlotUtils";
-import {FreqProfPlotData, FreqProfPlotTrace, setPlotTraces as freqSetPlotTrace } from "./freqProfPlotUtils"
+import {ParProfPlotData, ParProfPlotTrace, setPlotTraces as parSetPlotTrace } from "./parProfPlotUtils"
 import { yyyymmddtoDateObj } from "../timeUtils";
 
 export interface ISingleStateReData{
@@ -8,14 +8,14 @@ export interface ISingleStateReData{
   val: number;
   showDateKey:string
 } 
-export interface IFreqProfileObj{
+export interface IProfileObj{
   dateKey: string;
   value: number;
   parName:string
 } 
 //interface for object with dynamic keys Ref- https://stackoverflow.com/questions/39256682/how-to-define-an-interface-for-objects-with-dynamic-keys
-export interface IFreqProfileResp{
-  [dateId: number]: IFreqProfileObj[];
+export interface IProfileResp{
+  [dateId: string]: IProfileObj[];
 } 
 
 export interface IStateReData{
@@ -164,24 +164,47 @@ export const fetchReportHtml = async()=>{
 
     // plotting frequency profile data
     const freqProfData = await getFreqProfileData(targetDateValue)
-    let FreqProfPlotData: FreqProfPlotData = {
+    let ParProfPlotData: ParProfPlotData = {
       title: 'Frequency Profile',
       traces: [],
       yAxisTitle: "%age Time",
       barmode:"group"
     };
     // get all values for corresponding keys
-    const freqProfDataVal:IFreqProfileObj[][] = Object.values(freqProfData)
+    const freqProfDataVal:IProfileObj[][] = Object.values(freqProfData)
 
     for(let dateKeyInd = 0; dateKeyInd < freqProfDataVal.length; dateKeyInd++){
  
-      let freqProfPlotRace: FreqProfPlotTrace = {
+      let freqProfPlotRace: ParProfPlotTrace = {
         name: yyyymmddtoDateObj(freqProfDataVal[dateKeyInd][0].dateKey),
         data:freqProfDataVal[dateKeyInd],
         type: "bar",
         hoverYaxisDisplay: "%age",
       };
-      FreqProfPlotData.traces.push(freqProfPlotRace);
+      ParProfPlotData.traces.push(freqProfPlotRace);
     }
-    freqSetPlotTrace(`freqProf`, FreqProfPlotData); 
+    parSetPlotTrace(`freqProf`, ParProfPlotData); 
+
+    // plotting Generation profile data
+    const genProfData = await getGenPlotData(targetDateValue)
+    let GenProfPlotData: ParProfPlotData = {
+      title: 'Generation Profile(MU)',
+      traces: [],
+      yAxisTitle: "Gen(MU)",
+      barmode:"group"
+    };
+    // get all values for corresponding keys
+    const genProfDataVal:IProfileObj[][] = Object.values(genProfData)
+
+    for(let dateKeyInd = 0; dateKeyInd < genProfDataVal.length; dateKeyInd++){
+ 
+      let genProfPlotRace: ParProfPlotTrace = {
+        name: `${genProfDataVal[dateKeyInd][0].dateKey}`,
+        data:genProfDataVal[dateKeyInd],
+        type: "bar",
+        hoverYaxisDisplay: "MU",
+      };
+      GenProfPlotData.traces.push(genProfPlotRace);
+    }
+    parSetPlotTrace(`genProf`, GenProfPlotData); 
 }

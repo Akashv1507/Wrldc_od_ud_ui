@@ -12,6 +12,8 @@ from src.fetchers.MorningAppraisalReport.section_state_fetcher import SectionSta
 from src.fetchers.MorningAppraisalReport.section_istsRe_fetcher import SectionIstsReFetcher
 from src.fetchers.MorningAppraisalReport.section_freqProfile_fetcher import SectionFreqProfileFetcher
 from src.fetchers.MorningAppraisalReport.section_genPlotData_fetcher import SectionGenPlotDataFetcher
+from src.fetchers.MorningAppraisalReport.section_soFarHighestDem import SectionSoFarHighestDemFetcher
+from src.fetchers.MorningAppraisalReport.section_stateDrawlFetcher import SectionStateDrawlFetcher
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -44,7 +46,8 @@ obj_sectionStateFetcher = SectionStateFetcher(connStr=conStr)
 obj_sectionIstsReFetcher = SectionIstsReFetcher(connStr=conStr)
 obj_sectionFreqProfileFetcher = SectionFreqProfileFetcher(connStr=conStr)
 obj_sectionGenPlotDataFetcher = SectionGenPlotDataFetcher(connStr=conStr)
-
+obj_sectionSoFarHighestDemFetcher = SectionSoFarHighestDemFetcher(connStr=conStr)
+obj_sectionStateDrawlFetcher = SectionStateDrawlFetcher(connStr=conStr)
 
 @app.route('/')
 def index():
@@ -123,8 +126,9 @@ def generateMorningReport(targetDate:str ):
     section2Data = obj_section2Fetcher.fetchSection2Data(startDate, endDate)
     section3Data = obj_section3Fetcher.fetchSection3Data(startDate, endDate)
     sectio5Data = obj_section5Fetcher.fetchSection5Data(startDate, endDate)
+    sectionSoFarHighestData = obj_sectionSoFarHighestDemFetcher.fetchSoFarHighestDemData(endDate)
     
-    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data)
+    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data, sectionSoFarHighestData= sectionSoFarHighestData)
 
 @app.route('/getStateReData/<targetDate>/')
 def getStateReData(targetDate:str ):
@@ -165,6 +169,24 @@ def getGenPlotData(targetDate:str ):
 
     genPlotData = obj_sectionGenPlotDataFetcher.fetchGenPlotDataData(startDate, endDate)
     return jsonify(genPlotData)
+
+@app.route('/getStateDrawlTblData/<targetDate>/')
+def getStateDrawlTblData(targetDate:str ):
+
+    # target date is report date
+    targetDate = dt.strptime(targetDate, '%Y-%m-%d')
+    
+    stateDrawlMixTblData = obj_sectionStateDrawlFetcher.fetchStateDrawlTblData(targetDate)
+    return render_template('stateDrawlMixTemplate.html.j2',stateDrawlMixTblData= stateDrawlMixTblData)
+
+@app.route('/getStateDrawlPlotData/<targetDate>/')
+def getStateDrawlPlotData(targetDate:str ):
+
+    # target date is report date
+    targetDate = dt.strptime(targetDate, '%Y-%m-%d')
+    
+    stateDrawlMixPlotData = obj_sectionStateDrawlFetcher.fetchStateDrawlPlotData(targetDate)
+    return jsonify(stateDrawlMixPlotData)
     
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']

@@ -61,8 +61,10 @@ class Section5Fetcher():
             section5Dfcopy = section5Df.copy()
             
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         
         section5freqProf = self.toListOfDict(section5Dfcopy)
         return section5freqProf

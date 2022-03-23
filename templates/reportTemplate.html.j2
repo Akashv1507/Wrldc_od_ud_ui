@@ -177,4 +177,26 @@
       </tbody>     
   </table>
 
+{# section So Far Highest Table  #}
+  <h3>SoFar Highest Demand</h3>
+  <table id="section5Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>SrNo.</th>
+              <th>Entity</th>
+              <th>Demand in MW</th>
+              <th>Achieved on Date</th>
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in sectionSoFarHighestData %}
+          <tr>
+              <td>{{row["srNo"]}}</td>
+              <td>{{row["Entity"]}}</td>
+              <td>{{row["maxDem"]|int}}</td>
+              <td>{{row["dateKey"]}}</td>
+          </tr>
+          {% endfor %}     
+      </tbody>     
+  </table>
 

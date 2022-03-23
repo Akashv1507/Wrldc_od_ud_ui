@@ -1,7 +1,7 @@
-import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData} from "../fetchDataApi"
+import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData, getStateProfDrawlTblHtmlContent, getStateDrawlProfilePlotData} from "../fetchDataApi"
 import { StateRePlotData, StateRePlotTrace, setPlotTraces } from "./stateRePlotUtils";
 import {ParProfPlotData, ParProfPlotTrace, setPlotTraces as parSetPlotTrace } from "./parProfPlotUtils"
-import { yyyymmddtoDateObj } from "../timeUtils";
+import { yyyymmddtoDateStr } from "../timeUtils";
 
 export interface ISingleStateReData{
   dateKey: string;
@@ -9,7 +9,7 @@ export interface ISingleStateReData{
   showDateKey:string
 } 
 export interface IProfileObj{
-  dateKey: string;
+  legName: string;
   value: number;
   parName:string
 } 
@@ -40,6 +40,7 @@ export const fetchReportHtml = async()=>{
     const spinnerDiv = document.getElementById("contDeviationTableSpinner") as HTMLDivElement;
   
     const reportSectionDiv = document.getElementById("reportSection") as HTMLDivElement;
+    const stateDrawlMixTblDiv = document.getElementById("stateDrawlProfileTbl") as HTMLDivElement;
   
     //get user inputs
     let targetDateValue = (
@@ -176,7 +177,7 @@ export const fetchReportHtml = async()=>{
     for(let dateKeyInd = 0; dateKeyInd < freqProfDataVal.length; dateKeyInd++){
  
       let freqProfPlotRace: ParProfPlotTrace = {
-        name: yyyymmddtoDateObj(freqProfDataVal[dateKeyInd][0].dateKey),
+        name: yyyymmddtoDateStr(freqProfDataVal[dateKeyInd][0].legName),
         data:freqProfDataVal[dateKeyInd],
         type: "bar",
         hoverYaxisDisplay: "%age",
@@ -199,7 +200,7 @@ export const fetchReportHtml = async()=>{
     for(let dateKeyInd = 0; dateKeyInd < genProfDataVal.length; dateKeyInd++){
  
       let genProfPlotRace: ParProfPlotTrace = {
-        name: `${genProfDataVal[dateKeyInd][0].dateKey}`,
+        name: yyyymmddtoDateStr(genProfDataVal[dateKeyInd][0].legName),
         data:genProfDataVal[dateKeyInd],
         type: "bar",
         hoverYaxisDisplay: "MU",
@@ -207,4 +208,32 @@ export const fetchReportHtml = async()=>{
       GenProfPlotData.traces.push(genProfPlotRace);
     }
     parSetPlotTrace(`genProf`, GenProfPlotData); 
+
+
+    //  table of state drawl profile mix
+    const stateDrawlTblHtmlText = await getStateProfDrawlTblHtmlContent(targetDateValue)
+    stateDrawlMixTblDiv.innerHTML = stateDrawlTblHtmlText
+
+    // ploting  of state drawl profile mix
+    const stateDrawlProfilePlotData = await getStateDrawlProfilePlotData(targetDateValue)
+    let StateDrawlProfPlotData: ParProfPlotData = {
+      title: 'State Drawl Profile Mix in %',
+      traces: [],
+      yAxisTitle: "Percentage %",
+      barmode:"group"
+    };
+    // get all values for corresponding keys
+    const stateDrawlProfilePlotDataVal:IProfileObj[][] = Object.values(stateDrawlProfilePlotData)
+
+    for(let metricInd = 0; metricInd < stateDrawlProfilePlotDataVal.length; metricInd++){
+ 
+      let stateDrawlProfPlotRace: ParProfPlotTrace = {
+        name: stateDrawlProfilePlotDataVal[metricInd][0].legName,
+        data:stateDrawlProfilePlotDataVal[metricInd],
+        type: "bar",
+        hoverYaxisDisplay: "%",
+      };
+      StateDrawlProfPlotData.traces.push(stateDrawlProfPlotRace);
+    }
+    parSetPlotTrace(`stateDrawlProfileTbl`, StateDrawlProfPlotData); 
 }

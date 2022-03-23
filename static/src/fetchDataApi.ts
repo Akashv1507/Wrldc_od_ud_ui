@@ -108,6 +108,21 @@ export const getReportHtmlContent = async (
     return null;
   }  
 }
+export const getStateProfDrawlTblHtmlContent = async (
+  targetDate: string,
+)=>{
+  try {
+    const resp = await fetch(`/getStateDrawlTblData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respHtml = await resp.text();
+    return respHtml;  
+  } catch (e) {
+    console.error(e);
+    return null;
+  }  
+}
 
 export const getStateReData = async (
   targetDate: string,
@@ -162,6 +177,22 @@ export const getGenPlotData = async (
 ):Promise<IProfileResp | null>=>{
   try {
     const resp = await fetch(`/getGenPlotData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getStateDrawlProfilePlotData = async (
+  targetDate: string,
+):Promise<IProfileResp | null>=>{
+  try {
+    const resp = await fetch(`/getStateDrawlPlotData/${targetDate}`, {
       method: "get",
     });
 

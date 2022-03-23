@@ -2,6 +2,7 @@ import datetime as dt
 from typing import List, Tuple
 import cx_Oracle
 import pandas as pd
+from src.helperFunctions import convertIntToDateStr
 
 class Section1Fetcher():
 
@@ -23,8 +24,7 @@ class Section1Fetcher():
         for nameOfGroup,groupDf in groupedSection1Df:
             groupDf.reset_index(inplace=True, drop= True)
             # converting 20220307-> 2022-03-07
-            dateKeyStr = str(nameOfGroup)
-            dateKeyStr = dateKeyStr[:4]+ '-' + dateKeyStr[4:6] + '-' + dateKeyStr[6:]
+            dateKeyStr = convertIntToDateStr(nameOfGroup)
             section1Obj = {"date": dateKeyStr}
 
             # deleting DATE_KEY column
@@ -62,8 +62,10 @@ class Section1Fetcher():
             section1Df = pd.concat([section1WrDf, section1StateDf], ignore_index=True)
             section1DfCopy = section1Df.copy()          
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         #combining state data with wr data 
 
         section1ConsumpData = self.toListOfDict(section1DfCopy)   

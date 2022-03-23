@@ -1,6 +1,5 @@
 // import Plotly from "plotly.js-dist";
 declare var Plotly: any;
-import { toDateObj, yyyymmddtoDateObj } from "../timeUtils";
 import {IProfileObj} from "./fetchReportHtml"
 
 
@@ -88,7 +87,7 @@ export const setPlotTraces = (divId: string, plotData: ParProfPlotData) => {
   hovermode: 'x',
   autosize: true,
     // width: 1500,
-    // height: 750,
+  height: 500,
   bargap:0.5,
   xaxis: {
     showgrid: false,

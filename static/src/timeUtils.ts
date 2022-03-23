@@ -17,7 +17,7 @@ export const toDateObj = (timestampStr: string): Date => {
     return newTimestamp;
 };
 
-export const yyyymmddtoDateObj = (timestampStr: string): string => {
+export const yyyymmddtoDateStr = (timestampStr: string): string => {
     // convert 20210915 to javascript dateobject
     // let year = Number(timestampStr.substring(0, 4));
     // let month = Number(timestampStr.substring(4, 6));

@@ -78,8 +78,10 @@ class Section2Fetcher():
             section2Dfcopy = section2Df.copy()
             
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         
         section2MaxData = self.toListOfDict(section2Dfcopy)
         section2DiffData = self.getDiffMaxHighestDemand(section2Df, numbStartDate, numbEndDate)

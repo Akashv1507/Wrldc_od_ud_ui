@@ -28,8 +28,6 @@ class SectionGenPlotDataFetcher():
             print('error while creating a connection/cursor', err)
         else:
             for dateKey in range(numbStartDate, numbEndDate+1):
-                dateKeyStr = str(dateKey)
-                dateKeyStr = dateKeyStr[:4]+ '-' + dateKeyStr[4:6] + '-' + dateKeyStr[6:]
                 thermalGen = 0
                 windGen= 0
                 solarGen=0
@@ -47,15 +45,17 @@ class SectionGenPlotDataFetcher():
                     other = other + (0 if not row[6] else row[6])
                     totalGen = totalGen + (0 if not row[7] else row[7])
 
-                genPlotData[dateKey] =[{'parName': 'Thermal', 'value':round(thermalGen,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'Solar', 'value':round(solarGen,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'Wind', 'value':round(windGen,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'Hydro', 'value':round(hydroGen,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'Other', 'value':round(other,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'Total', 'value':round(totalGen,1), 'dateKey':dateKeyStr },
-                                        {'parName': 'RE-Total', 'value':round((solarGen+windGen),1), 'dateKey':dateKeyStr }]                   
+                genPlotData[dateKey] =[{'parName': 'Thermal', 'value':round(thermalGen,1), 'legName':str(dateKey) },
+                                        {'parName': 'Solar', 'value':round(solarGen,1), 'legName':str(dateKey) },
+                                        {'parName': 'Wind', 'value':round(windGen,1), 'legName':str(dateKey) },
+                                        {'parName': 'Hydro', 'value':round(hydroGen,1), 'legName':str(dateKey) },
+                                        {'parName': 'Other', 'value':round(other,1), 'legName':str(dateKey) },
+                                        {'parName': 'Total', 'value':round(totalGen,1), 'legName':str(dateKey) },
+                                        {'parName': 'RE-Total', 'value':round((solarGen+windGen),1), 'legName':str(dateKey) }]                   
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
 
         return genPlotData

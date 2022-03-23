@@ -84,7 +84,9 @@ class SectionStateFetcher():
 
                 entiyResultList.append(entityObj)
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         
         return entiyResultList

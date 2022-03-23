@@ -1,0 +1,32 @@
+{# section state drawl profile mix table #}
+
+<table id="stateDrawlMixTbl" class="table table-bordered table-hover display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Metric</th>
+            <th>Maharashtra</th>
+            <th>MP</th>
+            <th>Gujarat</th>
+            <th>Goa</th>
+            <th>DD</th>
+            <th>DNH</th>
+            <th>Chhattisgarh</th>
+            <th>AMNSIL</th>                      
+        </tr>
+    </thead>    
+    <tbody>
+        {% for row in  stateDrawlMixTblData%}
+        <tr>
+            <td>{{row['METRIC']}}</td>
+            <td>{{row['MAHARASHTRA']|round(2)}}</td>
+            <td>{{row['MADHYA PRADESH']|round(2)}}</td>
+            <td>{{row['GUJARAT']|round(2)}}</td>
+            <td>{{row['GOA']|round(2)}}</td>
+            <td>{{row['DAMAN AND DIU']|round(2)}}</td>
+            <td>{{row['DADRA AND NAGAR HAVELI']|round(2)}}</td>
+            <td>{{row['CHHATTISGARH']|round(2)}}</td>
+            <td>{{row['AMNSIL']|round(2)}}</td>        
+        </tr>
+        {% endfor %}    
+    </tbody>     
+</table>

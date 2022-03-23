@@ -49,7 +49,9 @@ class SectionIstsReFetcher():
                 }
                
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         
         return istsReObj

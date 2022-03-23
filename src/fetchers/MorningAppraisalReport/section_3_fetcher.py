@@ -49,8 +49,10 @@ class Section3Fetcher():
                 section3List.append((dateKeyStr, thermalGen, solarGen, windGen, hydroGen, other, totalGen, solarGen+windGen, (solarGen+windGen+hydroGen)*100/totalGen, (solarGen+windGen)*100/totalGen ))
                     
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
 
         return section3List
         

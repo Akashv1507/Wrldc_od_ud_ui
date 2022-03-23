@@ -33,11 +33,13 @@ class SectionFreqProfileFetcher():
                         WHERE fp.DATE_KEY = :date_key '''
                 cur.execute(fetch_freqProf_sql, {'date_key': dateKey})
                 result = cur.fetchall()
-                freqProfData[dateKey] =[{'parName': '<49.9Hz', 'value':result[0][1], 'dateKey':str(dateKey) },
-                                        {'parName': '49.9Hz-50.05Hz', 'value':result[0][2], 'dateKey':str(dateKey) },
-                                        {'parName': '>50.05Hz', 'value':result[0][3], 'dateKey':str(dateKey) }]           
+                freqProfData[dateKey] =[{'parName': '<49.9Hz', 'value':result[0][1], 'legName':str(dateKey) },
+                                        {'parName': '49.9Hz-50.05Hz', 'value':result[0][2], 'legName':str(dateKey) },
+                                        {'parName': '>50.05Hz', 'value':result[0][3], 'legName':str(dateKey) }]           
         finally:
-            cur.close()
-            connection.close()
+            if cur:
+                cur.close()
+            if connection:
+                connection.close()
         
         return freqProfData

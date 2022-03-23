@@ -1,6 +1,6 @@
 // import Plotly from "plotly.js-dist";
 declare var Plotly: any;
-import { toDateObj, yyyymmddtoDateObj } from "../timeUtils";
+import { yyyymmddtoDateStr } from "../timeUtils";
 import {ISingleStateReData} from "./fetchReportHtml"
 
 
@@ -36,8 +36,8 @@ export const getPlotXYArrays = (
   let vals: number[] = [];
   let showTimestamps: string[]=[]
   for (var i = 0; i < measData.length; i = i + 1) {
-    timestamps.push(yyyymmddtoDateObj(measData[i].dateKey));
-    showTimestamps.push(yyyymmddtoDateObj(measData[i].showDateKey));
+    timestamps.push(yyyymmddtoDateStr(measData[i].dateKey));
+    showTimestamps.push(yyyymmddtoDateStr(measData[i].showDateKey));
     vals.push(measData[i].val as number);
   }
   return { timestamps: timestamps, vals: vals, showTimestamps:showTimestamps };

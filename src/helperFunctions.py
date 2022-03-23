@@ -44,3 +44,8 @@ def getListofPointDict():
     for state in stateName:
         stateObjList.append({"schedule":appConfig[f"{state}_Schedule"], "actual":appConfig[f"{state}_Actual"], "stateName": state})
     return stateObjList
+
+def convertIntToDateStr(dateNumb:int)->str:
+    dateKeyStr = str(dateNumb)
+    dateKeyStr = dateKeyStr[:4]+ '-' + dateKeyStr[4:6] + '-' + dateKeyStr[6:]
+    return dateKeyStr

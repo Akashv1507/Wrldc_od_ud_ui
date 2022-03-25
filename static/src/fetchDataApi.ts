@@ -21,7 +21,11 @@ export interface IStateReRespData{
   stateReData:IStateReData[]
 }
 
-
+export interface IDamRtmPlotData{
+  IEX_DAM:[string,number][]
+  IEX_RTM:[string,number][]
+  dateKey : string
+}
 
 export const getOdUdData = async (
   startDate: string,
@@ -193,6 +197,22 @@ export const getStateDrawlProfilePlotData = async (
 ):Promise<IProfileResp | null>=>{
   try {
     const resp = await fetch(`/getStateDrawlPlotData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getDamRtmPlotData = async (
+  targetDate: string,
+):Promise<IDamRtmPlotData[] | null>=>{
+  try {
+    const resp = await fetch(`/getDamRtmPlotData/${targetDate}`, {
       method: "get",
     });
 

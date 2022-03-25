@@ -177,6 +177,55 @@
       </tbody>     
   </table>
 
+{# section & DAM RTM GDAM  Table  #}
+  <h3>DAM RTM & GDAM</h3>
+  <table id="section7Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+            <th></th>
+            <th colspan="4">DAM</th>
+            <th colspan="4">RTM</th>
+            <th colspan="4">GDAM</th>
+          </tr>
+          <tr>
+              <th>Date</th>
+              <th>MCV(Mu)</th>
+              <th>ACP(Rs/unit)</th>
+              <th>Max MCP(Rs/Unit)</th>
+              <th>Min MCP(Rs/Unit)</th>
+              <th>MCV(Mu)</th>
+              <th>ACP(Rs/unit)</th>
+              <th>Max MCP(Rs/Unit)</th>
+              <th>Min MCP(Rs/Unit)</th>
+              <th>MCV(Mu)</th>
+              {# <th>ACP(Rs/unit)</th>
+              <th>Max MCP(Rs/Unit)</th>
+              <th>Min MCP(Rs/Unit)</th> #}
+              
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section7Data %}
+          <tr>
+            <td>{{row["dateKey"]}}</td>
+            <td>{{row["IEX_DAM"][0]|round(2)}}</td>
+            <td>{{row["IEX_DAM"][1]|round(2)}}</td>
+            <td>{{row["IEX_DAM"][2]|round(2)}}</td>
+            <td>{{row["IEX_DAM"][3]|round(2)}}</td>
+            <td>{{row["IEX_RTM"][0]|round(2)}}</td>
+            <td>{{row["IEX_RTM"][1]|round(2)}}</td>
+            <td>{{row["IEX_RTM"][2]|round(2)}}</td>
+            <td>{{row["IEX_RTM"][3]|round(2)}}</td>
+            <td>{{row["IEX_GDAM"][0]|round(2)}}</td>
+            {# <td>{{row["IEX_GDAM"][1]|round(2)}}</td>
+            <td>{{row["IEX_GDAM"][2]|round(2)}}</td>
+            <td>{{row["IEX_GDAM"][3]|round(2)}}</td> #}
+          </tr>
+          {% endfor %}     
+      </tbody>     
+  </table>
+
+
 {# section So Far Highest Table  #}
   <h3>SoFar Highest Demand</h3>
   <table id="section5Tbl" class="table table-bordered table-hover display" style="width:100%">

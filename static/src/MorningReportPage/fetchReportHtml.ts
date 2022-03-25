@@ -1,6 +1,7 @@
-import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData, getStateProfDrawlTblHtmlContent, getStateDrawlProfilePlotData} from "../fetchDataApi"
+import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData, getStateProfDrawlTblHtmlContent, getStateDrawlProfilePlotData, getDamRtmPlotData} from "../fetchDataApi"
 import { StateRePlotData, StateRePlotTrace, setPlotTraces } from "./stateRePlotUtils";
 import {ParProfPlotData, ParProfPlotTrace, setPlotTraces as parSetPlotTrace } from "./parProfPlotUtils"
+import {PlotData, PlotTrace, setPlotTraces as rtmDamSetPlotTraces} from "../plotUtils"
 import { yyyymmddtoDateStr } from "../timeUtils";
 
 export interface ISingleStateReData{
@@ -236,4 +237,34 @@ export const fetchReportHtml = async()=>{
       StateDrawlProfPlotData.traces.push(stateDrawlProfPlotRace);
     }
     parSetPlotTrace(`stateDrawlProfileTbl`, StateDrawlProfPlotData); 
+
+    // ploting  of DAM RTM
+    const damRtmResData = await getDamRtmPlotData(targetDateValue)
+    let DamRtmPlotData: PlotData = {
+      title: 'DAM VS RTM',
+      traces: [],
+      yAxisTitle: "Rs/Unit",
+      barmode:"group"
+    };
+   
+
+    for(let dateKeyInd = 0; dateKeyInd < damRtmResData.length; dateKeyInd++){
+ 
+      let DamPlotRace: PlotTrace = {
+        name: `DAM_${damRtmResData[dateKeyInd].dateKey}`,
+        data:damRtmResData[dateKeyInd].IEX_DAM,
+        type: "scatter",
+        hoverYaxisDisplay: "Rs/Unit",
+      };
+      DamRtmPlotData.traces.push(DamPlotRace);
+
+      let RtmPlotRace: PlotTrace = {
+        name: `RTM_${damRtmResData[dateKeyInd].dateKey}`,
+        data:damRtmResData[dateKeyInd].IEX_RTM,
+        type: "scatter",
+        hoverYaxisDisplay: "Rs/Unit",
+      };
+      DamRtmPlotData.traces.push(RtmPlotRace);
+      rtmDamSetPlotTraces(`day1RtmVsDam`, DamRtmPlotData);
+    }   
 }

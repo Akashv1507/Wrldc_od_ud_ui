@@ -69,10 +69,15 @@ export const fetchPlotData = async () => {
         try{
         currState = selectedStateList[stateInd].value
 
-        //div for plot of a current loop state
-        let plotDiv = document.createElement('div');
-        plotDiv.id = `${selectedStateList[stateInd].name}_plot`;
-        schVsActDrawlPlotsWrapper.appendChild(plotDiv);
+        //div for plot of a sch act and deviation of current loop state
+        let schActPlotDiv = document.createElement('div');
+        schActPlotDiv.id = `${selectedStateList[stateInd].name}_schActplot`;
+        //div for plot of a sch act and deviation of current loop state
+        let freqDevPlotDiv = document.createElement('div');
+        freqDevPlotDiv.id = `${selectedStateList[stateInd].name}_freqDevplot`;
+        // appending above two divs to plotswrapper
+        schVsActDrawlPlotsWrapper.appendChild(schActPlotDiv);
+        schVsActDrawlPlotsWrapper.appendChild(freqDevPlotDiv);
   
         // div for plotting horizontal rule
         let hrDiv = document.createElement("div");
@@ -91,7 +96,7 @@ export const fetchPlotData = async () => {
           title: `Schedule Vs Actual Drawl Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,
           traces: [],
           yAxisTitle: "MW",
-          y2AxisTitle:"MW/Hz"
+          y2AxisTitle:"MW"
 
       };
   
@@ -137,22 +142,6 @@ export const fetchPlotData = async () => {
       };
       schActDrawlPlotData.traces.push(uiTrace);
 
-    let freqTrace: PlotTrace = {
-      name: "Frequency",
-      data: freqData.schVsActDrawlData,
-      type: "scatter",
-      hoverYaxisDisplay: "Freq",
-      isSecondaryAxisTrace: true,
-      visible:"legendonly",
-      line: {
-          width: 1,
-          // color: '#34A853'
-      },
-      // fill: "tonextx",
-      // fillcolor: '#e763fa'
-    };
-    schActDrawlPlotData.traces.push(freqTrace);
-
     // let actualCorrToUiNegTrace: PlotTrace = {
     //   name: "ActForUd",
     //   data: uiPosNegData.actualCorrToUiNeg,
@@ -184,9 +173,53 @@ export const fetchPlotData = async () => {
   // schActDrawlPlotData.traces.push(actualCorrToUiPosTrace);
   
       setPlotTraces(
-          `${selectedStateList[stateInd].name}_plot`,
+          `${selectedStateList[stateInd].name}_schActplot`,
           schActDrawlPlotData
       ); 
+
+      // Now plotting frequency vs Deviation Plot
+      let FreqDevPlotData: PlotData = {
+          title: `Deviation Vs Frequency Of ${selectedStateList[stateInd].value} B/w Dates ${startDateValue} And ${endDateValue}`,
+          traces: [],
+          yAxisTitle: "Hz",
+          y2AxisTitle:"MW"
+
+      };
+
+      let freqTrace: PlotTrace = {
+        name: "Frequency",
+        data: freqData.schVsActDrawlData,
+        type: "scatter",
+        hoverYaxisDisplay: "Freq",
+        line: {
+            width: 2,    
+            color: '#FF7F50'
+        },
+        // fill: "tonextx",
+        // fillcolor: '#e763fa'
+      };
+      FreqDevPlotData.traces.push(freqTrace);
+
+      let uiTraceCopy: PlotTrace = {
+        name: "Deviation",
+        data: uiData,
+        type: "scatter",
+        hoverYaxisDisplay: "MW",
+        isSecondaryAxisTrace: true,
+        line: {
+            width: 2,
+            color: '#007500',
+        },
+        // fill: "tonextx",
+        // fillcolor: '#e763fa'
+      };
+      FreqDevPlotData.traces.push(uiTraceCopy);
+
+      setPlotTraces(
+        `${selectedStateList[stateInd].name}_freqDevplot`,
+        FreqDevPlotData
+    ); 
+
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For ${currState} B/w Selected Date. Please Try Again</b>`

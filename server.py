@@ -8,12 +8,14 @@ from src.fetchers.MorningAppraisalReport.section_1_fetcher import Section1Fetche
 from src.fetchers.MorningAppraisalReport.section_2_fetcher import Section2Fetcher
 from src.fetchers.MorningAppraisalReport.section_3_fetcher import Section3Fetcher
 from src.fetchers.MorningAppraisalReport.section_5_fetcher import Section5Fetcher
+from src.fetchers.MorningAppraisalReport.section_7_damRtm_fetcher import Section7Fetcher
 from src.fetchers.MorningAppraisalReport.section_state_fetcher import SectionStateFetcher
 from src.fetchers.MorningAppraisalReport.section_istsRe_fetcher import SectionIstsReFetcher
 from src.fetchers.MorningAppraisalReport.section_freqProfile_fetcher import SectionFreqProfileFetcher
 from src.fetchers.MorningAppraisalReport.section_genPlotData_fetcher import SectionGenPlotDataFetcher
 from src.fetchers.MorningAppraisalReport.section_soFarHighestDem import SectionSoFarHighestDemFetcher
 from src.fetchers.MorningAppraisalReport.section_stateDrawlFetcher import SectionStateDrawlFetcher
+from src.fetchers.MorningAppraisalReport.section_damRtmPlotData_fetcher import SectionDamRtmPlotDataFetcher
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -29,6 +31,7 @@ appConfig = loadAppConfig()
 app.config['SECRET_KEY'] = appConfig['flaskSecret']
 
 conStr = appConfig['con_string_server_db']
+moDbConStr = appConfig['moDbConnStr']
 tokenUrl = appConfig['tokenUrl']
 apiBaseUrl= appConfig['apiBaseUrl']
 clientId=appConfig['clientId']
@@ -42,12 +45,14 @@ obj_section1Fetcher = Section1Fetcher(connStr=conStr)
 obj_section2Fetcher = Section2Fetcher(connStr=conStr)
 obj_section3Fetcher = Section3Fetcher(connStr=conStr)
 obj_section5Fetcher = Section5Fetcher(connStr=conStr)
+obj_section7Fetcher = Section7Fetcher(connStr=moDbConStr)
 obj_sectionStateFetcher = SectionStateFetcher(connStr=conStr)
 obj_sectionIstsReFetcher = SectionIstsReFetcher(connStr=conStr)
 obj_sectionFreqProfileFetcher = SectionFreqProfileFetcher(connStr=conStr)
 obj_sectionGenPlotDataFetcher = SectionGenPlotDataFetcher(connStr=conStr)
 obj_sectionSoFarHighestDemFetcher = SectionSoFarHighestDemFetcher(connStr=conStr)
 obj_sectionStateDrawlFetcher = SectionStateDrawlFetcher(connStr=conStr)
+obj_sectionDamRtmPlotDataFetcher = SectionDamRtmPlotDataFetcher(connStr=moDbConStr)
 
 @app.route('/')
 def index():
@@ -126,9 +131,9 @@ def generateMorningReport(targetDate:str ):
     section2Data = obj_section2Fetcher.fetchSection2Data(startDate, endDate)
     section3Data = obj_section3Fetcher.fetchSection3Data(startDate, endDate)
     sectio5Data = obj_section5Fetcher.fetchSection5Data(startDate, endDate)
+    section7Data = obj_section7Fetcher.fetchSection7Data(startDate, endDate)
     sectionSoFarHighestData = obj_sectionSoFarHighestDemFetcher.fetchSoFarHighestDemData(endDate)
-    
-    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data, sectionSoFarHighestData= sectionSoFarHighestData)
+    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data, sectionSoFarHighestData= sectionSoFarHighestData, section7Data=section7Data )
 
 @app.route('/getStateReData/<targetDate>/')
 def getStateReData(targetDate:str ):
@@ -187,6 +192,16 @@ def getStateDrawlPlotData(targetDate:str ):
     
     stateDrawlMixPlotData = obj_sectionStateDrawlFetcher.fetchStateDrawlPlotData(targetDate)
     return jsonify(stateDrawlMixPlotData)
+
+@app.route('/getDamRtmPlotData/<targetDate>/')
+def getDamRtmPlotData(targetDate:str ):
+
+    # endDate will be targetDate and startDate will be previous date
+    endDate = dt.strptime(targetDate, '%Y-%m-%d')
+    startDate = endDate - timedelta(days=1)
+    damRtmPlotData = obj_sectionDamRtmPlotDataFetcher.fetchDamRtmPlotData(startDate, endDate)
+    return jsonify(damRtmPlotData)
+    
     
 if __name__ == '__main__':
     serverMode: str = appConfig['mode']

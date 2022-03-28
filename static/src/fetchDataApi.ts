@@ -26,6 +26,11 @@ export interface IDamRtmPlotData{
   IEX_RTM:[string,number][]
   dateKey : string
 }
+export interface IRrasScedPlotData{
+  rras:[string,number][]
+  sced:[string,number][]
+  dateKey : string
+}
 
 export const getOdUdData = async (
   startDate: string,
@@ -213,6 +218,22 @@ export const getDamRtmPlotData = async (
 ):Promise<IDamRtmPlotData[] | null>=>{
   try {
     const resp = await fetch(`/getDamRtmPlotData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getRrasScedPlotData = async (
+  targetDate: string,
+):Promise<IRrasScedPlotData[] | null>=>{
+  try {
+    const resp = await fetch(`/getRrasScedPlotData/${targetDate}`, {
       method: "get",
     });
 

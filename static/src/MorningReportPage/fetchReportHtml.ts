@@ -1,7 +1,7 @@
-import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData, getStateProfDrawlTblHtmlContent, getStateDrawlProfilePlotData, getDamRtmPlotData} from "../fetchDataApi"
+import {getReportHtmlContent, getStateReData, getIstsReData, getFreqProfileData, getGenPlotData, getStateProfDrawlTblHtmlContent, getStateDrawlProfilePlotData, getDamRtmPlotData, getRrasScedPlotData} from "../fetchDataApi"
 import { StateRePlotData, StateRePlotTrace, setPlotTraces } from "./stateRePlotUtils";
 import {ParProfPlotData, ParProfPlotTrace, setPlotTraces as parSetPlotTrace } from "./parProfPlotUtils"
-import {PlotData, PlotTrace, setPlotTraces as rtmDamSetPlotTraces} from "../plotUtils"
+import {PlotData, PlotTrace, setPlotTraces as timeSeriesSetPlotTraces} from "../plotUtils"
 import { yyyymmddtoDateStr } from "../timeUtils";
 
 export interface ISingleStateReData{
@@ -42,6 +42,8 @@ export const fetchReportHtml = async()=>{
   
     const reportSectionDiv = document.getElementById("reportSection") as HTMLDivElement;
     const stateDrawlMixTblDiv = document.getElementById("stateDrawlProfileTbl") as HTMLDivElement;
+    const rtmDamPlotsDiv = document.getElementById("rtmDamPlots") as HTMLDivElement;
+    const rrasScedPlotsDiv = document.getElementById("rrasScedPlots") as HTMLDivElement;
   
     //get user inputs
     let targetDateValue = (
@@ -240,31 +242,71 @@ export const fetchReportHtml = async()=>{
 
     // ploting  of DAM RTM
     const damRtmResData = await getDamRtmPlotData(targetDateValue)
-    let DamRtmPlotData: PlotData = {
-      title: 'DAM VS RTM',
-      traces: [],
-      yAxisTitle: "Rs/Unit",
-      barmode:"group"
-    };
-   
 
     for(let dateKeyInd = 0; dateKeyInd < damRtmResData.length; dateKeyInd++){
- 
+      let plotDiv = document.createElement("div"); 
+      plotDiv.id = `damRtm_${dateKeyInd}_plot`;
+      rtmDamPlotsDiv.appendChild(plotDiv);
+      let DamRtmPlotData: PlotData = {
+        title: 'DAM VS RTM',
+        traces: [],
+        yAxisTitle: "Rs/Unit",
+        barmode:"group"
+      };
+
       let DamPlotRace: PlotTrace = {
         name: `DAM_${damRtmResData[dateKeyInd].dateKey}`,
         data:damRtmResData[dateKeyInd].IEX_DAM,
-        type: "scatter",
+        type: "bar",
         hoverYaxisDisplay: "Rs/Unit",
+        // barWidth:
       };
       DamRtmPlotData.traces.push(DamPlotRace);
 
       let RtmPlotRace: PlotTrace = {
         name: `RTM_${damRtmResData[dateKeyInd].dateKey}`,
         data:damRtmResData[dateKeyInd].IEX_RTM,
-        type: "scatter",
+        type: "bar",
         hoverYaxisDisplay: "Rs/Unit",
+        // barWidth:5
       };
       DamRtmPlotData.traces.push(RtmPlotRace);
-      rtmDamSetPlotTraces(`day1RtmVsDam`, DamRtmPlotData);
+      timeSeriesSetPlotTraces(`damRtm_${dateKeyInd}_plot`, DamRtmPlotData);
+    } 
+    
+    // ploting of RRAS SCED
+    const rrasScedResData = await getRrasScedPlotData(targetDateValue)
+    console.log(rrasScedResData)
+    for(let dateKeyInd = 0; dateKeyInd < rrasScedResData.length; dateKeyInd++){
+      console.log("hi")
+      let plotDiv = document.createElement("div"); 
+      plotDiv.id = `rrasCed_${dateKeyInd}_plot`;
+      rrasScedPlotsDiv.appendChild(plotDiv);
+
+      let RrasScedPlotData: PlotData = {
+        title: 'RRAS Vs SCED',
+        traces: [],
+        yAxisTitle: "MW",
+        barmode:"group"
+      };
+
+      let RrasPlotRace: PlotTrace = {
+        name: `RRAS_${rrasScedResData[dateKeyInd].dateKey}`,
+        data:rrasScedResData[dateKeyInd].rras,
+        type: "bar",
+        hoverYaxisDisplay: "MW",
+        // barWidth:
+      };
+      RrasScedPlotData.traces.push(RrasPlotRace);
+
+      let ScedPlotRace: PlotTrace = {
+        name: `SCED_${rrasScedResData[dateKeyInd].dateKey}`,
+        data:rrasScedResData[dateKeyInd].sced,
+        type: "bar",
+        hoverYaxisDisplay: "MW",
+        // barWidth:5
+      };
+      RrasScedPlotData.traces.push(ScedPlotRace);
+      timeSeriesSetPlotTraces(`rrasCed_${dateKeyInd}_plot`, RrasScedPlotData);
     }   
 }

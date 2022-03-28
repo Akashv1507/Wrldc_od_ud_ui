@@ -16,6 +16,7 @@ export interface PlotTrace {
     mode?: string;
     fillcolor?: string;
     range?:number[],
+    barWidth?:number,
     offsetgroup?: number
 }
 
@@ -154,8 +155,10 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
     if (trace.mode != null) {
         traceObj["mode"] = trace.mode;
     }
+    if (trace.barWidth != null) {
+      traceObj["width"] = trace.barWidth;
+  }
      
-
     traceData.push(traceObj);
   }
   Plotly.newPlot(divId, traceData, layout);

@@ -24,6 +24,8 @@ class DataFetchFromApi():
             entityDataDf = entityDataDf.resample('1min', on='timestamp').agg({'value': 'first'})  # this will set timestamp as index of dataframe
         except Exception as err:
             print('error while resampling', err)
+            entityDataDf = pd.DataFrame(columns = [ 'timestamp','value']) 
+            return entityDataDf
         entityDataDf.reset_index(inplace=True)
         return entityDataDf
 
@@ -45,12 +47,10 @@ class DataFetchFromApi():
         try:
             # fetching secondwise data from api for each entity(timestamp,value) and converting to dataframe
             resData = obj_scadaApiFetcher.fetchData(entityTag, startTime, endTime)
-          
         except Exception as err:
             print("error while fetching current demand", err)
         else:
             entityDataDf = pd.DataFrame(resData, columns =['timestamp','value']) 
-            
             #converting to minutewise data
             entityDataDf = self.toMinuteWiseData(entityDataDf)
             #filtering demand between startTIme and endtime only

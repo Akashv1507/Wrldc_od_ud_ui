@@ -1,4 +1,4 @@
-import { getSchVsActDrawlData } from "../fetchDataApi";
+import { getSchVsActDrawlData, getWbesData } from "../fetchDataApi";
 import { PlotData, PlotTrace, setPlotTraces } from "../plotUtils";
 import{SelectedStateObj} from "./schVsActDrawl"
 import {getDifference, getUiPosNeg} from "../helperFunctions"
@@ -89,6 +89,7 @@ export const fetchPlotData = async () => {
         const schDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Schedule`)
         const actDrawlData = await getSchVsActDrawlData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_Actual`)
         const freqData = await getSchVsActDrawlData(startDateValue, endDateValue, 'Frequency')
+        const wbesScheDrawldata = await getWbesData(startDateValue, endDateValue, `${selectedStateList[stateInd].value}_WbesSchedule`)
         const uiData = getDifference( actDrawlData.schVsActDrawlData, schDrawlData.schVsActDrawlData)
         const uiPosNegData = getUiPosNeg(schDrawlData.schVsActDrawlData, uiData)
         
@@ -102,7 +103,7 @@ export const fetchPlotData = async () => {
   
       let schDrawlTrace: PlotTrace = {
           name: "Schedule",
-          data: schDrawlData.schVsActDrawlData,
+          data: wbesScheDrawldata.schVsActDrawlData,
           type: "scatter",
           hoverYaxisDisplay: "MW",
           line: {

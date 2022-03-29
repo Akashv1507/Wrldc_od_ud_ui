@@ -2,6 +2,7 @@ from src.appConfig import loadAppConfig
 from flask import Flask, jsonify, render_template
 from src.fetchers.odUdDataFetcher import OdUdDataFetcher
 from src.fetchers.fetchScadaPointsApi import DataFetchFromApi
+from src.fetchers.wbesDataFetcher import WbesDataFetcher
 from src.fetchers.getContOdUdDate import ContOdUdDataFetch
 from src.fetchers.FreqAndCorrDevDataFetcher import FreqAndCorrDevDataFetch
 from src.fetchers.MorningAppraisalReport.section_1_fetcher import Section1Fetcher
@@ -44,6 +45,7 @@ wbesPass = appConfig['Wbes_Pass']
 
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
+obj_wbesDataFetcher = WbesDataFetcher(wbesUser, wbesPass)
 obj_contOdUdDataFetch= ContOdUdDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_freqAndCorrDevDataFetch= FreqAndCorrDevDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_section1Fetcher = Section1Fetcher(connStr=conStr)
@@ -96,6 +98,20 @@ def getSchVsActDrawl(startDate:str, endDate:str, scadaPointName:str ):
     schVsActDrawl = obj_dataFetchFromApi.fetchEntityDataFromApi(startTime, endTime, scadaPointId)
   
     return jsonify({'schVsActDrawlData':schVsActDrawl})
+
+@app.route('/api/wbesData/<startDate>/<endDate>/<acrName>')
+def getWbesData(startDate:str, endDate:str, acrName:str ):
+    
+    startTime = dt.strptime(startDate, '%Y-%m-%d %H:%M:%S')
+    endTime = dt.strptime(endDate, '%Y-%m-%d %H:%M:%S')  
+    # converting startime and endtime to nearest block starttime and endtime
+    newTimes= getNearestBlockTimeStamp(startTime, endTime) 
+    startTime = newTimes['newStartTime']
+    endTime = newTimes['newEndTime']
+   
+    acrValue = appConfig[acrName]
+    wbesData = obj_wbesDataFetcher.fetchDataWbesApi(acrValue, startTime, endTime)
+    return jsonify({'schVsActDrawlData':wbesData})
 
 @app.route('/api/contOdUd/<startDate>/<endDate>/<stateName>')
 def getContOdUd(startDate:str, endDate:str, stateName:str ):

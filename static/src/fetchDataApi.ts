@@ -66,6 +66,23 @@ export const getSchVsActDrawlData = async (
     return null;
   }
 };
+export const getWbesData = async (
+  startDate: string,
+  endDate: string,
+  acrName: string
+): Promise<schActDrawlResObj | null> => {
+  try {
+    const resp = await fetch(`/api/wbesData/${startDate}/${endDate}/${acrName}`, {
+      method: "get",
+    });
+  
+    const respJSON = await resp.json();   
+    return respJSON;   
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
 
 export const getContDeviationData = async (
   startDate: string,

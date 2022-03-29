@@ -138,10 +138,10 @@ def generateMorningReport(targetDate:str ):
     section2Data = obj_section2Fetcher.fetchSection2Data(startDate, endDate)
     section3Data = obj_section3Fetcher.fetchSection3Data(startDate, endDate)
     sectio5Data = obj_section5Fetcher.fetchSection5Data(startDate, endDate)
-    # sectio6Data = obj_section6Fetcher.fetchSection6Data(startDate, endDate)
+    section6Data = obj_section6Fetcher.fetchSection6Data(startDate, endDate)
     section7Data = obj_section7Fetcher.fetchSection7Data(startDate, endDate)
     sectionSoFarHighestData = obj_sectionSoFarHighestDemFetcher.fetchSoFarHighestDemData(endDate)
-    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data, sectionSoFarHighestData= sectionSoFarHighestData, section7Data=section7Data )
+    return render_template('reportTemplate.html.j2', reportDate= targetDate, section1ConsumpData = section1Data, section2MaxData = section2Data["section2MaxData"], section2DiffData = section2Data["section2DiffData"], section3Data =section3Data, section5freqProf = sectio5Data, sectionSoFarHighestData= sectionSoFarHighestData, section7Data=section7Data, section6Data=section6Data )
 
 @app.route('/getStateReData/<targetDate>/')
 def getStateReData(targetDate:str ):

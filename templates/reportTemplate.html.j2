@@ -177,8 +177,38 @@
       </tbody>     
   </table>
 
-{# section & DAM RTM GDAM  Table  #}
-  <h3>DAM RTM & GDAM</h3>
+{# section 6 & RRAS SCED Table  #}
+  <h3>6. RRAS, SCED Schedule(MU)</h3>
+  <table id="section6Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Date</th>
+              <th>RRAS</th>
+              <th>RRAS Down</th>
+              <th>RRAS UP</th>
+              <th>SCED</th>
+              <th>SCED Down</th>
+              <th>SCED UP</th>
+              
+          </tr>
+      </thead>    
+      <tbody>
+          {% for row in section6Data %}
+          <tr>
+            <td>{{row["dateKey"]}}</td>
+            <td>{{row["rras"]}}</td>
+            <td>{{row["rrasDwn"]}}</td>
+            <td>{{row["rrasUp"]}}</td>
+            <td>{{row["sced"]}}</td>
+            <td>{{row["scedDwn"]}}</td>
+            <td>{{row["scedUp"]}}</td>       
+          </tr>
+          {% endfor %}     
+      </tbody>     
+  </table>
+
+{# section 7 & DAM RTM GDAM  Table  #}
+  <h3>7. DAM, RTM & GDAM</h3>
   <table id="section7Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>

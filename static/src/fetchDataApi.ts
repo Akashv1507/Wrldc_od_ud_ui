@@ -31,6 +31,26 @@ export interface IRrasScedPlotData{
   sced:[string,number][]
   dateKey : string
 }
+export interface IHourlyDemShortageObj{
+  AMNSIL_dem: number,
+  AMNSIL_short: number,
+  CH_dem: number,
+  CH_short: number,
+  DD_dem: number,
+  DD_short: number,
+  DNH_dem: number,
+  DNH_short: number,
+  GOA_dem: number,
+  GOA_short: number,
+  GUJ_dem: number,
+  GUJ_short: number,
+  MAH_dem: number,
+  MAH_short: number,
+  MP_dem: number,
+  MP_short: number,
+  dateKey: string,
+  hour: number
+}
 
 export const getOdUdData = async (
   startDate: string,
@@ -39,6 +59,22 @@ export const getOdUdData = async (
 ): Promise<odUdRespObj | null> => {
   try {
     const resp = await fetch(`/api/odUd/${startDate}/${endDate}/${stateName}`, {
+      method: "get",
+    });
+    const respJSON = await resp.json();
+    return respJSON;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getHourlyDemShortTbldData = async (
+  startDate: string,
+  endDate: string,
+): Promise<IHourlyDemShortageObj[] | null> => {
+  try {
+    const resp = await fetch(`/api/hourlyDemShortage/${startDate}/${endDate}`, {
       method: "get",
     });
     const respJSON = await resp.json();

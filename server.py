@@ -19,6 +19,7 @@ from src.fetchers.MorningAppraisalReport.section_soFarHighestDem import SectionS
 from src.fetchers.MorningAppraisalReport.section_stateDrawlFetcher import SectionStateDrawlFetcher
 from src.fetchers.MorningAppraisalReport.section_damRtmPlotData_fetcher import SectionDamRtmPlotDataFetcher
 from src.fetchers.MorningAppraisalReport.section_rrasSced_fetcher import SectionRrasScedDataFetcher
+from src.fetchers.hourlyDemShortFetchers import HourlyDemShortFetchers
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -62,6 +63,7 @@ obj_sectionSoFarHighestDemFetcher = SectionSoFarHighestDemFetcher(connStr=conStr
 obj_sectionStateDrawlFetcher = SectionStateDrawlFetcher(connStr=conStr)
 obj_sectionDamRtmPlotDataFetcher = SectionDamRtmPlotDataFetcher(connStr=moDbConStr)
 obj_sectionRrasScedDataFetcher = SectionRrasScedDataFetcher(wbesUser, wbesPass)
+obj_hourlyDemShortFetchers = HourlyDemShortFetchers(connStr=conStr)
 
 @app.route('/')
 def index():
@@ -78,6 +80,10 @@ def schVsActDrawlIndex():
 @app.route('/mornAppraisalRep')
 def morningAppraisalReport():
     return render_template('morningReportIndex.html.j2')
+    
+@app.route('/hourlyDemShortage')
+def hourlyDemShortage():
+    return render_template('hourlyDemShort.html.j2')
 
 @app.route('/api/odUd/<startDate>/<endDate>/<stateName>')
 def getOdUdData(startDate:str, endDate:str, stateName:str ):
@@ -235,6 +241,19 @@ def getRrasScedPlotData(targetDate:str ):
     rrasScedPlotData = obj_sectionRrasScedDataFetcher.fetchDataWbesApi(startDate, endDate)
     return jsonify(rrasScedPlotData)
 
+@app.route('/api/hourlyDemShortage/<startDate>/<endDate>')
+def getHourlyDemShortTbldData(startDate:str, endDate:str ):
+
+    startDate = dt.strptime(startDate, '%Y-%m-%d')
+    endDate = dt.strptime(endDate, '%Y-%m-%d')  
+    listOfHourlyDemShortObj= obj_hourlyDemShortFetchers.getHourlyDemShortageData(startDate, endDate)
+    return jsonify(listOfHourlyDemShortObj)
+
+
+    
+    
+
+    
 
     
     

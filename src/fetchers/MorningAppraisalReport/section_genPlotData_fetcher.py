@@ -17,9 +17,6 @@ class SectionGenPlotDataFetcher():
 
     def fetchGenPlotDataData(self, start_date: dt.datetime, end_date: dt.datetime):  
 
-        # converting datetime obj to string and then integer, 2021-08-16-> 20210816
-        numbStartDate = int(start_date.strftime('%Y%m%d'))
-        numbEndDate = int(end_date.strftime('%Y%m%d'))
         genPlotData = {}
         try:
             connection = cx_Oracle.connect(self.connString)
@@ -27,7 +24,9 @@ class SectionGenPlotDataFetcher():
         except Exception as err:
             print('error while creating a connection/cursor', err)
         else:
-            for dateKey in range(numbStartDate, numbEndDate+1):
+            currDate = start_date
+            while currDate<=end_date:
+                currDateNumb = int(currDate.strftime('%Y%m%d'))
                 thermalGen = 0
                 windGen= 0
                 solarGen=0
@@ -35,7 +34,7 @@ class SectionGenPlotDataFetcher():
                 other = 0
                 totalGen =0
 
-                cur.execute(generationFetchSql,{'date_key': dateKey})
+                cur.execute(generationFetchSql,{'date_key': currDateNumb})
                 result = cur.fetchall()
                 for row in result:
                     thermalGen = thermalGen + (0 if not row[2] else row[2])
@@ -45,13 +44,14 @@ class SectionGenPlotDataFetcher():
                     other = other + (0 if not row[6] else row[6])
                     totalGen = totalGen + (0 if not row[7] else row[7])
 
-                genPlotData[dateKey] =[{'parName': 'Thermal', 'value':round(thermalGen,1), 'legName':str(dateKey) },
-                                        {'parName': 'Solar', 'value':round(solarGen,1), 'legName':str(dateKey) },
-                                        {'parName': 'Wind', 'value':round(windGen,1), 'legName':str(dateKey) },
-                                        {'parName': 'Hydro', 'value':round(hydroGen,1), 'legName':str(dateKey) },
-                                        {'parName': 'Other', 'value':round(other,1), 'legName':str(dateKey) },
-                                        {'parName': 'Total', 'value':round(totalGen,1), 'legName':str(dateKey) },
-                                        {'parName': 'RE-Total', 'value':round((solarGen+windGen),1), 'legName':str(dateKey) }]                   
+                genPlotData[currDateNumb] =[{'parName': 'Thermal', 'value':round(thermalGen,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'Solar', 'value':round(solarGen,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'Wind', 'value':round(windGen,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'Hydro', 'value':round(hydroGen,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'Other', 'value':round(other,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'Total', 'value':round(totalGen,1), 'legName':str(currDateNumb) },
+                                        {'parName': 'RE-Total', 'value':round((solarGen+windGen),1), 'legName':str(currDateNumb) }]     
+                currDate = currDate + dt.timedelta(days=1)              
         finally:
             if cur:
                 cur.close()

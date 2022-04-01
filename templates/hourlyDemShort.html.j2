@@ -1,0 +1,57 @@
+{% extends "layoutBase.html.j2" %} 
+{% block title %}Display Hourly Demand And Shortage{% endblock %}
+{% block head %} {{ super() }} {% endblock %} 
+
+{% block content %}
+
+<div class="mt-3 ml-5">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" name="startDate" id="startDate" />
+        </div>
+        <div class="col-md-3">
+            <label for="endDate">End Date</label>
+            <input type="date" name="endDate" id="endDate" />
+        </div>
+        {# <div class="col-md-3">
+            <label for="stateName">State Name</label>
+            <select id="stateName"
+                    name="stateName" multiple
+                    > 
+                <option value="WR">WR</option>
+                <option value="MAHARASHTRA">Mah</option>
+                <option value="GUJARAT">Guj</option>
+                <option value="MADHYA PRADESH">MP</option>
+                <option value="CHHATTISGARH">Chatt</option>
+                <option value="GOA">Goa</option>
+                <option value="DAMAN AND DIU">DD</option>
+                <option value="DADRA AND NAGAR HAVELI">DNH</option>
+                <option value="AMNSIL">DNH</option>
+                
+            </select>
+        </div> #}
+        <div class="col-md-3 align-self-center mt-4">
+            <button type="button" class="btn btn-primary" id="submitBtn">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-4 mb-3" id = "arrowDiv">    
+        <button id = "leftArrow"style='font-size:18px;' class="btn btn-outline-danger"> Previous Date <i class='fas fa-arrow-left' style='font-size:32px;color:orange'></i></button>
+        <button id = "rightArrow" style='font-size:18px;' class="btn btn-outline-success" > Next Date <i class="fas fa-arrow-right" style='font-size:32px;color:green'></i></button> 
+        {# <button id = "chartIcon"style='font-size:18px; margin-left:60%' class="btn btn-outline-warning"> Chart <i class='fas fa-chart-area' style='font-size:32px;color:orange'></i></button>
+        <button id = "tblIcon" style='font-size:18px; margin-left:20px' class="btn btn-outline-success" > Table <i class="fas fa-solid fa-table" style='font-size:32px;color:green'></i></button> #}
+    </div>
+    <div id="hourlyDemShortage">
+        <div id="errorDemShortageTableDiv"></div>
+        <div id="demShortageTblSpinner"></div>
+        <div id="hourlyDemShortageTblWrapper"></div>
+    </div>
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<script src="{{ url_for('static', filename='dist/hourlyDemShortIndex.js') }}"></script>
+{% endblock %}

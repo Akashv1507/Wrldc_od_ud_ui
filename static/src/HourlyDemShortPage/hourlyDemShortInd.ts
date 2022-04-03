@@ -71,7 +71,6 @@ const setPrevDate = ()=>{
   
   //return in string
   let startDate=(document.getElementById("startDate") as HTMLInputElement)
-  let endDate = (document.getElementById("endDate") as HTMLInputElement)
 
   //converting to date obj, then subtracting one day then setting to startdate and endDate value and calling both the functions
   const startDateObj = new Date (startDate.value)
@@ -85,7 +84,6 @@ const setPrevDate = ()=>{
 
 const setNextDate = ()=>{
   //return in string
-  let startDate=(document.getElementById("startDate") as HTMLInputElement)
   let endDate = (document.getElementById("endDate") as HTMLInputElement)
 
   //converting to date obj, then subtracting one day then setting to startdate and endDate value and calling both the functions

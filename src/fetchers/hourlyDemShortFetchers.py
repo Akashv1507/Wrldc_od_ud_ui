@@ -29,15 +29,24 @@ class HourlyDemShortFetchers():
                     dayHrDemandShortObj = {'dateKey': convertIntToDateStr(currDateNumb), 'hour': hr}
                     for ind in filteredDf.index:
                         stateName = filteredDf['FULL_NAME'][ind]
-                        dayHrDemandShortObj[f'{stateName}_dem'] = filteredDf['HOUR_DEMAND'][ind]
-                        dayHrDemandShortObj[f'{stateName}_short'] = filteredDf['HOUR_LOAD_SHEDDING'][ind]
+                        dayHrDemandShortObj[f'{stateName}_dem'] = float(filteredDf['HOUR_DEMAND'][ind])
+                        dayHrDemandShortObj[f'{stateName}_short'] = float(filteredDf['HOUR_LOAD_SHEDDING'][ind])
                     listOfHourlyDemShortObj.append(dayHrDemandShortObj)
                 else:
                     listOfHourlyDemShortObj.append({'dateKey': convertIntToDateStr(currDateNumb), 'hour': hr, 'AMNSIL_dem':0.00, 'AMNSIL_short':0.00, 'CH_dem':0.00, 'CH_short':0.00, 'DNH_dem':0.00, 'DNH_short':0.00, 'DD_dem':0.00, 'DD_short':0.00, 'GOA_dem':0.00, 'GOA_short':0.00, 'GUJ_dem':0.00, 'GUJ_short':0.00, 'MP_dem':0.00, 'MP_short':0.00, 'MAH_dem':0.00, 'MAH_short':0.00})
                     
             currDate = currDate + dt.timedelta(days=1)
 
-
+        for hourlyDemShortObj in listOfHourlyDemShortObj:
+            wrHourlyDem =0
+            wrHourlyShort =0
+            for ele in hourlyDemShortObj.items():
+                if ele[0].endswith('_dem'):
+                    wrHourlyDem = wrHourlyDem+ ele[1]
+                if ele[0].endswith('_short'):
+                    wrHourlyShort = wrHourlyShort + ele[1]
+            hourlyDemShortObj['WR_dem'] = round(wrHourlyDem,2)
+            hourlyDemShortObj['WR_short'] = round(wrHourlyShort,2)
         return listOfHourlyDemShortObj
 
 

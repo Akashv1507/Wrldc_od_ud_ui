@@ -276,9 +276,8 @@ export const fetchReportHtml = async()=>{
     
     // ploting of RRAS SCED
     const rrasScedResData = await getRrasScedPlotData(targetDateValue)
-    console.log(rrasScedResData)
     for(let dateKeyInd = 0; dateKeyInd < rrasScedResData.length; dateKeyInd++){
-      console.log("hi")
+      
       let plotDiv = document.createElement("div"); 
       plotDiv.id = `rrasCed_${dateKeyInd}_plot`;
       rrasScedPlotsDiv.appendChild(plotDiv);

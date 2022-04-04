@@ -61,11 +61,11 @@ export const fetchHourlyDemShortTblData = async () => {
          
          $(`#hourlyDemShort_tbl`).DataTable({
            dom: "Bfrtip",
-          //  fixedHeader: true,
+           fixedHeader: true,
            lengthMenu: [50, 192, 188],
            data: hourlyDemShortList,
            columns: cols
-          });
+          } as DataTables.Settings);
           
           // showing meta information
           metaInfoDiv.innerHTML =  `Showing Hourly Demand and Load Shedding`

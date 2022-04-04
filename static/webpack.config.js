@@ -17,7 +17,7 @@ module.exports = {
 
   // https://webpack.js.org/configuration/externals/
   externals: {
-    "plotly.js-dist": "Plotly",
+    "plotly.js-dist": "Plotly"
     // 'moment': 'window.moment',
     // jquery: "jQuery",
   },

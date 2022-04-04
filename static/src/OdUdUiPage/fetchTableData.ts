@@ -87,10 +87,11 @@ export const fetchTableData = async () => {
   
         $(`#${selectedStateList[stateInd].name}_tbl`).DataTable({
           dom: "Bfrtip",
+          fixedHeader: true,
           lengthMenu: [50, 192, 188],
           data: odUdData.odUdData,
           columns: columns
-      });
+      }as DataTables.Settings);
       // showing meta information
       metaInfoDiv.innerHTML =  `Showing Schedule Drawal, Actual Drawal and Deviation(in MUs) For State ${selectedStateList[stateInd].value}.`
       }catch(err){

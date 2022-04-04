@@ -1,5 +1,5 @@
-// import Plotly from "plotly.js-dist";
-declare var Plotly: any;
+import Plotly from "plotly.js-dist";
+// declare var Plotly: any;
 import {IProfileObj} from "./fetchReportHtml"
 
 

@@ -1,3 +1,4 @@
+from typing import List
 from src.appConfig import loadAppConfig
 from flask import Flask, jsonify, render_template
 from src.fetchers.odUdDataFetcher import OdUdDataFetcher
@@ -20,6 +21,8 @@ from src.fetchers.MorningAppraisalReport.section_stateDrawlFetcher import Sectio
 from src.fetchers.MorningAppraisalReport.section_damRtmPlotData_fetcher import SectionDamRtmPlotDataFetcher
 from src.fetchers.MorningAppraisalReport.section_rrasSced_fetcher import SectionRrasScedDataFetcher
 from src.fetchers.hourlyDemShortFetchers import HourlyDemShortFetchers
+from src.fetchers.OutageDataFetcher.outageDataFetcher import OutageDataFetcher
+from src.fetchers.OutageDataFetcher.IOutageObj import IOutageObj
 from src.helperFunctions import getNearestBlockTimeStamp
 from waitress import serve
 from datetime import datetime as dt, timedelta
@@ -64,6 +67,7 @@ obj_sectionStateDrawlFetcher = SectionStateDrawlFetcher(connStr=conStr)
 obj_sectionDamRtmPlotDataFetcher = SectionDamRtmPlotDataFetcher(connStr=moDbConStr)
 obj_sectionRrasScedDataFetcher = SectionRrasScedDataFetcher(wbesUser, wbesPass)
 obj_hourlyDemShortFetchers = HourlyDemShortFetchers(connStr=conStr)
+obj_outageDataFetcher = OutageDataFetcher(connStr=conStr)
 
 @app.route('/')
 def index():
@@ -76,6 +80,10 @@ def odUdUiIndex():
 @app.route('/schVsActDrawl')
 def schVsActDrawlIndex():
     return render_template('schVsActDrawlIndex.html.j2')
+
+@app.route('/outageData')
+def outageData():
+    return render_template('outageIndex.html.j2')
 
 @app.route('/mornAppraisalRep')
 def morningAppraisalReport():
@@ -249,10 +257,10 @@ def getHourlyDemShortTbldData(startDate:str, endDate:str ):
     listOfHourlyDemShortObj= obj_hourlyDemShortFetchers.getHourlyDemShortageData(startDate, endDate)
     return jsonify(listOfHourlyDemShortObj)
 
-
-    
-    
-
+@app.route('/api/getOutageData/<targetDate>/')
+def getOutageData(targetDate:str ):
+    outageListData:List[IOutageObj] = obj_outageDataFetcher.getOutageData(targetDate)
+    return jsonify(outageListData)
     
 
     

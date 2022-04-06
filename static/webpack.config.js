@@ -7,8 +7,8 @@ module.exports = {
     odUdUiIndex: ["babel-polyfill", path.resolve(__dirname, "src/odUdUiPage/odUdUiIndex.ts")],
     schVsActDrawl: ["babel-polyfill", path.resolve(__dirname, "src/schVsActDrawlPage/schVsActDrawl.ts")],
     morningRepIndex: ["babel-polyfill", path.resolve(__dirname, "src/MorningReportPage/morningReportIndex.ts")],
-    hourlyDemShortIndex: ["babel-polyfill", path.resolve(__dirname, "src/HourlyDemShortPage/hourlyDemShortInd.ts")]
-
+    hourlyDemShortIndex: ["babel-polyfill", path.resolve(__dirname, "src/HourlyDemShortPage/hourlyDemShortInd.ts")],
+    outageDataIndex: ["babel-polyfill", path.resolve(__dirname, "src/OutagePage/outageDataInd.ts")]
   },
 
   output: {

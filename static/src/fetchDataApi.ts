@@ -52,6 +52,23 @@ export interface IHourlyDemShortageObj{
   hour: number
 }
 
+export interface IOutageObj{
+    elementName:string,
+    stateName:string,
+    owners:string,
+    stationName:string,
+    unitNo:number,
+    installedCap: number,
+    classification: string,
+    outageDate:string,
+    outageTime:string,
+    expectedDate:string,
+    expectedTime:string,
+    shutdownType:string,
+    shutdownTag:string,
+    reason:string
+}
+
 export const getOdUdData = async (
   startDate: string,
   endDate: string,
@@ -102,6 +119,7 @@ export const getSchVsActDrawlData = async (
     return null;
   }
 };
+
 export const getWbesData = async (
   startDate: string,
   endDate: string,
@@ -170,6 +188,7 @@ export const getReportHtmlContent = async (
     return null;
   }  
 }
+
 export const getStateProfDrawlTblHtmlContent = async (
   targetDate: string,
 )=>{
@@ -287,6 +306,22 @@ export const getRrasScedPlotData = async (
 ):Promise<IRrasScedPlotData[] | null>=>{
   try {
     const resp = await fetch(`/getRrasScedPlotData/${targetDate}`, {
+      method: "get",
+    });
+
+    const respJson = await resp.json();
+    return respJson;    
+  } catch (e) {
+    console.error(e);
+    return null;
+  } 
+}
+
+export const getOutageData = async (
+  targetDate: string,
+):Promise<IOutageObj[] | null>=>{
+  try {
+    const resp = await fetch(`api/getOutageData/${targetDate}`, {
       method: "get",
     });
 

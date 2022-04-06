@@ -1,13 +1,12 @@
-import {fetchHourlyDemShortTblData} from "./fetchHourlyDemShortTblData"
-declare var Choices: any;
+import {fetchOutageData} from "./fetchOutageData"
 
 window.onload = async () => {
   
   const yesterday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date).toISOString().slice(0,10);
 
-  //setting startdate and enddate to yesterday
-  (document.getElementById("startDate") as HTMLInputElement).value= yesterday;
-  (document.getElementById("endDate") as HTMLInputElement).value = yesterday;
+  //setting target date to yesterday
+  (document.getElementById("targetDate") as HTMLInputElement).value= yesterday;
+ 
 
   // getting right arrow btn and left arrow btn
   (document.getElementById("leftArrow") as HTMLButtonElement).onclick = setPrevDate;
@@ -15,6 +14,7 @@ window.onload = async () => {
     
   const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement
   submitBtn.onclick= wrapperFunc;
+
 };
 
 const wrapperFunc = async ()=>{
@@ -31,7 +31,7 @@ const wrapperFunc = async ()=>{
      leftArrowBtn.classList.add("button", "disabled")
      rightArrowBtn.classList.add("button", "disabled")
 
-     fetchHourlyDemShortTblData()
+     fetchOutageData()
      
      submitBtn.disabled = false
      leftArrowBtn.disabled = false
@@ -45,29 +45,29 @@ const wrapperFunc = async ()=>{
 const setPrevDate = ()=>{
   
   //return in string
-  let startDate=(document.getElementById("startDate") as HTMLInputElement)
+  let targetDate=(document.getElementById("targetDate") as HTMLInputElement)
 
-  //converting to date obj, then subtracting one day then setting to startdate and endDate value and calling both the functions
-  const startDateObj = new Date (startDate.value)
+  //converting to date obj, then subtracting one day then setting to targetDate and calling functions
+  const targetDateObj = new Date (targetDate.value)
   
-  let newStartDate= startDateObj.setDate(startDateObj.getDate()-1)
-  startDate.value = (new Date(newStartDate)).toISOString().slice(0,10)
+  let newTargetDate= targetDateObj.setDate(targetDateObj.getDate()-1)
+  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,10)
 
-  //calling both the function with the new start date and end date
+  //calling function with the new targetDate
   wrapperFunc()
 }
 
 const setNextDate = ()=>{
   //return in string
-  let endDate = (document.getElementById("endDate") as HTMLInputElement)
+  let targetDate=(document.getElementById("targetDate") as HTMLInputElement)
 
-  //converting to date obj, then subtracting one day then setting to startdate and endDate value and calling both the functions
-  const endDateObj = new Date (endDate.value)
-
-  let newEndDate= endDateObj.setDate(endDateObj.getDate()+1)
-  endDate.value  = (new Date(newEndDate)).toISOString().slice(0,10)
+  //converting to date obj, then subtracting one day then setting to targetDate and calling functions
+  const targetDateObj = new Date (targetDate.value)
   
-  //calling both the function with the new start date and end date
- wrapperFunc()
+  let newTargetDate= targetDateObj.setDate(targetDateObj.getDate()+1)
+  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,10)
+
+  //calling function with the new targetDate
+  wrapperFunc()
 }
 

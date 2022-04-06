@@ -129,6 +129,35 @@
               </div>
             </div>
           </div>
+        </div> 
+
+        <div class="col-1-of-3">
+          <div class="card">
+            <div class="card__side card__side--front-1">
+              <div class="card__title card__title--1">
+                <i class="fas fa-solid fa-desktop"></i>
+                <h4 class="card__heading">Outage Data</h4>
+              </div>
+
+              <div class="card__details">
+                <ul>
+                  <li>Outage Data</li>
+                  <li>Outage ElementName</li>
+                  <li>Outage Classification</li>
+                  <li>Outage Type</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card__side card__side--back card__side--back-1">
+              <div class="card__cta">
+                {# <div class="card__price-box">
+                  <p class="card__price-only">Only</p>
+                  <p class="card__price-value">$2.95/mo*</p>
+                </div> #}
+                <a href="{{url_for('outageData')}}" class="btn btn--white">Go To Page</a>
+              </div>
+            </div>
+          </div>
         </div>   
   </div>
 {% endblock %} 

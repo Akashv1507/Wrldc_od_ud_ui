@@ -52,8 +52,25 @@ export const fetchOutageData = async () => {
          //generating column name
          const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, { title: 'StationName', data:"stationName"}, {title:'UnitNo', data:"unitNo"}, {title:'InstalledCap', data:"installedCap"}, {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, { title: 'ExpectedDate', data:"expectedDate"  }, { title: 'ExpectedTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
          
-         $(`#outage_tbl`).DataTable({
-           dom: "Bfrtip",
+         const outageTbl = $(`#outage_tbl`).DataTable({
+          searchPanes: {
+            viewTotal: true,
+            initCollapsed: true,
+            layout: 'columns-6'
+                        },
+            dom: 'PBfrtip',
+            columnDefs: [
+              {
+              targets: [2]
+              },
+              {
+                searchPanes: {
+                  show: false
+              },
+              targets: [3,4,5,9,10]
+              },
+
+          ],
            fixedHeader: true,
            lengthMenu: [50, 192, 188],
            data: outageObjList,
@@ -61,7 +78,7 @@ export const fetchOutageData = async () => {
           } as DataTables.Settings);
           
           // showing meta information
-          metaInfoDiv.innerHTML =  `Showing Hourly Demand and Load Shedding`
+          metaInfoDiv.innerHTML =  `Showing Outage Data `
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For B/w Selected Date. Please Try Again</b>`

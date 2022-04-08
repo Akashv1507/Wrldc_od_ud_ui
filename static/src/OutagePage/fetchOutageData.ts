@@ -50,7 +50,7 @@ export const fetchOutageData = async () => {
          let outageObjList = await getOutageData(targetDateValue)
          
          //generating column name
-         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, { title: 'StationName', data:"stationName"}, {title:'UnitNo', data:"unitNo"}, {title:'InstalledCap', data:"installedCap"}, {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, { title: 'ExpectedDate', data:"expectedDate"  }, { title: 'ExpectedTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
+         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, { title: 'StationName', data:"stationName"}, {title:'Unit', data:"unitNo"}, {title:'InstCap', data:"installedCap"}, {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, { title: 'ExpDate', data:"expectedDate"  }, { title: 'ExpTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
          
          const outageTbl = $(`#outage_tbl`).DataTable({
           searchPanes: {
@@ -69,7 +69,6 @@ export const fetchOutageData = async () => {
               },
               targets: [3,4,5,9,10]
               },
-
           ],
            fixedHeader: true,
            lengthMenu: [50, 192, 188],
@@ -78,7 +77,7 @@ export const fetchOutageData = async () => {
           } as DataTables.Settings);
           
           // showing meta information
-          metaInfoDiv.innerHTML =  `Showing Outage Data `
+          metaInfoDiv.innerHTML =  `Showing Latest Generator Outage Data.`
       }catch(err){
         errorDiv.classList.add("mt-4", "mb-4", "alert", "alert-danger")
         errorDiv.innerHTML = `<b>Oops !!! Data Fetch Unsuccessful For B/w Selected Date. Please Try Again</b>`

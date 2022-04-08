@@ -1,4 +1,6 @@
 import {fetchReportHtml} from "./fetchReportHtml"
+// declare var jsPDF: any;
+declare var googoose: any;
 
 
 window.onload = async () => {
@@ -8,64 +10,26 @@ window.onload = async () => {
     //setting startdate and enddate to yesterday
     const targetDate =document.getElementById("targetDate") as HTMLInputElement
     targetDate.value= yesterday;
-    targetDate.setAttribute("max", yesterday);
-    // getting right arrow btn and left arrow btn
-    // (document.getElementById("leftArrow") as HTMLButtonElement).onclick = setPrevDate;
-    // (document.getElementById("rightArrow") as HTMLButtonElement).onclick = setNextDate;
-      
+    targetDate.setAttribute("max", yesterday);  
+
+    // adding onclick listener on submit btn  
     const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement
     submitBtn.onclick= wrapperFunc;
-    
+
+    // adding onclick listener on pdf Convert  btn
+    const pdfConvBtn = document.getElementById("convertPdfBtn") as HTMLButtonElement
+    pdfConvBtn.onclick= Export2Pdf;    
   };
-
-  const setPrevDate = ()=>{
-  
-    //return in string
-    let targetDate=(document.getElementById("targetDate") as HTMLInputElement)
-  
-    //converting to date obj, then subtracting one day then setting to target date
-    const targetDateObj = new Date (targetDate.value)
-  
-    let newtargetDateObj= targetDateObj.setDate(targetDateObj.getDate()-1)
-    targetDate.value = (new Date(newtargetDateObj)).toISOString().slice(0,10)
-  
-    wrapperFunc()
-  }
-
-  const setNextDate = ()=>{
-    //return in string
-    let targetDate=(document.getElementById("targetDate") as HTMLInputElement)
-  
-    //converting to date obj, then subtracting one day then setting to target date
-    const targetDateObj = new Date (targetDate.value)
-  
-    let newtargetDateObj= targetDateObj.setDate(targetDateObj.getDate()+1)
-    targetDate.value = (new Date(newtargetDateObj)).toISOString().slice(0,10)
-  
-    wrapperFunc()
-  }
-  
+ 
   const wrapperFunc = async ()=>{
-    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement 
-    // const leftArrowBtn = document.getElementById("leftArrow") as HTMLButtonElement 
-    // const rightArrowBtn = document.getElementById("rightArrow") as HTMLButtonElement 
-  
-       // making submit button disabled till api call fetches data
-       submitBtn.disabled = true
-      //  leftArrowBtn.disabled = true
-      //  rightArrowBtn.disabled = true
-  
-       submitBtn.classList.add("button", "disabled");
-      //  leftArrowBtn.classList.add("button", "disabled");
-      //  rightArrowBtn.classList.add("button", "disabled");
-
-      await fetchReportHtml()
-       
-       submitBtn.disabled = false
-      //  leftArrowBtn.disabled = false
-      //  rightArrowBtn.disabled = false
-  
-      //  leftArrowBtn.classList.remove("button", "disabled")
-      //  rightArrowBtn.classList.remove  ("button", "disabled")
-       submitBtn.classList.remove("button", "disabled");
+      const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement 
+      submitBtn.disabled = true
+      submitBtn.classList.add("button", "disabled");
+      await fetchReportHtml() 
+      submitBtn.disabled = false
+      submitBtn.classList.remove("button", "disabled");
   }
+
+  function Export2Pdf(){
+    window.print()
+}

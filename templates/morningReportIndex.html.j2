@@ -13,121 +13,123 @@
         </div>
         <div class="col-md-2 mt-5">
             <button type="button" class="btn btn-primary btn-lg"  style='font-size:18px; width:100%;'id="submitBtn">
-                Submit
-                <i class="fas fa-shuffle" style='font-size:32px;color:blue'></i>
+                Display Report
+                <i class="fas fa-file" style='font-size:32px;color:white'></i>
             </button>
         </div>
-        {# <div class="col-md-2 mt-5">
-            <button id = "leftArrow"style='font-size:18px; width:100%;' class="btn btn-outline-danger"> Previous Date <i class='fas fa-arrow-left' style='font-size:32px;color:orange'></i></button>     
-        </div>   
         <div class="col-md-2 mt-5">
-            <button id = "rightArrow" style='font-size:18px; width:100%;' class="btn btn-outline-success" > Next Date <i class="fas fa-arrow-right" style='font-size:32px;color:green'></i></button>    
-        </div> #}
+            <button type="button" class="btn btn-danger btn-lg"  style='font-size:18px; width:100%;'id="convertPdfBtn">
+                Convert To Pdf
+                <i class="fas fa-file-pdf" style='font-size:32px;color:white'></i>
+            </button>
+        </div>
     </div>  
 
-    <div id="reportSection" class = "mt-4">   
-    </div>
-    {# State Re Plots #}
-    <div id="stateRePlotSection" class = "mt-4"> 
+    <div id="wholeReport" style="background-color: white;">
+        <div id="reportSection" class = "mt-4">   
+        </div>
+        {# State Re Plots #}
+        <div id="stateRePlotSection" class = "mt-4"> 
 
-        {# gujarat Re plots #}
-        <div id ="gujaratRePlots">
-            <h4> Gujarat</h4>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Guj_maxDem"> </div>
-                <div class="col-md-5" id= "Guj_consump"> </div>
+            {# gujarat Re plots #}
+            <div id ="gujaratRePlots">
+                <h4> Gujarat</h4>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Guj_maxDem"> </div>
+                    <div class="col-md-5" id= "Guj_consump"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Guj_windGen"> </div>
+                    <div class="col-md-5" id= "Guj_solarGen"> </div>
+                </div>
             </div>
+            <div class="hrStyle mt-3 mb-3"></div>
+            
+            {# MP Re plots #}
+            <div id ="mpRePlots">
+                <h4> Madhya Pradesh</h4>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "MP_maxDem"> </div>
+                    <div class="col-md-5" id= "MP_consump"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "MP_windGen"> </div>
+                    <div class="col-md-5" id= "MP_solarGen"> </div>
+                </div>
+            </div>
+            <div class="hrStyle mt-3 mb-3"></div>
+
+            {# Maharashtra Re plots #}
+            <div id ="mahRePlots">
+                <h4> Maharashtra</h4>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Mah_maxDem"> </div>
+                    <div class="col-md-5" id= "Mah_consump"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Mah_windGen"> </div>
+                    <div class="col-md-5" id= "Mah_solarGen"> </div>
+                </div>
+            </div>
+            <div class="hrStyle mt-3 mb-3"></div>
+
+            {# Chhattisgarh Re plots #}
+            <div id ="chattRePlots">
+                <h4> Chhattisgarh</h4>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Chatt_maxDem"> </div>
+                    <div class="col-md-5" id= "Chatt_consump"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "Chatt_windGen"> </div>
+                    <div class="col-md-5" id= "Chatt_solarGen"> </div>
+                </div>
+            </div>
+            <div class="hrStyle mt-3 mb-3"></div>
+
+            {# WR Re plots #}
+            <div id ="wrRePlots">
+                <h4> Total WR</h4>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "WR_maxDem"> </div>
+                    <div class="col-md-5" id= "WR_consump"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1" id= "WR_windGen"> </div>
+                    <div class="col-md-5" id= "WR_solarGen"> </div>
+                </div>
+            </div>
+            <div class="hrStyle mt-3 mb-3"></div>
+        </div>
+
+        {# ISTS Re plots #}
+        <div id ="istsRePlots" >
+            <h4> ISTS Connected RE Generation</h4>
             <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Guj_windGen"> </div>
-                <div class="col-md-5" id= "Guj_solarGen"> </div>
+                <div class="col-md-5 offset-md-1" id= "ists_windGen"> </div>
+                <div class="col-md-5" id= "ists_solarGen"> </div>
             </div>
         </div>
+
+        {# frequency profile plot#}
+        <div id ="freqProf">        
+        </div>
+
+        {# Generation Profile Plot#}
+        <div id ="genProf">        
+        </div>
+
         <div class="hrStyle mt-3 mb-3"></div>
         
-        {# MP Re plots #}
-        <div id ="mpRePlots">
-            <h4> Madhya Pradesh</h4>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "MP_maxDem"> </div>
-                <div class="col-md-5" id= "MP_consump"> </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "MP_windGen"> </div>
-                <div class="col-md-5" id= "MP_solarGen"> </div>
-            </div>
+        <div id ="stateDrawlProfileMix">     
+            <div id = 'stateDrawlProfilePlot'></div>
+            <div id = 'stateDrawlProfileTbl'></div>
+        </div> 
+
+        <div id ="rtmDamPlots">        
+        </div>  
+        <div id ="rrasScedPlots">        
         </div>
-        <div class="hrStyle mt-3 mb-3"></div>
-
-        {# Maharashtra Re plots #}
-        <div id ="mahRePlots">
-            <h4> Maharashtra</h4>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Mah_maxDem"> </div>
-                <div class="col-md-5" id= "Mah_consump"> </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Mah_windGen"> </div>
-                <div class="col-md-5" id= "Mah_solarGen"> </div>
-            </div>
-        </div>
-        <div class="hrStyle mt-3 mb-3"></div>
-
-        {# Chhattisgarh Re plots #}
-        <div id ="chattRePlots">
-            <h4> Chhattisgarh</h4>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Chatt_maxDem"> </div>
-                <div class="col-md-5" id= "Chatt_consump"> </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "Chatt_windGen"> </div>
-                <div class="col-md-5" id= "Chatt_solarGen"> </div>
-            </div>
-        </div>
-        <div class="hrStyle mt-3 mb-3"></div>
-
-        {# WR Re plots #}
-        <div id ="wrRePlots">
-            <h4> Total WR</h4>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "WR_maxDem"> </div>
-                <div class="col-md-5" id= "WR_consump"> </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 offset-md-1" id= "WR_windGen"> </div>
-                <div class="col-md-5" id= "WR_solarGen"> </div>
-            </div>
-        </div>
-        <div class="hrStyle mt-3 mb-3"></div>
-    </div>
-
-    {# ISTS Re plots #}
-    <div id ="istsRePlots">
-        <h4> ISTS Connected RE Generation</h4>
-        <div class="row">
-            <div class="col-md-5 offset-md-1" id= "ists_windGen"> </div>
-            <div class="col-md-5" id= "ists_solarGen"> </div>
-        </div>
-    </div>
-
-    {# frequency profile plot#}
-    <div id ="freqProf">        
-    </div>
-
-    {# Generation Profile Plot#}
-    <div id ="genProf">        
-    </div>
-
-    <div class="hrStyle mt-3 mb-3"></div>
-    
-    <div id ="stateDrawlProfileMix">     
-        <div id = 'stateDrawlProfilePlot'></div>
-        <div id = 'stateDrawlProfileTbl'></div>
-    </div> 
-
-    <div id ="rtmDamPlots">        
-    </div>  
-    <div id ="rrasScedPlots">        
     </div>
 </div>
 
@@ -138,6 +140,8 @@
       rel="stylesheet"
       type="text/css"
     />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
 <script src="{{ url_for('static', filename='dist/morningRepIndex.js') }}"></script>
 
 {% endblock %}

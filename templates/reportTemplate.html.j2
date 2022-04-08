@@ -9,7 +9,7 @@
     Subject : Daily Report for {{reportDate}}</h6>
 <br>
 {# section 1 table consumption(MUs) #}
-  <h3>1. Energy Consumption</h3>
+<h3>1. Energy Consumption</h3>
   <table id="section1Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -47,7 +47,7 @@
   </table>
 
 {# section 2 table Max Demand #}
-  <h3>2. Maximum Demand</h3>
+<h3>2. Maximum Demand</h3>
   <table id="section2Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -78,7 +78,7 @@
 
 
 {# section 3 table Generation #}
-  <h3>3. Generation in MU</h3>
+<h3>3. Generation in MU</h3>
   <table id="section3Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -126,8 +126,45 @@
       </tbody>     
   </table>
 
+<h3>4. Load Curtailment Details</h3>
+  <table id="section4Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th>SrNo</th>
+              <th>State</th>
+              <th>MWh</th>
+              <th>Max MW</th>
+              <th>@Time (hh:mm)</th>
+              <th>Reason for Curtailment</th>          
+          </tr>
+      </thead>    
+      <tbody>
+          <tr>
+            <td>1.</td><td>Chhattisgarh</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td>  
+          </tr> 
+          <tr>
+            <td>2.</td><td>Gujarat</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr>
+          <tr>
+            <td>3.</td><td>MP</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr>
+          <tr>
+            <td>4.</td><td>Maharashtra</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr>
+          <tr>
+            <td>5.</td><td>Goa</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr>
+          <tr>
+            <td>6.</td><td>DD</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr>
+          <tr>
+            <td>7.</td><td>DNH</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr> 
+      </tbody>     
+  </table>
+
 {# section 5 freq table #}
-  <h3>5. Frequency Profile</h3>
+<h3>5. Frequency Profile</h3>
   <table id="section5Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -178,7 +215,7 @@
   </table>
 
 {# section 6 & RRAS SCED Table  #}
-  <h3>6. RRAS, SCED Schedule(MU)</h3>
+<h3>6. RRAS, SCED Schedule(MU)</h3>
   <table id="section6Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -208,7 +245,7 @@
   </table>
 
 {# section 7 & DAM RTM GDAM  Table  #}
-  <h3>7. DAM, RTM & GDAM</h3>
+<h3>7. DAM, RTM & GDAM</h3>
   <table id="section7Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -237,16 +274,16 @@
       <tbody>
           {% for row in section7Data %}
           <tr>
-            <td>{{row["dateKey"]}}</td>
-            <td>{{row["IEX_DAM"][0]|round(2)}}</td>
-            <td>{{row["IEX_DAM"][1]|round(2)}}</td>
-            <td>{{row["IEX_DAM"][2]|round(2)}}</td>
-            <td>{{row["IEX_DAM"][3]|round(2)}}</td>
-            <td>{{row["IEX_RTM"][0]|round(2)}}</td>
-            <td>{{row["IEX_RTM"][1]|round(2)}}</td>
-            <td>{{row["IEX_RTM"][2]|round(2)}}</td>
-            <td>{{row["IEX_RTM"][3]|round(2)}}</td>
-            <td>{{row["IEX_GDAM"][0]|round(2)}}</td>
+            <td contenteditable='true'>{{row["dateKey"]}}</td>
+            <td contenteditable='true'>{{row["IEX_DAM"][0]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_DAM"][1]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_DAM"][2]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_DAM"][3]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_RTM"][0]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_RTM"][1]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_RTM"][2]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_RTM"][3]|round(2)}}</td>
+            <td contenteditable='true'>{{row["IEX_GDAM"][0]|round(2)}}</td>
             {# <td>{{row["IEX_GDAM"][1]|round(2)}}</td>
             <td>{{row["IEX_GDAM"][2]|round(2)}}</td>
             <td>{{row["IEX_GDAM"][3]|round(2)}}</td> #}
@@ -255,9 +292,35 @@
       </tbody>     
   </table>
 
-
+<h3>9. Hydro Units were running in Condensor Mode:</h3>
+  <table id="section9Tbl" class="table table-bordered table-hover display" style="width:100%">
+      <thead>
+          <tr>
+              <th> SrNo </th>
+              <th>Station</th>
+              <th>Total No. of Units</th>
+              <th>Total MVAR Absorption</th>
+              <th>Remark</th>         
+          </tr>
+      </thead>    
+      <tbody>
+          <tr>
+            <td>1.</td><td>Koyna IV</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td> 
+          </tr> 
+          <tr>
+            <td>2.</td><td>SSP</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td>
+          </tr>
+          <tr>
+            <td>3.</td><td>Ghatghar</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td>
+          </tr>
+          <tr>
+            <td>4.</td><td>TATA Power</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td><td contenteditable='true'>-</td>
+          </tr>
+           
+      </tbody>     
+  </table>
 {# section So Far Highest Table  #}
-  <h3>SoFar Highest Demand</h3>
+<h3>SoFar Highest Demand</h3>
   <table id="section5Tbl" class="table table-bordered table-hover display" style="width:100%">
       <thead>
           <tr>
@@ -272,8 +335,8 @@
           <tr>
               <td>{{row["srNo"]}}</td>
               <td>{{row["Entity"]}}</td>
-              <td>{{row["maxDem"]|int}}</td>
-              <td>{{row["dateKey"]}}</td>
+              <td contenteditable='true'>{{row["maxDem"]|int}}</td>
+              <td contenteditable='true'>{{row["dateKey"]}}</td>
           </tr>
           {% endfor %}     
       </tbody>     

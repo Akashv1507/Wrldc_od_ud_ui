@@ -112,6 +112,10 @@ tfoot tr th {
   font-weight: bolder;
   animation: blinker 1s linear infinite;
 }
+ /* for searchpanes colname */
+.dtsp-search{
+  font-weight: 700;
+}
 
 @keyframes blinker {
   50% {

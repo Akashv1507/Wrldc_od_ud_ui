@@ -37,8 +37,13 @@ export const fetchOutageData = async () => {
  
          // div for meta info like showing table of which state and date
          let metaInfoDiv = document.createElement("div");
-         metaInfoDiv.className = " text-info text-center mt-3 mb-5 font-weight-bold h5";
+         metaInfoDiv.className = " text-info text-center mt-3 font-weight-bold h4";
          outageTblWrapper.appendChild(metaInfoDiv);
+
+        //div for total installed capacity out info 
+         let instCapOut = document.createElement("div");
+         instCapOut.className = " text-danger text-center mt-1 font-weight-bold h5 instCapOut";
+         outageTblWrapper.appendChild(instCapOut);
  
          //defining table schema dynamically
          let tbl = document.createElement('table');
@@ -49,15 +54,15 @@ export const fetchOutageData = async () => {
    
          //fetch outage data and push data to datatble div created above dynamically
          let outageObjList = await getOutageData(targetDateValue)
-         
+         //removedCol = { title: 'Owners', data:"owners"  }, {title:'Unit', data:"unitNo"}, { title: 'ExpTime' , data:"expectedTime" },
          //generating column name
-         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, 
-         { title: 'StationName', data:"stationName"},{ title: 'StationType', data:"stationType"}, {title:'Unit', data:"unitNo"}, {title:'InstCap', data:"installedCap"}, 
+         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'Location', data:"stateName" }, 
+         { title: 'StationName', data:"stationName"},{ title: 'StationType', data:"stationType"},  {title:'InstCap', data:"installedCap"}, 
          {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, 
-         { title: 'ExpDate', data:"expectedDate"  }, { title: 'ExpTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, 
+         { title: 'ExpDate', data:"expectedDate"  },  { title: 'ShutdownType', data:"shutdownType"}, 
          {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
          
-        $("#outage_tbl").append('<tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>');
+        $("#outage_tbl").append('<tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>');
         $(`#outage_tbl`).DataTable({
           
           dom:  'PBfrtip', 
@@ -69,19 +74,32 @@ export const fetchOutageData = async () => {
           searchPanes: {
             initCollapsed: true,
             layout: 'columns-6'
-                        },            
+                        }, 
+            
+          columnDefs: [
+            {
+              searchPanes: {
+                show: false
+            },
+            targets: [2,4,6,7,8]
+            },
+            {  
+              targets: [2,4,6,7,8],
+              className:'bolder'
+            },
+          ],          
         footerCallback: function (row, data, start, end, display) {
           let api = this.api();
     
           // Total over all pages
           const total = api
-              .column(6)
+              .column(4)
               .data()
               .reduce((a, b) =>a + b, 0);
     
           // Total over this page
           const pageTotal = api
-              .column(6, { page: 'current' })
+              .column(4, { page: 'current' })
               .data()
               .reduce((a, b) => a + b, 0);
 
@@ -89,7 +107,10 @@ export const fetchOutageData = async () => {
          
           // Update footer
           $(api.column(0).footer()).html("Total InstCapacity Out");
-          $(api.column(6).footer()).html(`${roundInstCapcityOutTotal}`)
+          $(api.column(4).footer()).html(`${roundInstCapcityOutTotal}MW`)
+
+          //update div
+          $(".instCapOut").html(`Total InstCapacity Out -: ${roundInstCapcityOutTotal} MW`)
 
       }
         } as DataTables.Settings);

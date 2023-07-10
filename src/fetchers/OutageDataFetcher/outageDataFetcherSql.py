@@ -9,7 +9,8 @@ fetchOutageSql = '''SELECT
     rto.station_name,
     rto.unit_number,
     rto.INSTALLED_CAPACITY,
-    rto.CLASSIFICATION,
+    RTO.CLASSIFICATION,
+    rto.station_type,
     trunc(rto.outage_date) AS outage_date,
     coalesce(rto.outage_time, 'NA') AS outage_time,
     trunc(rto.expected_date) AS expected_date,
@@ -38,7 +39,8 @@ FROM
             gu.UNIT_NUMBER,
             gs.GENERATING_STATION_NAME AS station_name,
             ssm.FULL_NAME AS state_name,
-            cm.CLASSIFICATION,
+            CM.CLASSIFICATION,
+            gst.NAME station_type,
             reas.reason,
             sd_type.id             AS shut_down_type_id,
             sd_type.name           AS shut_down_type_name,
@@ -55,7 +57,8 @@ FROM
             LEFT JOIN reporting_web_ui_uat.GENERATING_UNIT gu ON gu.ID = outages.ELEMENT_ID 
             LEFT JOIN reporting_web_ui_uat.GENERATING_STATION gs ON gs.ID = gu.FK_GENERATING_STATION 
             LEFT JOIN reporting_web_ui_uat.CLASSIFICATION_MASTER cm ON cm.ID = gs.CLASSIFICATION_ID 
-            LEFT JOIN reporting_web_ui_uat.SRLDC_STATE_MASTER ssm ON ssm.ID = gs.LOCATION_ID
+            LEFT JOIN REPORTING_WEB_UI_UAT.SRLDC_STATE_MASTER SSM on SSM.id = GS.LOCATION_ID
+            LEFT JOIN reporting_web_ui_uat.GENERATING_STATION_TYPE gst ON gst.ID = gs.station_type
             LEFT JOIN (SELECT
                             LISTAGG(own.owner_name, ',') WITHIN GROUP(
                             ORDER BY
@@ -83,7 +86,7 @@ FROM
                 || outage_time) AS out_date_time
         FROM
             reporting_web_ui_uat.real_time_outage
-        where outage_date<=TO_DATE(:dateKey,'YYYY-MM-DD HH24:MI:SS') 
+        where outage_date<=TO_DATE(:dateKey,'YYYY-MM-DD HH24:MI:SS')
         GROUP BY
             entity_id,
             element_id
@@ -92,6 +95,8 @@ FROM
                            AND ( latest_out_info.out_date_time = rto.out_date_time ) )
 WHERE rto.entity_name='GENERATING_UNIT' AND rto.revived_time IS NULL
 ORDER BY
-    rto.out_date_time DESC'''
+    rto.out_date_time DESC
+
+'''
 
 

@@ -57,6 +57,7 @@ export interface IOutageObj{
     stateName:string,
     owners:string,
     stationName:string,
+    stationType:string,
     unitNo:number,
     installedCap: number,
     classification: string,

@@ -5,7 +5,7 @@ import {createDynamicHtmlContent} from "./dynamicHtmlContentCreator"
 import {yyyyddmmToddmmyyy, convertIsoString, getListOfDates, getMultiplyingFactorMus} from  "../timeUtils"
 
 export interface InstUiMax{
-  date:string
+  date: string
   timestamp: string
   maxUi:number
   correspondingSch:number
@@ -15,7 +15,7 @@ export interface InstUiMax{
   percentOdGreaterThan250InMin:number
 }
 export interface InstUiMin{
-  date:string
+  date: string
   timestamp: string
   minUi:number
   correspondingSch:number
@@ -25,7 +25,7 @@ export interface InstUiMin{
   percentUdGreaterThan250InMin:number
 }
 export interface AvgOd{
-  date:string
+  date: string
   avgOd:number
   mus:number
   correspondingAvgSch:number
@@ -33,7 +33,7 @@ export interface AvgOd{
   correspondingFreqLessThanBand:number
 }
 export interface AvgUd{
-  date:string
+  date: string
   avgUd:number
   mus:number
   correspondingAvgSch:number
@@ -41,21 +41,21 @@ export interface AvgUd{
   correspondingFreqGreaterThanBand:number
 }
 export interface NetUi{
-  date:string
+  date: string
   netUi:number
   netSch:number
   netAct:number
   freqBetweenBand:number
 }
 export interface InstMinFreq{
-  date:string
+  date: string
   timestamp: string
   minFreq:number
   correspondingUi:number
   
 }
 export interface InstMaxFreq{
-  date:string
+  date: string
   timestamp: string
   maxFreq:number
   correspondingUi:number
@@ -145,8 +145,8 @@ export const fetchTableData = async()=>{
        //fetch data for each states and for each date, cal min max avg for each day and append to list
        for(let ind=0;ind<datesChunksList.length;ind++){
           try{
-            
             let currDateStrDDMMYYY = yyyyddmmToddmmyyy(datesChunksList[ind].startTime)
+            // let currDateStrDDMMYYY = new Date(datesChunksList[ind].startTime);
             
             //making api call
             const schDrawlData = await getSchVsActDrawlData(datesChunksList[ind].startTime, datesChunksList[ind].endTime, `${selectedStateList[stateInd].value}_Schedule`)

@@ -2,6 +2,7 @@
 import {getOutageData} from "../fetchDataApi"
 
 
+
 export const fetchOutageData = async () => {
     //to display error msg
     const errorDiv = document.getElementById("errorOutageDataTblDiv") as HTMLDivElement;
@@ -50,32 +51,48 @@ export const fetchOutageData = async () => {
          let outageObjList = await getOutageData(targetDateValue)
          
          //generating column name
-         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, { title: 'StationName', data:"stationName"}, {title:'Unit', data:"unitNo"}, {title:'InstCap', data:"installedCap"}, {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, { title: 'ExpDate', data:"expectedDate"  }, { title: 'ExpTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
+         const cols = [{ title: 'EleName', data:"elementName" },{ title: 'StateName', data:"stateName" }, { title: 'Owners', data:"owners"  }, 
+         { title: 'StationName', data:"stationName"},{ title: 'StationType', data:"stationType"}, {title:'Unit', data:"unitNo"}, {title:'InstCap', data:"installedCap"}, 
+         {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, 
+         { title: 'ExpDate', data:"expectedDate"  }, { title: 'ExpTime' , data:"expectedTime" }, { title: 'ShutdownType', data:"shutdownType"}, 
+         {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
          
-         const outageTbl = $(`#outage_tbl`).DataTable({
+        $("#outage_tbl").append('<tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>');
+        $(`#outage_tbl`).DataTable({
+          
+          dom:  'PBfrtip', 
+          lengthMenu: [50, 192, 188],
+          order: [[1, 'desc']],
+          data: outageObjList,
+          columns: cols,
+          fixedHeader: true,
           searchPanes: {
-            viewTotal: true,
             initCollapsed: true,
             layout: 'columns-6'
-                        },
-            dom: 'PBfrtip',
-            columnDefs: [
-              {
-              targets: [2]
-              },
-              {
-                searchPanes: {
-                  show: false
-              },
-              targets: [3,4,5,9,10]
-              },
-          ],
-           fixedHeader: true,
-           lengthMenu: [50, 192, 188],
-           data: outageObjList,
-           columns: cols
-          } as DataTables.Settings);
-          
+                        },            
+        footerCallback: function (row, data, start, end, display) {
+          let api = this.api();
+    
+          // Total over all pages
+          const total = api
+              .column(6)
+              .data()
+              .reduce((a, b) =>a + b, 0);
+    
+          // Total over this page
+          const pageTotal = api
+              .column(6, { page: 'current' })
+              .data()
+              .reduce((a, b) => a + b, 0);
+
+          const roundInstCapcityOutTotal= Math.round(pageTotal)
+         
+          // Update footer
+          $(api.column(0).footer()).html("Total InstCapacity Out");
+          $(api.column(6).footer()).html(`${roundInstCapcityOutTotal}`)
+
+      }
+        } as DataTables.Settings);
           // showing meta information
           metaInfoDiv.innerHTML =  `Showing Latest Generator Outage Data.`
       }catch(err){

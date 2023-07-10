@@ -27,6 +27,7 @@ class OutageDataFetcher():
                 outageObj['stateName']=outageDataDf['STATE_NAME'][ind]
                 outageObj['owners']=outageDataDf['OWNERS'][ind]
                 outageObj['stationName']=outageDataDf['STATION_NAME'][ind]
+                outageObj['stationType']=outageDataDf['STATION_TYPE'][ind]
                 outageObj['unitNo']=int(outageDataDf['UNIT_NUMBER'][ind])
                 outageObj['installedCap']=float(outageDataDf['INSTALLED_CAPACITY'][ind])
                 outageObj['classification']=outageDataDf['CLASSIFICATION'][ind]

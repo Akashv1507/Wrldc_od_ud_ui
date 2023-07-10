@@ -5,6 +5,7 @@ class IOutageObj(TypedDict):
     stateName:str
     owners:str
     stationName:str
+    stationType:str
     unitNo:int
     installedCap: int
     classification: str

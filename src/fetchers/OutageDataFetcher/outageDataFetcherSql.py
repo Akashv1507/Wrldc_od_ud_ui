@@ -93,7 +93,7 @@ FROM
     ) latest_out_info ON ( ( latest_out_info.entity_id = rto.entity_id )
                            AND ( latest_out_info.element_id = rto.element_id )
                            AND ( latest_out_info.out_date_time = rto.out_date_time ) )
-WHERE rto.entity_name='GENERATING_UNIT' AND rto.revived_time IS NULL
+WHERE rto.entity_name='GENERATING_UNIT' AND rto.outage_date<=TO_DATE(:dateKey,'YYYY-MM-DD HH24:MI:SS') AND (rto.revived_time IS NULL or rto.revived_date>TO_DATE(:dateKey,'YYYY-MM-DD HH24:MI:SS'))
 ORDER BY
     rto.out_date_time DESC
 

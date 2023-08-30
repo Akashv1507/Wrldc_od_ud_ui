@@ -2,10 +2,12 @@ import {fetchOutageData} from "./fetchOutageData"
 
 window.onload = async () => {
   
-  const yesterday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date).toISOString().slice(0,10);
+  let currDate = new Date();
+  let yesterdayDate = new Date(currDate.setDate(currDate.getDate()-1));
+  let yesterdayDateStr = yesterdayDate.toISOString().substring(0,10);
 
   //setting target date to yesterday
-  (document.getElementById("targetDate") as HTMLInputElement).value= yesterday;
+  (document.getElementById("targetDate") as HTMLInputElement).value=  yesterdayDateStr + 'T00:00';
  
 
   // getting right arrow btn and left arrow btn
@@ -49,9 +51,10 @@ const setPrevDate = ()=>{
 
   //converting to date obj, then subtracting one day then setting to targetDate and calling functions
   const targetDateObj = new Date (targetDate.value)
-  
+  // toISOString() will subtract 5 hours and 30 minutes, hence adding 5 hours and 30 minutes before converting to string
+  targetDateObj.setHours(targetDateObj.getHours()+5, targetDateObj.getMinutes()+30)
   let newTargetDate= targetDateObj.setDate(targetDateObj.getDate()-1)
-  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,10)
+  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,16)
 
   //calling function with the new targetDate
   wrapperFunc()
@@ -63,9 +66,10 @@ const setNextDate = ()=>{
 
   //converting to date obj, then subtracting one day then setting to targetDate and calling functions
   const targetDateObj = new Date (targetDate.value)
-  
+  // toISOString() will subtract 5 hours and 30 minutes, hence adding 5 hours and 30 minutes before converting to string
+  targetDateObj.setHours(targetDateObj.getHours()+5, targetDateObj.getMinutes()+30)
   let newTargetDate= targetDateObj.setDate(targetDateObj.getDate()+1)
-  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,10)
+  targetDate.value = (new Date(newTargetDate)).toISOString().slice(0,16)
 
   //calling function with the new targetDate
   wrapperFunc()

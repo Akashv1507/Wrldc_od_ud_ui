@@ -2,7 +2,7 @@ import datetime as dt
 from typing import List, Tuple
 import cx_Oracle
 import pandas as pd
-from src.fetchers.OutageDataFetcher.outageDataFetcherSql import fetchOutageSql
+from src.fetchers.OutageDataFetcher.outageTimeDataFetcherSql import fetchOutageDateTimeSql
 from src.fetchers.OutageDataFetcher.IOutageObj import IOutageObj
 
 class OutageDataFetcher():
@@ -31,15 +31,11 @@ class OutageDataFetcher():
                 outageObj['unitNo']=int(outageDataDf['UNIT_NUMBER'][ind])
                 outageObj['installedCap']=float(outageDataDf['INSTALLED_CAPACITY'][ind])
                 outageObj['classification']=outageDataDf['CLASSIFICATION'][ind]
-                outageObj['outageDate']=str(outageDataDf['OUTAGE_DATE'][ind])[:10]
-                outageObj['outageTime']=str(outageDataDf['OUTAGE_TIME'][ind])
-                expDt = outageDataDf['EXPECTED_DATE'][ind]
-                if pd.isna(expDt):
-                    expDt = None
-                else:
-                    expDt = str(outageDataDf['EXPECTED_DATE'][ind])[:10]
-                outageObj['expectedDate']=expDt
-                outageObj['expectedTime']=outageDataDf['EXPECTED_TIME'][ind]
+                outageObj['outageDateTime']=str(outageDataDf['OUT_DATE_TIME'][ind])
+                expDtTime = outageDataDf['EXPECTED_DATE_TIME'][ind]
+                if pd.isna(expDtTime):
+                    expDtTime = None
+                outageObj['expectedDateTime']=expDtTime
                 outageObj['shutdownType']= outageDataDf['SHUT_DOWN_TYPE_NAME'][ind]
                 outageObj['shutdownTag']=outageDataDf['SHUTDOWN_TAG'][ind]
                 outageObj['reason']=outageDataDf['REASON'][ind]
@@ -49,7 +45,8 @@ class OutageDataFetcher():
 
     def getOutageData (self, dateKey:str)->List[IOutageObj]:
         # dateKey is date till outage is fetched
-       
+        dateTimeKey = dateKey[:10] + ' '+dateKey[11:]
+        print(dateTimeKey)
         try:
             connection = cx_Oracle.connect(self.connString)
             cur = connection.cursor()
@@ -57,7 +54,7 @@ class OutageDataFetcher():
             print('error while creating a connection/cursor', err)
         else:
             try:
-                outageDataDf = pd.read_sql(fetchOutageSql, params={'datekey':dateKey }, con=connection)
+                outageDataDf = pd.read_sql(fetchOutageDateTimeSql, params={'targetDatetime':dateTimeKey }, con=connection)
             except Exception as err:
                 print ('error while executing sql query', err)
                 if cur:

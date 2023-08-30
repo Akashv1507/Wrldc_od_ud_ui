@@ -61,10 +61,8 @@ export interface IOutageObj{
     unitNo:number,
     installedCap: number,
     classification: string,
-    outageDate:string,
-    outageTime:string,
-    expectedDate:string,
-    expectedTime:string,
+    outageDateTime:string,
+    expectedDateTime:string,
     shutdownType:string,
     shutdownTag:string,
     reason:string

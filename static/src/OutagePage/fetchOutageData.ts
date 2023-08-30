@@ -57,12 +57,13 @@ export const fetchOutageData = async () => {
          //removedCol = , {title:'Unit', data:"unitNo"}, { title: 'ExpTime' , data:"expectedTime" },
          //generating column name
          const cols = [{ title: 'EleName', data:"elementName" },{ title: 'Location', data:"stateName" }, 
-         { title: 'StationName', data:"stationName"},{ title: 'StationType', data:"stationType"}, { title: 'Owners', data:"owners"  }, {title:'InstCap', data:"installedCap"}, 
-         {title:'Classification', data:"classification"}, {title:'OutageDate', data:"outageDate"}, {title:'OutageTime', data:"outageTime"}, 
-         { title: 'ExpDate', data:"expectedDate"  },  { title: 'ShutdownType', data:"shutdownType"}, 
+         { title: 'StationName', data:"stationName"},{ title: 'StationType', data:"stationType"}, 
+         { title: 'Owners', data:"owners"  }, {title:'InstCap', data:"installedCap"}, 
+         {title:'Classification', data:"classification"}, {title:'OutageDateTime', data:"outageDateTime"}, 
+         { title: 'ExpectedDateTime', data:"expectedDateTime"  }, {title:'ShutdownType', data:"shutdownType"},
          {title:'ShutdownTag', data:"shutdownTag"}, {title:'Reason', data:"reason"}]
          
-        $("#outage_tbl").append('<tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>');
+        $("#outage_tbl").append('<tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>');
         $(`#outage_tbl`).DataTable({
           
           dom:  'PBfrtip', 
@@ -81,10 +82,10 @@ export const fetchOutageData = async () => {
               searchPanes: {
                 show: false
             },
-            targets: [2,5,7,8,9]
+            targets: [0,2,5,7,8,11]
             },
             {  
-              targets: [2,5,7,8,9],
+              targets: [0,2,5,7,8,11],
               className:'bolder'
             },
           ],          

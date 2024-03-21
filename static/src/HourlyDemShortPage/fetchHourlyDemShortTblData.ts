@@ -57,7 +57,7 @@ export const fetchHourlyDemShortTblData = async () => {
          let hourlyDemShortList = await getHourlyDemShortTbldData(startDateValue, endDateValue,)
          
          //generating column name
-         const cols = [{ title: 'Date', data:"dateKey" },{ title: 'Hour', data:"hour" }, { title: 'Mah_Shedd', data:"MAH_short"  }, { title: 'Guj_Shedd', data:"GUJ_short"}, {title:'MP_Shedd', data:"MP_short"}, {title:'Ch_Shedd', data:"CH_short"}, {title:'Goa_Shedd', data:"GOA_short"}, {title:'DD_Shedd', data:"DD_short"}, {title:'DNH_Shedd', data:"DNH_short"}, { title: 'WR_Shedd', data:"WR_short"  }, { title: 'Mah_Dem' , data:"MAH_dem" }, { title: 'Guj_Dem', data:"GUJ_dem"}, {title:'MP_Dem', data:"MP_dem"}, {title:'Ch_Dem', data:"CH_dem"}, {title:'Goa_Dem', data:"GOA_dem"}, {title:'DD_Dem', data:"DD_dem"}, {title:'DNH_Dem', data:"DNH_dem"}, {title:'DNH_Dem', data:"DNH_dem"}, { title: 'WR_Dem', data:"WR_dem"  }]
+         const cols = [{ title: 'Date', data:"dateKey" },{ title: 'Hour', data:"hour" }, { title: 'Mah_Shedd', data:"MAH_short"  }, { title: 'Guj_Shedd', data:"GUJ_short"}, {title:'MP_Shedd', data:"MP_short"}, {title:'Ch_Shedd', data:"CH_short"}, {title:'Goa_Shedd', data:"GOA_short"}, {title:'DD_Shedd', data:"DD_short"}, { title: 'WR_Shedd', data:"WR_short"  }, { title: 'Mah_Dem' , data:"MAH_dem" }, { title: 'Guj_Dem', data:"GUJ_dem"}, {title:'MP_Dem', data:"MP_dem"}, {title:'Ch_Dem', data:"CH_dem"}, {title:'Goa_Dem', data:"GOA_dem"}, {title:'DD_Dem', data:"DD_dem"},  { title: 'WR_Dem', data:"WR_dem"  }]
          
          $(`#hourlyDemShort_tbl`).DataTable({
            dom: "Bfrtip",

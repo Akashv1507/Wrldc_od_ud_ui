@@ -45,11 +45,13 @@ clientId=appConfig['clientId']
 clientSecret=appConfig['clientSecret']
 wbesUser= appConfig['Wbes_User']
 wbesPass = appConfig['Wbes_Pass']
+apiKey= appConfig['apikey']
+wbesApiBaseUrl = appConfig['wbesApiBaseUrl']
 
 
 obj_odUdDataFetcher = OdUdDataFetcher(connStr=conStr)
 obj_dataFetchFromApi = DataFetchFromApi(tokenUrl, apiBaseUrl, clientId, clientSecret)
-obj_wbesDataFetcher = WbesDataFetcher(wbesUser, wbesPass)
+obj_wbesDataFetcher = WbesDataFetcher(wbesUser, wbesPass, apiKey, wbesApiBaseUrl)
 obj_contOdUdDataFetch= ContOdUdDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_freqAndCorrDevDataFetch= FreqAndCorrDevDataFetch(tokenUrl, apiBaseUrl, clientId, clientSecret)
 obj_section1Fetcher = Section1Fetcher(connStr=conStr)

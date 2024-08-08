@@ -48,7 +48,7 @@ class DataFetchFromApi():
             # fetching secondwise data from api for each entity(timestamp,value) and converting to dataframe
             resData = obj_scadaApiFetcher.fetchData(entityTag, startTime, endTime)
         except Exception as err:
-            print("error while fetching current demand", err)
+            print("error while fetching SadaApiData", err)
         else:
             entityDataDf = pd.DataFrame(resData, columns =['timestamp','value']) 
             #converting to minutewise data

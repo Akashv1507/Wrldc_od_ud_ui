@@ -93,7 +93,7 @@ class FreqAndCorrDevDataFetch():
             return deviationDataDf[f'{stateName}_dev']
           
         except Exception as err:
-            print("error while fetching Api data", err)
+            print("error while fetching Freq and Corr Dev Api data", err)
             emptyDf = pd.DataFrame()
             return emptyDf
 

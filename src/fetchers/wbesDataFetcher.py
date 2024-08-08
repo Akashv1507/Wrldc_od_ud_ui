@@ -1,24 +1,30 @@
 import datetime as dt
 import requests
 from typing import List, Tuple
+import json
 
 class WbesDataFetcher():
-    def __init__(self,user:str, password:str) -> None:
+    def __init__(self,user:str, password:str, apiKey:str, apiBaseUrl:str) -> None:
         """constructor   
         """
         self.user = user
         self.password = password
+        self.apiKey= apiKey
+        self.apiBaseUrl= apiBaseUrl
     
-    def makeApiCall(self, dateKey:dt.datetime, parameterApiName:str, parameterName:str):
+    def makeApiCall(self, dateKey:dt.datetime, wbesAcr:str):
         dateStr = dt.datetime.strftime(dateKey, '%d-%m-%Y')
-        url = f'https://wbes.wrldc.in/WebAccess/GetFilteredSchdData?USER={self.user}&PASS={self.password}&DATE={dateStr}&ACR={parameterApiName}'
-        resp = requests.get(url)
+        params = {"apikey": self.apiKey}
+        headers = {"Content-Type": "application/json"}
+        auth = (self.user, self.password)
+        body = {"Date":dateStr,"SchdRevNo": -1,"UserName":self.user, "UtilAcronymList": [wbesAcr],"UtilRegionIdList":[2]}
+        resp = requests.post( self.apiBaseUrl, params=params, auth=auth, data=json.dumps(body), headers=headers)
         if not resp.status_code == 200:
             print(resp.status_code)
-            print("unable to get data from wbes api")
+            print("unable to get data from wbes api for {wbesAcr}")
             return []
         respJson = resp.json()
-        paramsData = respJson["groupWiseDataList"][0]["netScheduleSummary"][parameterName].split(',')
+        paramsData = respJson['ResponseBody']["GroupWiseDataList"][0]["NetScheduleSummary"]["TotalNetSchdAmount"]
         if len(paramsData) == 0:
             return []
         return paramsData
@@ -58,7 +64,7 @@ class WbesDataFetcher():
         endDate = endTime.replace(hour=0, minute=0, second=0, microsecond=0)
         parRespData =[]
         while currDate<=endDate:
-            apiData = self.makeApiCall(currDate, parameterApiName, 'NET_Total')
+            apiData = self.makeApiCall(currDate, parameterApiName)
             timestampList = self.generateTimestampDay(currDate)
             respListTuple= self.zipTwoList(timestampList, apiData)
             parRespData = [*parRespData, *respListTuple]

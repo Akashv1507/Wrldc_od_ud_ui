@@ -137,6 +137,6 @@ class ContOdUdDataFetch():
             deviationRespObj = self.toDesiredFormat(actDataDf, schDataDf, blkNoList)
           
         except Exception as err:
-            print("error while fetching current demand", err)
+            print("error while fetching current ConOdUdData", err)
         finally:
             return deviationRespObj

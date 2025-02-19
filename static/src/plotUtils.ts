@@ -93,7 +93,8 @@ export const setPlotTraces = (divId: string, plotData: PlotData) => {
       automargin: true,
       titlefont: { color: "#000"  , size: 18 },
       tickfont: { color: "#000", size: 18 },
-      tickformat: "digits",
+      // tickformat: "digits",
+      tickformat: ".3f",
     },
     yaxis2: {
       title: plotData.y2AxisTitle,

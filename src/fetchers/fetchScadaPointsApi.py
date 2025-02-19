@@ -62,6 +62,7 @@ class DataFetchFromApi():
             # handling missing values NANs
             entityDataDf['value'].fillna(method='ffill', inplace= True)
             entityDataDf['value'].fillna(method='bfill', inplace= True)
+            # entityDataDf['value'] = entityDataDf['value'].apply(lambda x: round(x, 3))
         finally:
             data : List[Union[dt.datetime, float]] = self.toListOfTuple(entityDataDf)
        

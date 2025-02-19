@@ -186,7 +186,7 @@ export const fetchPlotData = async () => {
           y2AxisTitle:"MW"
 
       };
-
+      console.log(freqData)
       let freqTrace: PlotTrace = {
         name: "Frequency",
         data: freqData.schVsActDrawlData,
